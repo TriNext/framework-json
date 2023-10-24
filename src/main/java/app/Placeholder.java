@@ -8,6 +8,11 @@ package app;
 public class Placeholder {
 
     /**
+     * JavaDoc comment for Default Constructor
+     */
+    public Placeholder() { }
+
+    /**
      * a Function  that always returns true
      * @return always True
      */
