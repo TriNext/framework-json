@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test;
  * @author Dennis Woithe
  */
 public class MainTest {
-
     @Test public void testMain() throws Exception {
-        Assertions.assertTrue(Placeholder.alwaysTrue());
+        Assertions.assertTrue(new Placeholder().alwaysTrue());
     }
-
-
 }

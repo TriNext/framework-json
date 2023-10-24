@@ -6,7 +6,7 @@ package app;
 
 public class Placeholder {
 
-    public static boolean alwaysTrue() {
+    public boolean alwaysTrue() {
         return true;
     }
 
