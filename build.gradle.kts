@@ -24,34 +24,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-}
 
-var pathToMain = "de.trinext.app.Main"
-
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = pathToMain
-    }
-}
-
-val fatJar = task("fatJar", type = Jar::class) {
-    val baseName = "${project.name}-fat"
-    archiveFileName.set(baseName + ".jar")
-    manifest {
-        attributes["Implementation-Title"] = "Gradle Jar File Example"
-        attributes["Implementation-Version"] = version
-        attributes["Main-Class"] = pathToMain
-    }
-    from(configurations.runtimeClasspath.get().map({ if (it.isDirectory) it else zipTree(it) }))
-    with(tasks.jar.get() as CopySpec)
-}
-tasks {
-    "build" {
-        dependsOn(fatJar)
-    }
-}
-tasks.withType<Jar> {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // Temporarily Wrapped Dependency
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.check {

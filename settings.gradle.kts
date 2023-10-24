@@ -1,1 +1,3 @@
-rootProject.name = "TemplateRepository" // your project name
+@file:Suppress("HardCodedStringLiteral")
+
+rootProject.name = "framework-json"
