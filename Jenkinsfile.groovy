@@ -1,3 +1,5 @@
+//file:noinspection HardCodedStringLiteral
+
 def repoUrl = "https://github.com/TriNext/framework-json";
 pipeline {
     agent any
