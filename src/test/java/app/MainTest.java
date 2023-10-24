@@ -1,5 +1,6 @@
 package app;
 
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +11,9 @@ import org.junit.jupiter.api.Test;
  */
 public class MainTest {
 
-	@Test
-	public void testMain() {
-		Assertions.assertTrue(true);
-	}
+    @Test public void testMain() throws Exception {
+        Assertions.assertTrue(Placeholder.alwaysTrue());
+    }
 
 
 }
