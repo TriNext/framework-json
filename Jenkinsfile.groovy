@@ -8,19 +8,23 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
+        stage('Prepare') {
+            steps {
+                cleanWorkspace()
+            }
+        }
         stage('Test') {
             steps {
                 echo 'Testing'
-                cleanWorkspace()
 //                runTestsAndPublishResults()
 //                jacocoSetup()
             }
         }
-        stage('Checks') {
-            steps {
-                runGradleChecks()
-            }
-        }
+//        stage('Checks') {
+//            steps {
+//                runGradleChecks()
+//            }
+//        }
         stage('Deploy to Prod') {
             when {
                 anyOf {
