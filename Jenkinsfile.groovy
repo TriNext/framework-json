@@ -20,11 +20,11 @@ pipeline {
                 jacocoSetup()
             }
         }
-//        stage('Checks') {
-//            steps {
-//                runGradleChecks()
-//            }
-//        }
+        stage('Checks') {
+            steps {
+                runGradleChecks()
+            }
+        }
         stage('Deploy to Prod') {
             when {
                 anyOf {
