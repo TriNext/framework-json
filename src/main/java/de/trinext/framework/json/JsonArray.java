@@ -1,9 +1,11 @@
 package de.trinext.framework.json;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.*;
 
 import de.trinext.framework.json.paths.JsonElementIterable;
+import util.GsonHelper;
 
 /**
  * @author Dennis Woithe
@@ -17,19 +19,48 @@ public final class JsonArray
     // ==== CONSTRUCTORS ===================================================== //
 
     /** Creates an empty JsonArray. */
-    JsonArray() {
-        super(new ArrayList<>());
+    JsonArray(Object... elems) {
+        super(Arrays.stream(elems).map(Json::treeFromInstance).collect(Collectors.toList()));
+    }
+
+    public int size() {
+        return getValue().size();
+    }
+
+    public boolean isEmpty() {
+        return getValue().isEmpty();
     }
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated @SuppressWarnings("TypeMayBeWeakened") //
-    JsonArray(com.google.gson.JsonArray jArr) {
-        super(StreamSupport.stream(jArr.spliterator(), false)
+    @Deprecated
+    static JsonArray from(com.google.gson.JsonArray jArr) {
+        // TODO: Optimize performance
+        return new JsonArray(GsonHelper.arrayToStream(jArr)
                 .map(Json::treeFromGsonTree)
                 .collect(Collectors.toList()));
     }
 
     // ==== METHODS ========================================================== //
+
+    @SuppressWarnings("BoundedWildcard")
+    public JsonArray addObj(Function<JsonObject, JsonObject> elem) throws JsonFieldAlreadyExistsException {
+        return add(elem.apply(new JsonObject()));
+    }
+
+
+    public JsonArray add(Object elem) throws JsonFieldAlreadyExistsException {
+        getValue().add(Json.treeFromInstance(elem));
+        return this;
+    }
+
+    public boolean contains(Object elem) {
+        return getValue().contains(Json.treeFromInstance(elem));
+    }
+
+
+    public JsonArray addArr(Object... elems) throws JsonFieldAlreadyExistsException {
+        return add(elems);
+    }
 
     @Override
     public Iterator<JsonElement<?>> iterator() {
@@ -47,11 +78,6 @@ public final class JsonArray
                 );
     }
 
-    @Override
-    public String toString() {
-        return getValue().toString();
-    }
-
     public Stream<JsonElement<?>> stream() {
         return getValue().stream();
     }
@@ -65,6 +91,11 @@ public final class JsonArray
 
     public Optional<JsonElement<?>> tryGet(int idx) {
         return Optional.ofNullable(getValue().get(idx));
+    }
+
+    @Override
+    public String toString() {
+        return getValue().toString();
     }
 
 }

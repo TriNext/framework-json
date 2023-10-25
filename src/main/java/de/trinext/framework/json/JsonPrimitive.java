@@ -30,4 +30,13 @@ abstract sealed class JsonPrimitive<V>
         throw new UnexpectedGsonTypeError(jPrim, com.google.gson.JsonPrimitive.class);
     }
 
+    static JsonPrimitive<?> tryFrom(Object obj) {
+        return switch (obj) {
+            case Boolean val -> JsonBool.from(val);
+            case Number val -> JsonNumber.from(val);
+            case CharSequence val -> JsonString.from(val);
+            default -> throw new IllegalArgumentException("Received instance of unexpected type \"" + obj.getClass() + "\". Pass a json-primitive instead.");
+        };
+    }
+
 }

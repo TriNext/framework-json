@@ -1,10 +1,13 @@
 package util;
 
+import java.util.*;
+
 import com.google.gson.*;
 import org.junit.jupiter.api.Test;
 
 import static de.trinext.framework.json.GsonPrimitiveTypeName.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestHelper.randomInts;
 import static util.GsonHelper.*;
 
 /**
@@ -13,6 +16,8 @@ import static util.GsonHelper.*;
 class GsonHelperTest {
 
     // ==== METHODS ========================================================== //
+
+    private static final int ELEMS_PER_TEST = 100;
 
     @Test
     void test_gson_type_name() {
@@ -35,7 +40,6 @@ class GsonHelperTest {
         );
     }
 
-
     @Test
     void test_gson_nr_is_dec() {
         assertTrue(gsonNrIsDec(new JsonPrimitive(0.5)));
@@ -45,5 +49,14 @@ class GsonHelperTest {
                 () -> gsonNrIsInt(new JsonPrimitive(""))
         );
     }
+
+    @Test
+    void test_array_to_stream() {
+        var elems = randomInts(ELEMS_PER_TEST).boxed().toArray();
+        var jArr = new JsonArray();
+        Arrays.stream(elems).forEach(e -> jArr.add((Number) e));
+        assertArrayEquals(elems, arrayToStream(jArr).map(JsonElement::getAsInt).toArray());
+    }
+
 
 }

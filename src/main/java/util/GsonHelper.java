@@ -1,7 +1,9 @@
 package util;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import com.google.gson.*;
 import de.trinext.framework.json.Json;
 
 import static de.trinext.framework.json.GsonPrimitiveTypeName.*;
@@ -50,6 +52,11 @@ public interface GsonHelper {
     /** Returns the type name of a gson-class. */
     static String gsonTypeName(Class<? extends JsonElement> jElem) {
         return jElem.getSimpleName();
+    }
+
+    /** Creates a {@link Stream} from a {@link JsonArray}. */
+    static Stream<JsonElement> arrayToStream(JsonArray jArr) {
+        return StreamSupport.stream(jArr.spliterator(), false);
     }
 
 }

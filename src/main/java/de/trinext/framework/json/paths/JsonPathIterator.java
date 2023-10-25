@@ -2,6 +2,7 @@ package de.trinext.framework.json.paths;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import java.util.stream.Stream;
  */
 class JsonPathIterator implements Iterator<String> {
 
+    private static final Pattern PATH_SEPARATOR = Pattern.compile("(?<!\\\\)\\.");
     private final String[] pathElems;
 
     private int i;
@@ -17,7 +19,7 @@ class JsonPathIterator implements Iterator<String> {
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonPathIterator(String jsonPath) {
-        pathElems = jsonPath.split("\\.");
+        pathElems = PATH_SEPARATOR.split(jsonPath);
         i = 0;
     }
 

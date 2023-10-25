@@ -20,7 +20,7 @@ public sealed interface JsonElementIterable permits JsonObject, JsonArray {
     default Optional<JsonElement<?>> tryGet(String jsonPath) {
         try {
             var iter = jsonElemIterator(jsonPath);
-            JsonElement<?> elem = null;
+            var elem = (JsonElement<?>) this;
             while (iter.hasNext())
                 elem = iter.next();
             return Optional.ofNullable(elem);

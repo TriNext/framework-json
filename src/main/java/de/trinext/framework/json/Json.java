@@ -28,8 +28,8 @@ public final class Json {
     @Deprecated
     static JsonElement<?> treeFromGsonTree(com.google.gson.JsonElement jElem) {
         return switch (jElem) {
-            case com.google.gson.JsonObject jObj -> new JsonObject(jObj);
-            case com.google.gson.JsonArray jArr -> new JsonArray(jArr);
+            case com.google.gson.JsonObject jObj -> JsonObject.from(jObj);
+            case com.google.gson.JsonArray jArr -> JsonArray.from(jArr);
             case com.google.gson.JsonNull jNull -> JsonNull.NULL;
             case com.google.gson.JsonPrimitive jPrim -> JsonPrimitive.from(jPrim);
             default -> throw new UnexpectedGsonTypeError(jElem, com.google.gson.JsonElement.class);
@@ -45,7 +45,7 @@ public final class Json {
     /**
      * Converts any Object into a tree of {@link JsonElement}s.
      *
-     * @see JsonPrimitive#from for definite primitive types
+     * @see JsonPrimitive#tryFrom(Object) for known primitive types.
      */
     @SuppressWarnings("WeakerAccess")
     public static JsonElement<?> treeFromInstance(Object value) {

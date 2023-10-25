@@ -24,23 +24,27 @@ public class JsonElementIterator implements Iterator<JsonElement<?>> {
     // ==== METHODS ========================================================== //
 
     @Override
+    public String toString() {
+        return path.toString();
+    }
+
+    @Override
     public boolean hasNext() {
-        return current instanceof JsonElementIterable;
+        return current instanceof JsonElementIterable && path.hasNext();
     }
 
     @Override
     public JsonElement<?> next() {
-        if (!path.hasNext())
-            throw new NoSuchElementException("Reached the end of path.");
-        var last = current;
+        if (!hasNext())
+            throw new NoSuchElementException("Reached the end of path at: " + current);
+        var jIter = (JsonElementIterable) current;
         var currentPathElem = path.next();
-        if (current instanceof JsonElementIterable jIter) {
-            current = jIter.tryGet(currentPathElem)
-                    .orElseThrow(() -> new NoSuchElementException(
-                            "Couldn't find " + currentPathElem + " in " + path
-                    ));
-        } else throw new NoSuchElementException("Reached a leaf in the object tree.");
-        return last;
+        current = jIter.tryGet(currentPathElem)
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Couldn't find " + currentPathElem + " in " + current
+                ));
+        return current;
     }
+
 
 }
