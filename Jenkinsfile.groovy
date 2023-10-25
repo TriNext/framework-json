@@ -39,11 +39,11 @@ pipeline {
                 deploy('staging')
             }
         }
-        stage('Javadoc') {
-            steps {
-                generateAndPublishJavadoc()
-            }
-        }
+//        stage('Javadoc') {
+//            steps {
+//                generateAndPublishJavadoc()
+//            }
+//        }
     }
     post {
         success {
