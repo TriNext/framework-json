@@ -16,8 +16,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing'
-//                runTestsAndPublishResults()
-//                jacocoSetup()
+                runTestsAndPublishResults()
+                jacocoSetup()
             }
         }
 //        stage('Checks') {
@@ -43,11 +43,11 @@ pipeline {
                 deploy('staging')
             }
         }
-//        stage('Javadoc') {
-//            steps {
-//                generateAndPublishJavadoc()
-//            }
-//        }
+        stage('Javadoc') {
+            steps {
+                generateAndPublishJavadoc()
+            }
+        }
     }
     post {
         success {
