@@ -8,9 +8,6 @@ package app;
 
 public class Placeholder {
 
-    /**
-     * JavaDoc comment for Default Constructor
-     */
     public Placeholder() { }
 
     /**
