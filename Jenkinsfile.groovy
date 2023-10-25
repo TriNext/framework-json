@@ -8,14 +8,14 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
-//        stage('Test') {
-//            steps {
-//                echo 'Testing'
-//                cleanWorkspace()
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                cleanWorkspace()
 //                runTestsAndPublishResults()
 //                jacocoSetup()
-//            }
-//        }
+            }
+        }
         stage('Checks') {
             steps {
                 runGradleChecks()
