@@ -63,10 +63,7 @@
       <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
       <option name="ASSERT_STATEMENT_WRAP" value="5" />
       <option name="ASSERT_STATEMENT_COLON_ON_NEXT_LINE" value="true" />
-      <option name="METHOD_ANNOTATION_WRAP" value="5" />
-      <option name="CLASS_ANNOTATION_WRAP" value="5" />
-      <option name="FIELD_ANNOTATION_WRAP" value="5" />
-      <option name="VARIABLE_ANNOTATION_WRAP" value="5" />
+      <option name="VARIABLE_ANNOTATION_WRAP" value="2" />
       <option name="ENUM_CONSTANTS_WRAP" value="5" />
       <arrangement>
         <groups>
@@ -96,7 +93,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// ==== CONSTANTS ========================================================>> &#10;">
+          <section start_comment="// ==== CONSTANTS ========================================================&gt;&gt;">
             <rule>
               <match>
                 <AND>
@@ -132,7 +129,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// STATIC FIELDS ========================================================>> &#10;">
+          <section start_comment="// STATIC FIELDS ========================================================&gt;&gt;">
             <rule>
               <match>
                 <AND>
@@ -186,7 +183,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// INNER TYPES ========================================================>> &#10;">
+          <section start_comment="// INNER TYPES ========================================================&gt;&gt;">
             <rule>
               <match>
                 <CLASS>true</CLASS>
@@ -217,7 +214,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// FIELDS ========================================================>> &#10;">
+          <section start_comment="// FIELDS ========================================================&gt;&gt;">
             <rule>
               <match>
                 <AND>
@@ -308,7 +305,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// CONSTRUCTORS ========================================================>> &#10;">
+          <section start_comment="// CONSTRUCTORS ========================================================&gt;&gt;">
             <rule>
               <match>
                 <INITIALIZER_BLOCK>true</INITIALIZER_BLOCK>
@@ -322,7 +319,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// METHODS ========================================================>> &#10;">
+          <section start_comment="// METHODS ========================================================&gt;&gt;">
             <rule>
               <match>
                 <AND>
