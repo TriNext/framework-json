@@ -12,6 +12,10 @@ projectJDK: 21
 failThreshold: 0
 paths:
   - src/*
+severity:
+  info: ACCEPT
+  warning: ACCEPT
+  error: ERROR
 exclude:
   - name: Paths to Exclude
     paths:
