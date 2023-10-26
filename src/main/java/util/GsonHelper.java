@@ -23,6 +23,8 @@ public interface GsonHelper {
 
     /** Returns the type name of a {@link JsonElement}. */
     static String gsonTypeName(JsonElement jElem) {
+        if (jElem == null)
+            throw new UnexpectedGsonTypeException(null, JsonElement.class);
         if (jElem instanceof JsonPrimitive jPrim) {
             if (jPrim.isBoolean())
                 return JSON_BOOLEAN_TYPE;
@@ -37,25 +39,29 @@ public interface GsonHelper {
 
     /** Returns true if a {@link JsonPrimitive} is an Integer (not a Decimal) */
     static boolean gsonNrIsInt(JsonPrimitive jPrim) {
-        if (!jPrim.isNumber())
+        if (jPrim == null || !jPrim.isNumber())
             throw new UnexpectedGsonTypeException(jPrim, JsonPrimitive.class);
         return BigDecimalHelper.isInteger(jPrim.getAsBigDecimal());
     }
 
     /** Returns true if a {@link JsonPrimitive} is a Decimal (not an Integer) */
     static boolean gsonNrIsDec(JsonPrimitive jPrim) {
-        if (!jPrim.isNumber())
+        if (jPrim == null || !jPrim.isNumber())
             throw new UnexpectedGsonTypeException(jPrim, JsonPrimitive.class);
         return !BigDecimalHelper.isInteger(jPrim.getAsBigDecimal());
     }
 
     /** Returns the type name of a gson-class. */
-    static String gsonTypeName(Class<? extends JsonElement> jElem) {
-        return jElem.getSimpleName();
+    static String gsonTypeName(Class<? extends JsonElement> jElemCls) {
+        if (jElemCls == null)
+            throw new UnexpectedGsonTypeError(null, JsonElement.class);
+        return jElemCls.getSimpleName();
     }
 
     /** Creates a {@link Stream} from a {@link JsonArray}. */
     static Stream<JsonElement> arrayToStream(JsonArray jArr) {
+        if (jArr == null)
+            throw new UnexpectedGsonTypeError(null, JsonElement.class);
         return StreamSupport.stream(jArr.spliterator(), false);
     }
 

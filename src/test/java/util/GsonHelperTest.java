@@ -1,6 +1,6 @@
 package util;
 
-import java.util.*;
+import java.util.Arrays;
 
 import com.google.gson.*;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,9 @@ import static util.GsonHelper.*;
  */
 class GsonHelperTest {
 
-    // ==== METHODS ========================================================== //
-
     private static final int ELEMS_PER_TEST = 100;
+
+    // ==== METHODS ========================================================== //
 
     @Test
     void test_gson_type_name() {
@@ -28,6 +28,7 @@ class GsonHelperTest {
         assertEquals(JSON_DECIMAL_TYPE, gsonTypeName(new JsonPrimitive(0.5)));
         assertEquals(JSON_STRING_TYPE, gsonTypeName(new JsonPrimitive("")));
         assertEquals(JSON_BOOLEAN_TYPE, gsonTypeName(new JsonPrimitive(true)));
+        assertThrows(UnexpectedGsonTypeError.class, () -> gsonTypeName((Class<? extends JsonElement>) null));
     }
 
     @Test
@@ -38,6 +39,10 @@ class GsonHelperTest {
                 UnexpectedGsonTypeException.class,
                 () -> gsonNrIsInt(new JsonPrimitive(""))
         );
+        assertThrows(
+                UnexpectedGsonTypeException.class,
+                () -> gsonNrIsInt(null)
+        );
     }
 
     @Test
@@ -46,7 +51,11 @@ class GsonHelperTest {
         assertFalse(gsonNrIsDec(new JsonPrimitive(1)));
         assertThrows(
                 UnexpectedGsonTypeException.class,
-                () -> gsonNrIsInt(new JsonPrimitive(""))
+                () -> gsonNrIsDec(new JsonPrimitive(""))
+        );
+        assertThrows(
+                UnexpectedGsonTypeException.class,
+                () -> gsonNrIsDec(null)
         );
     }
 

@@ -32,10 +32,10 @@ public class UnexpectedGsonTypeException extends IllegalArgumentException {
      * {@link GsonPrimitiveTypeName#JSON_DECIMAL_TYPE}
      */
     public UnexpectedGsonTypeException(JsonElement jElem, String expected) {
-        super(String.format(
-                "Expected %s but received element of type %s.",
-                expected, GsonHelper.gsonTypeName(jElem)
-        ));
+        super(jElem == null
+              ? String.format("Expected %s but received null.", expected)
+              : String.format("Expected %s but received element of type %s.", expected, GsonHelper.gsonTypeName(jElem))
+        );
     }
 
 }

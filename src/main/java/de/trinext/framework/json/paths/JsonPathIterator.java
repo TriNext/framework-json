@@ -19,7 +19,9 @@ class JsonPathIterator implements Iterator<String> {
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonPathIterator(String jsonPath) {
-        pathElems = PATH_SEPARATOR.split(jsonPath);
+        pathElems = jsonPath.isEmpty()
+                    ? new String[0]
+                    : PATH_SEPARATOR.split(jsonPath);
         i = 0;
     }
 

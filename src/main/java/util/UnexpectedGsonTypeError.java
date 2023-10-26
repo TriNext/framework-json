@@ -20,10 +20,10 @@ public class UnexpectedGsonTypeError extends AssertionError {
      * @param expected {@link JsonElement} or {@link JsonPrimitive}.
      */
     public UnexpectedGsonTypeError(JsonElement jElem, Class<? extends JsonElement> expected) {
-        super(String.format(
-                "Expected %s but received element of unknown type %s.",
-                expected, GsonHelper.gsonTypeName(jElem)
-        ));
+        super(jElem == null
+              ? String.format("Expected %s but received null.", expected)
+              : String.format("Expected %s but received element of unknown type %s.", expected, GsonHelper.gsonTypeName(jElem))
+        );
     }
 
 }
