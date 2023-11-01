@@ -6,11 +6,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// INNER TYPES ========================================================>>
+
 /**
  * @author Dennis Woithe
  */
 class JsonPathIterator implements Iterator<String> {
 
+    private static final String[] EMPTY_PATH = new String[0];
     private static final Pattern PATH_SEPARATOR = Pattern.compile("(?<!\\\\)\\.");
     private final String[] pathElems;
 
@@ -18,9 +21,9 @@ class JsonPathIterator implements Iterator<String> {
 
     // ==== CONSTRUCTORS ===================================================== //
 
-    JsonPathIterator(String jsonPath) {
+    JsonPathIterator(CharSequence jsonPath) {
         pathElems = jsonPath.isEmpty()
-                    ? new String[0]
+                    ? EMPTY_PATH
                     : PATH_SEPARATOR.split(jsonPath);
         i = 0;
     }

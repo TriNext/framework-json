@@ -3,6 +3,8 @@ package de.trinext.framework.json;
 import java.util.Objects;
 
 /**
+ * @param <V> the type of the wrapped value
+ *
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -13,10 +15,15 @@ public abstract sealed class JsonElement<V> permits JsonArray, JsonObject, JsonP
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonElement(V value) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value, "Value of " + typeName() + " cannot be null!");
     }
 
     // ==== METHODS ========================================================== //
+
+    /** Returns the name of the type of this JsonElement. */
+    public final String typeName() {
+        return getClass().getSimpleName();
+    }
 
     /**
      * Converts this into the respective {@link com.google.gson.JsonElement}.
@@ -38,8 +45,10 @@ public abstract sealed class JsonElement<V> permits JsonArray, JsonObject, JsonP
                 && Objects.equals(value, ((JsonElement<?>) obj).value);
     }
 
+    @Override
     public abstract String toString();
 
+    /** Returns the wrapped value of this JsonElement. */
     public final V getValue() {
         return value;
     }

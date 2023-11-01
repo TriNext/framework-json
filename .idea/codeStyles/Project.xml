@@ -63,7 +63,10 @@
       <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
       <option name="ASSERT_STATEMENT_WRAP" value="5" />
       <option name="ASSERT_STATEMENT_COLON_ON_NEXT_LINE" value="true" />
-      <option name="VARIABLE_ANNOTATION_WRAP" value="2" />
+      <option name="METHOD_ANNOTATION_WRAP" value="5" />
+      <option name="CLASS_ANNOTATION_WRAP" value="5" />
+      <option name="FIELD_ANNOTATION_WRAP" value="5" />
+      <option name="VARIABLE_ANNOTATION_WRAP" value="5" />
       <option name="ENUM_CONSTANTS_WRAP" value="5" />
       <arrangement>
         <groups>
@@ -85,6 +88,37 @@
             <rule>
               <match>
                 <AND>
+                  <CLASS>true</CLASS>
+                  <STATIC>true</STATIC>
+                </AND>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <CLASS>true</CLASS>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <ENUM>true</ENUM>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <INTERFACE>true</INTERFACE>
+              </match>
+            </rule>
+          </section>
+          <section start_comment="// ==== CONSTANTS ========================================================&gt;&gt;">
+            <rule>
+              <match>
+                <AND>
                   <FIELD>true</FIELD>
                   <FINAL>true</FINAL>
                   <PUBLIC>true</PUBLIC>
@@ -93,7 +127,7 @@
               </match>
             </rule>
           </section>
-          <section start_comment="// ==== CONSTANTS ========================================================&gt;&gt;">
+          <section>
             <rule>
               <match>
                 <AND>
@@ -178,37 +212,6 @@
               <match>
                 <AND>
                   <INITIALIZER_BLOCK>true</INITIALIZER_BLOCK>
-                  <STATIC>true</STATIC>
-                </AND>
-              </match>
-            </rule>
-          </section>
-          <section start_comment="// INNER TYPES ========================================================&gt;&gt;">
-            <rule>
-              <match>
-                <CLASS>true</CLASS>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <ENUM>true</ENUM>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <INTERFACE>true</INTERFACE>
-              </match>
-            </rule>
-          </section>
-          <section>
-            <rule>
-              <match>
-                <AND>
-                  <CLASS>true</CLASS>
                   <STATIC>true</STATIC>
                 </AND>
               </match>
