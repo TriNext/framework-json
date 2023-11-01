@@ -21,3 +21,4 @@ exclude:
     paths:
       - build.gradle.kts
       - qodana.yaml
+      - Jenkinsfile.groovy
