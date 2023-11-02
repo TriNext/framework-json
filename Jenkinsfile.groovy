@@ -1,6 +1,6 @@
 //file:noinspection HardCodedStringLiteral
 
-def repoUrl = "https://github.com/TriNext/framework-json";
+def repoUrl = "https://github.com/TriNext/framework-json"
 pipeline {
     agent any
     options {
@@ -28,7 +28,7 @@ pipeline {
         stage('Deploy to Prod') {
             when {
                 anyOf {
-                    branch 'main';
+                    branch 'main'
                 }
             }
             steps {

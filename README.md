@@ -1,12 +1,8 @@
-# How to configure?
+# Functionality
 
-## In your Project
-- Add the project name
-  - in the `settings.gradle.kts` => `rootProject.name`
-  - in the `Jenkinsfile.groovy`
+This artifact retains 3 different functionalities:
 
-## In your editor (IntelliJ)
-- Go to `File > Settings > Tools > Actions on Save`
-  - enable `Reformat code (Whole File)`
-  - enable `Optimize imports`
-  - enable `Rearrange code`
+- Serializing any instance into a Json String
+- Deserializing a Json input source (`CharSequence`, `File`, `InputStream`) ...
+    - ...into an instance of a concrete class.
+    - ...into an abstract model of elements (`JsonObject`, `JsonPrimitive`).
