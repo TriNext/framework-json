@@ -6,18 +6,17 @@ import util.UnexpectedGsonTypeError;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "CyclicClassDependency"})
 public final class Json {
 
     private static final Gson GSON = new GsonBuilder()
             .serializeNulls()
             .create();
 
-    // ==== CONSTRUCTORS ===================================================== //
-
     private Json() { }
 
-    // ==== STATIC FUNCTIONS ================================================= //
+
+    // METHODS ========================================================>>
 
     @SuppressWarnings("WeakerAccess")
     public static JsonElement<?> treeFromString(CharSequence jsonInput) {

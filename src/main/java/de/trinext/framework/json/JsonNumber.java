@@ -7,12 +7,13 @@ import com.google.gson.JsonElement;
 import util.GsonHelper;
 
 // INNER TYPES ========================================================>>
+
 /**
  * @param <N> is the type of backing {@link Number}
  *
  * @author Dennis Woithe
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CyclicClassDependency"})
 public abstract sealed class JsonNumber<N extends Number>
         extends JsonPrimitive<N>
         permits JsonInteger, JsonDecimal

@@ -7,32 +7,18 @@ import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_BOOLEAN_TYPE;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonBool extends JsonPrimitive<Boolean> {
-
-    // ==== CONSTANTS ======================================================== //
 
     public static final JsonBool TRUE = new JsonBool(true), FALSE = new JsonBool(false);
 
-    // ==== CONSTRUCTORS ===================================================== //
+    // ==== CONSTANTS ========================================================>>
 
     private JsonBool(boolean value) {
         super(value);
     }
 
-    // ==== METHODS ========================================================== //
-
-    @Override
-    public com.google.gson.JsonPrimitive toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue());
-    }
-
-    @Override
-    public String toString() {
-        return getValue().toString();
-    }
-
-    // ==== STATIC FUNCTIONS ================================================= //
+    // METHODS ========================================================>>
 
     public static JsonBool from(boolean value) {
         return value ? TRUE : FALSE;
@@ -44,6 +30,18 @@ public final class JsonBool extends JsonPrimitive<Boolean> {
         if (!jPrim.isBoolean())
             throw new UnexpectedGsonTypeException(jPrim, JSON_BOOLEAN_TYPE);
         return jPrim.getAsBoolean() ? TRUE : FALSE;
+    }
+
+    // ==== STATIC FUNCTIONS ================================================= //
+
+    @Override
+    public com.google.gson.JsonPrimitive toGsonElem() {
+        return new com.google.gson.JsonPrimitive(getValue());
+    }
+
+    @Override
+    public String toString() {
+        return getValue().toString();
     }
 
 

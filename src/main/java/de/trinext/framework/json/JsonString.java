@@ -7,7 +7,7 @@ import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_STRING_TYPE;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonString extends JsonPrimitive<CharSequence> {
 
     // ==== CONSTRUCTORS ===================================================== //
@@ -16,19 +16,7 @@ public final class JsonString extends JsonPrimitive<CharSequence> {
         super(value);
     }
 
-    // ==== METHODS ========================================================== //
-
-    @Override
-    public com.google.gson.JsonPrimitive toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue().toString());
-    }
-
-    @Override
-    public String toString() {
-        return "\"" + getValue() + "\"";
-    }
-
-    // ==== STATIC FUNCTIONS ================================================= //
+    // METHODS ========================================================>>
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
     @Deprecated
@@ -40,6 +28,18 @@ public final class JsonString extends JsonPrimitive<CharSequence> {
 
     static JsonString from(CharSequence charSeq) {
         return new JsonString(charSeq);
+    }
+
+    // ==== STATIC FUNCTIONS ================================================= //
+
+    @Override
+    public com.google.gson.JsonPrimitive toGsonElem() {
+        return new com.google.gson.JsonPrimitive(getValue().toString());
+    }
+
+    @Override
+    public String toString() {
+        return "\"" + getValue() + "\"";
     }
 
 }

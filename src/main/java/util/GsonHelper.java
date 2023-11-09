@@ -15,11 +15,11 @@ import static de.trinext.framework.json.GsonPrimitiveTypeName.*;
  * @see Json for tree-conversion & (de-)serialization
  * @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore.
  */
-@SuppressWarnings("InterfaceNeverImplemented")
+@SuppressWarnings({"unused", "WeakerAccess", "InterfaceNeverImplemented", "CyclicClassDependency"})
 @Deprecated
 public interface GsonHelper {
 
-    // ==== STATIC FUNCTIONS ================================================= //
+    // METHODS ========================================================>>
 
     /** Returns the type name of a {@link JsonElement}. */
     static String gsonTypeName(JsonElement jElem) {

@@ -15,7 +15,7 @@ public abstract sealed class JsonElement<V> permits JsonArray, JsonObject, JsonP
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonElement(V value) {
-        this.value = Objects.requireNonNull(value, "Value of " + typeName() + " cannot be null!");
+        this.value = value;
     }
 
     // ==== METHODS ========================================================== //

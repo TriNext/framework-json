@@ -65,6 +65,7 @@ class GsonHelperTest {
         var jArr = new JsonArray();
         Arrays.stream(elems).forEach(e -> jArr.add((Number) e));
         assertArrayEquals(elems, arrayToStream(jArr).map(JsonElement::getAsInt).toArray());
+        assertThrows(UnexpectedGsonTypeError.class, () -> arrayToStream(null));
     }
 
 

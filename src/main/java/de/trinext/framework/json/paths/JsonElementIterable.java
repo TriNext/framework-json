@@ -1,6 +1,7 @@
 package de.trinext.framework.json.paths;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Optional;
 
 import de.trinext.framework.json.*;
 
@@ -17,16 +18,8 @@ public sealed interface JsonElementIterable permits JsonObject, JsonArray {
      * @see JsonElementIterable for the description of json paths.
      */
     @SuppressWarnings("UnnecessaryJavaDocLink")
-    default Optional<JsonElement<?>> tryGet(String jsonPath) {
-        try {
-            var iter = jsonElemIterator(jsonPath);
-            var elem = (JsonElement<?>) this;
-            while (iter.hasNext())
-                elem = iter.next();
-            return Optional.ofNullable(elem);
-        } catch (NoSuchElementException ignored) {
-            return Optional.empty();
-        }
+    public default Optional<JsonElement<?>> tryGetPath(String jsonPath) {
+        return jsonElemIterator(jsonPath).find();
     }
 
     /**
@@ -35,8 +28,8 @@ public sealed interface JsonElementIterable permits JsonObject, JsonArray {
      * @see JsonElementIterable for the description of json paths.
      */
     @SuppressWarnings("UnnecessaryJavaDocLink")
-    default JsonElementIterator jsonElemIterator(String jsonPath) {
-        return new JsonElementIterator(this, jsonPath);
+    default JsonPathFinder jsonElemIterator(String jsonPath) {
+        return new JsonPathFinder(this, jsonPath);
     }
 
 }

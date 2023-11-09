@@ -11,7 +11,7 @@ import de.trinext.framework.json.paths.JsonElementIterable;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonObject
         extends JsonElement<SequencedMap<String, JsonElement<?>>>
         implements Iterable<Entry<String, JsonElement<?>>>, JsonElementIterable
@@ -21,7 +21,7 @@ public final class JsonObject
 
     /** Creates an empty JsonObject. */
     JsonObject() {
-        super(new LinkedHashMap<>());
+        this(new LinkedHashMap<>());
     }
 
     /** Creates an empty JsonObject. */
@@ -31,6 +31,20 @@ public final class JsonObject
 
     // ==== METHODS ========================================================== //
 
+// METHODS ========================================================>>
+
+    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
+    @Deprecated //
+    static JsonObject from(com.google.gson.JsonObject jObj) {
+        return new JsonObject(new LinkedHashMap<>(jObj.asMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        entry -> Json.treeFromGsonTree(entry.getValue())
+                ))));
+    }
+
     /**
      * Add a JsonObject as a field.
      *
@@ -38,10 +52,7 @@ public final class JsonObject
      * @param objFieldValue an inner builder function
      */
     @SuppressWarnings("BoundedWildcard")
-    public JsonObject addObj(
-            String fieldName,
-            Function<JsonObject, JsonObject> objFieldValue
-    ) throws JsonFieldAlreadyExistsException {
+    public JsonObject addObj(String fieldName, Function<JsonObject, JsonObject> objFieldValue) throws JsonFieldAlreadyExistsException {
         return add(fieldName, objFieldValue.apply(new JsonObject()));
     }
 
@@ -51,10 +62,7 @@ public final class JsonObject
      * @param fieldName has to be a unique name
      * @param value can be any object
      */
-    public JsonObject add(
-            String fieldName,
-            Object value
-    ) throws JsonFieldAlreadyExistsException {
+    public JsonObject add(String fieldName, Object value) throws JsonFieldAlreadyExistsException {
         if (getValue().containsKey(Objects.requireNonNull(fieldName)))
             throw new JsonFieldAlreadyExistsException(fieldName);
         getValue().put(fieldName, Json.treeFromInstance(value));
@@ -104,25 +112,10 @@ public final class JsonObject
         return getValue().entrySet().iterator();
     }
 
-    @Override
-    public Optional<JsonElement<?>> tryGet(String jsonPath) {
-        return jsonPath.matches(".*[^.]")
-               ? Optional.ofNullable(getValue().get(jsonPath))
-               : JsonElementIterable.super.tryGet(jsonPath);
-    }
-
     // ==== STATIC FUNCTIONS ================================================= //
 
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated //
-    static JsonObject from(com.google.gson.JsonObject jObj) {
-        return new JsonObject(new LinkedHashMap<>(jObj.asMap()
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Entry::getKey,
-                        entry -> Json.treeFromGsonTree(entry.getValue())
-                ))));
+    public Optional<JsonElement<?>> tryGet(String fieldName) {
+        return Optional.ofNullable(getValue().get(fieldName));
     }
 
 }

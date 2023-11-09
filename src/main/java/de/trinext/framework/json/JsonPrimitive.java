@@ -5,6 +5,7 @@ import util.UnexpectedGsonTypeError;
 /**
  * @author Dennis Woithe
  */
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
 abstract sealed class JsonPrimitive<V>
         extends JsonElement<V>
         permits JsonBool, JsonNumber, JsonString
@@ -16,7 +17,8 @@ abstract sealed class JsonPrimitive<V>
         super(value);
     }
 
-    // ==== STATIC FUNCTIONS ================================================= //
+
+    // METHODS ========================================================>>
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
     @Deprecated

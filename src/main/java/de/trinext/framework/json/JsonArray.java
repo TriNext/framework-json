@@ -2,7 +2,8 @@ package de.trinext.framework.json;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import de.trinext.framework.json.paths.JsonElementIterable;
 import util.GsonHelper;
@@ -10,7 +11,7 @@ import util.GsonHelper;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "deprecation"})
 public final class JsonArray
         extends JsonElement<List<JsonElement<?>>>
         implements Iterable<JsonElement<?>>, JsonElementIterable
@@ -23,13 +24,7 @@ public final class JsonArray
         super(Arrays.stream(elems).map(Json::treeFromInstance).collect(Collectors.toList()));
     }
 
-    public int size() {
-        return getValue().size();
-    }
-
-    public boolean isEmpty() {
-        return getValue().isEmpty();
-    }
+// METHODS ========================================================>>
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
     @Deprecated
@@ -38,6 +33,14 @@ public final class JsonArray
         return new JsonArray(GsonHelper.arrayToStream(jArr)
                 .map(Json::treeFromGsonTree)
                 .collect(Collectors.toList()));
+    }
+
+    public int size() {
+        return getValue().size();
+    }
+
+    public boolean isEmpty() {
+        return getValue().isEmpty();
     }
 
     // ==== METHODS ========================================================== //
@@ -83,19 +86,12 @@ public final class JsonArray
     }
 
     @Override
-    public Optional<JsonElement<?>> tryGet(String jsonPath) {
-        return jsonPath.matches("\\d+")
-               ? tryGet(Integer.parseInt(jsonPath))
-               : JsonElementIterable.super.tryGet(jsonPath);
+    public String toString() {
+        return getValue().toString();
     }
 
     public Optional<JsonElement<?>> tryGet(int idx) {
         return Optional.ofNullable(getValue().get(idx));
-    }
-
-    @Override
-    public String toString() {
-        return getValue().toString();
     }
 
 }

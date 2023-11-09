@@ -1,6 +1,7 @@
 package de.trinext.framework.json;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +51,7 @@ class JsonArrayTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var iter =  new JsonArray((Object[]) elems).iterator();
+        var iter = new JsonArray((Object[]) elems).iterator();
         for (var i = 0; iter.hasNext(); i++)
             assertEquals(elems[i], iter.next());
     }
@@ -67,7 +68,7 @@ class JsonArrayTest {
     @Test
     void test_try_get_empty() {
         var jArr = new JsonArray();
-        var res = jArr.tryGet("");
+        var res = jArr.tryGetPath("");
         assertTrue(res.isPresent());
         assertEquals(jArr, res.get());
     }
@@ -75,13 +76,14 @@ class JsonArrayTest {
     @Test
     void test_try_get_index() {
         var jArr = new JsonArray().add(10);
-        assertEquals(jArr.tryGet(0), jArr.tryGet("0"));
+        assertEquals(jArr.tryGet(0), jArr.tryGetPath("0"));
+        assertEquals(Optional.empty(), jArr.tryGetPath("0.x"));
     }
 
     @Test
     void test_try_get_nested_obj() {
         var jArr = new JsonArray().addObj(obj -> obj.add("a", "b"));
-        var res = jArr.tryGet("0.a");
+        var res = jArr.tryGetPath("0.a");
         assertTrue(res.isPresent());
         assertEquals(JsonString.from("b"), res.get());
     }
