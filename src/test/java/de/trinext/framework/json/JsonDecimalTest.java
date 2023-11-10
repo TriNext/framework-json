@@ -87,4 +87,9 @@ class JsonDecimalTest {
         ));
     }
 
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonDecimal.class.getSimpleName(), JsonDecimal.from(0.1).typeName());
+    }
+
 }

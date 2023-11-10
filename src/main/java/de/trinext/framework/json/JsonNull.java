@@ -3,7 +3,10 @@ package de.trinext.framework.json;
 import java.util.Objects;
 
 /**
+ * The json representation of no value.
+ *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonNull gson equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonNull extends JsonElement<Void> {
@@ -22,13 +25,13 @@ public final class JsonNull extends JsonElement<Void> {
     // ==== METHODS ========================================================== //
 
     @Override
-    public String toString() {
-        return Objects.toString(null);
+    public com.google.gson.JsonElement toGsonElem() {
+        return com.google.gson.JsonNull.INSTANCE;
     }
 
     @Override
-    public com.google.gson.JsonElement toGsonElem() {
-        return com.google.gson.JsonNull.INSTANCE;
+    public String toString() {
+        return Objects.toString(null);
     }
 
 }

@@ -3,6 +3,8 @@ package de.trinext.framework.json;
 import util.UnexpectedGsonTypeError;
 
 /**
+ * The classification for a {@link JsonElement} that does not contain other {@link JsonElement}s.
+ *
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})

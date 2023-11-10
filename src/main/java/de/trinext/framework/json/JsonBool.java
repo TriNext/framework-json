@@ -5,7 +5,10 @@ import util.UnexpectedGsonTypeException;
 import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_BOOLEAN_TYPE;
 
 /**
+ * The json representation of a boolean value.
+ *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonPrimitive#JsonPrimitive(Boolean) gson equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonBool extends JsonPrimitive<Boolean> {

@@ -8,7 +8,11 @@ import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_DECIMAL_TYPE;
 
 
 /**
+ * The json representation of a potentially infinitely precise decimal number.
+ *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
+ * @see BigDecimal java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonDecimal extends JsonNumber<BigDecimal> {

@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract sealed class JsonElement<V> permits JsonArray, JsonObject, JsonPrimitive, JsonNull {
+public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive, JsonNull {
 
     private final V value;
 

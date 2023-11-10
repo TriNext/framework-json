@@ -5,22 +5,26 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.trinext.framework.json.paths.JsonElementIterable;
+import com.google.gson.JsonArray;
 import util.GsonHelper;
 
 /**
+ * The json representation of a mutable, ordered, numerically indexed, linear collection of {@link JsonElement}s.
+ *
  * @author Dennis Woithe
+ * @see JsonArray gson equivalent
+ * @see List java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "deprecation"})
-public final class JsonArray
-        extends JsonElement<List<JsonElement<?>>>
-        implements Iterable<JsonElement<?>>, JsonElementIterable
+public final class JsonList
+        extends JsonContainer<List<JsonElement<?>>>
+        implements Iterable<JsonElement<?>>
 {
 
     // ==== CONSTRUCTORS ===================================================== //
 
     /** Creates an empty JsonArray. */
-    JsonArray(Object... elems) {
+    JsonList(Object... elems) {
         super(Arrays.stream(elems).map(Json::treeFromInstance).collect(Collectors.toList()));
     }
 
@@ -28,17 +32,18 @@ public final class JsonArray
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
     @Deprecated
-    static JsonArray from(com.google.gson.JsonArray jArr) {
-        // TODO: Optimize performance
-        return new JsonArray(GsonHelper.arrayToStream(jArr)
+    static JsonList from(JsonArray jArr) {
+        return new JsonList(GsonHelper.arrayToStream(jArr)
                 .map(Json::treeFromGsonTree)
                 .collect(Collectors.toList()));
     }
 
+    /** @return the amount of elements in this array. */
     public int size() {
         return getValue().size();
     }
 
+    /** @return whether this array is empty. */
     public boolean isEmpty() {
         return getValue().isEmpty();
     }
@@ -46,12 +51,12 @@ public final class JsonArray
     // ==== METHODS ========================================================== //
 
     @SuppressWarnings("BoundedWildcard")
-    public JsonArray addObj(Function<JsonObject, JsonObject> elem) throws JsonFieldAlreadyExistsException {
-        return add(elem.apply(new JsonObject()));
+    public JsonList addObj(Function<JsonMap, JsonMap> elem) throws JsonFieldAlreadyExistsException {
+        return add(elem.apply(new JsonMap()));
     }
 
 
-    public JsonArray add(Object elem) throws JsonFieldAlreadyExistsException {
+    public JsonList add(Object elem) throws JsonFieldAlreadyExistsException {
         getValue().add(Json.treeFromInstance(elem));
         return this;
     }
@@ -61,7 +66,7 @@ public final class JsonArray
     }
 
 
-    public JsonArray addArr(Object... elems) throws JsonFieldAlreadyExistsException {
+    public JsonList addArr(Object... elems) throws JsonFieldAlreadyExistsException {
         return add(elems);
     }
 
@@ -71,13 +76,13 @@ public final class JsonArray
     }
 
     @Override
-    public com.google.gson.JsonArray toGsonElem() {
+    public JsonArray toGsonElem() {
         return stream()
                 .map(JsonElement::toGsonElem)
                 .collect(
-                        com.google.gson.JsonArray::new,
-                        com.google.gson.JsonArray::add,
-                        com.google.gson.JsonArray::addAll
+                        JsonArray::new,
+                        JsonArray::add,
+                        JsonArray::addAll
                 );
     }
 

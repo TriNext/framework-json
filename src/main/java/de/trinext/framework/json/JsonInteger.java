@@ -10,7 +10,11 @@ import util.UnexpectedGsonTypeException;
 import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_INTEGER_TYPE;
 
 /**
+ * The json representation of a potentially infinitely big integer.
+ *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
+ * @see BigInteger java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency", "OverloadedMethodsWithSameNumberOfParameters"})
 public final class JsonInteger extends JsonNumber<BigInteger> {

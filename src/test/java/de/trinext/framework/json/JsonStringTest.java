@@ -81,4 +81,9 @@ class JsonStringTest {
                 ));
     }
 
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonString.class.getSimpleName(), JsonString.from("").typeName());
+    }
+
 }
