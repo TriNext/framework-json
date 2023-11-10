@@ -5,9 +5,9 @@ import de.trinext.framework.json.Json;
  *
  * @see Json
  */
+@SuppressWarnings("MissingJavadoc") //
 module framework.json {
     exports de.trinext.framework.json;
-    exports de.trinext.framework.json.paths;
     requires com.google.gson;
     requires org.jetbrains.annotations;
 }
