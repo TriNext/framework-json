@@ -2,6 +2,9 @@
 
 import org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension
 
+group = "de.trinext"
+version = "1.0.0"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -14,6 +17,8 @@ java {
 }
 
 plugins {
+    `java-library`
+    `maven-publish`
     id("java")
     jacoco
     id("org.owasp.dependencycheck") version "8.4.0"
@@ -52,4 +57,23 @@ tasks.test {
 }
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
+}
+
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/trinext/framework-json")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("TONYS_GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TONYS_PAT")
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["java"])
+        }
+    }
 }
