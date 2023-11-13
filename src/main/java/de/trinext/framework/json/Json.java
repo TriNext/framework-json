@@ -13,7 +13,7 @@ public final class Json {
             .serializeNulls()
             .create();
 
-    private Json() { }
+    private Json() { throw new AssertionError(); }
 
 
     // METHODS ========================================================>>
