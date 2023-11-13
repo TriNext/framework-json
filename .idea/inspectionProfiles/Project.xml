@@ -2527,7 +2527,7 @@
     <inspection_tool class="SqlUnusedVariableInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SqlWithoutWhereInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StandardJS" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="StandardVariableNames" enabled="false" level="TYPO" enabled_by_default="false" editorAttributes="TYPO">
+    <inspection_tool class="StandardVariableNames" enabled="true" level="TYPO" enabled_by_default="true" editorAttributes="TYPO">
       <option name="ignoreParameterNameSameAsSuper" value="true" />
     </inspection_tool>
     <inspection_tool class="StatefulEp" enabled="true" level="WARNING" enabled_by_default="true" />
