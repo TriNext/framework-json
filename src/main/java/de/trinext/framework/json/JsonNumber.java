@@ -6,13 +6,16 @@ import java.math.BigInteger;
 import com.google.gson.JsonElement;
 import util.GsonHelper;
 
-// INNER TYPES ========================================================>>
 /**
- * @param <N> is the type of backing {@link Number}
+ * The classification for any {@link JsonElement} that represents a number.
+ *
+ * @param <N> the type of the number, either {@link BigDecimal} or {@link BigInteger}.
  *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
+ * @see Number java equivalent
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "CyclicClassDependency"})
 public abstract sealed class JsonNumber<N extends Number>
         extends JsonPrimitive<N>
         permits JsonInteger, JsonDecimal

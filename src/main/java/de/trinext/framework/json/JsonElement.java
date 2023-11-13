@@ -8,14 +8,14 @@ import java.util.Objects;
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract sealed class JsonElement<V> permits JsonArray, JsonObject, JsonPrimitive, JsonNull {
+public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive, JsonNull {
 
     private final V value;
 
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonElement(V value) {
-        this.value = Objects.requireNonNull(value, "Value of " + typeName() + " cannot be null!");
+        this.value = value;
     }
 
     // ==== METHODS ========================================================== //

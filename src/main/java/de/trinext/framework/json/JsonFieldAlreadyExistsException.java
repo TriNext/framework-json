@@ -1,7 +1,7 @@
 package de.trinext.framework.json;
 
 /**
- * Gets thrown when someone tries to add a field to a {@link JsonObject},
+ * Gets thrown when someone tries to add a field to a {@link JsonMap},
  * which already has a field with the same name.
  *
  * @author Dennis Woithe

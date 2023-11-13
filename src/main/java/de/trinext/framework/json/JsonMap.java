@@ -6,30 +6,48 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.trinext.framework.json.paths.JsonElementIterable;
+import com.google.gson.JsonObject;
 
 /**
+ * The json representation of a mutable, unordered, string key-value storage of {@link JsonElement}s.
+ *
  * @author Dennis Woithe
+ * @see JsonObject gson equivalent
+ * @see Map java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
-public final class JsonObject
-        extends JsonElement<SequencedMap<String, JsonElement<?>>>
-        implements Iterable<Entry<String, JsonElement<?>>>, JsonElementIterable
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
+public final class JsonMap
+        extends JsonContainer<SequencedMap<String, JsonElement<?>>>
+        implements Iterable<Entry<String, JsonElement<?>>>
 {
 
     // ==== CONSTRUCTORS ===================================================== //
 
     /** Creates an empty JsonObject. */
-    JsonObject() {
-        super(new LinkedHashMap<>());
+    JsonMap() {
+        this(new LinkedHashMap<>());
     }
 
     /** Creates an empty JsonObject. */
-    JsonObject(SequencedMap<String, JsonElement<?>> fields) {
+    JsonMap(SequencedMap<String, JsonElement<?>> fields) {
         super(fields);
     }
 
     // ==== METHODS ========================================================== //
+
+// METHODS ========================================================>>
+
+    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
+    @Deprecated //
+    static JsonMap from(JsonObject jObj) {
+        return new JsonMap(new LinkedHashMap<>(jObj.asMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        entry -> Json.treeFromGsonTree(entry.getValue())
+                ))));
+    }
 
     /**
      * Add a JsonObject as a field.
@@ -38,11 +56,8 @@ public final class JsonObject
      * @param objFieldValue an inner builder function
      */
     @SuppressWarnings("BoundedWildcard")
-    public JsonObject addObj(
-            String fieldName,
-            Function<JsonObject, JsonObject> objFieldValue
-    ) throws JsonFieldAlreadyExistsException {
-        return add(fieldName, objFieldValue.apply(new JsonObject()));
+    public JsonMap addObj(String fieldName, Function<JsonMap, JsonMap> objFieldValue) throws JsonFieldAlreadyExistsException {
+        return add(fieldName, objFieldValue.apply(new JsonMap()));
     }
 
     /**
@@ -51,10 +66,7 @@ public final class JsonObject
      * @param fieldName has to be a unique name
      * @param value can be any object
      */
-    public JsonObject add(
-            String fieldName,
-            Object value
-    ) throws JsonFieldAlreadyExistsException {
+    public JsonMap add(String fieldName, Object value) throws JsonFieldAlreadyExistsException {
         if (getValue().containsKey(Objects.requireNonNull(fieldName)))
             throw new JsonFieldAlreadyExistsException(fieldName);
         getValue().put(fieldName, Json.treeFromInstance(value));
@@ -72,7 +84,7 @@ public final class JsonObject
      * @param fieldName has to be a unique name
      * @param arrFieldValue an array of values
      */
-    public JsonObject addArr(
+    public JsonMap addArr(
             String fieldName,
             Object... arrFieldValue
     ) throws JsonFieldAlreadyExistsException {
@@ -80,8 +92,8 @@ public final class JsonObject
     }
 
     @Override
-    public com.google.gson.JsonObject toGsonElem() {
-        var res = new com.google.gson.JsonObject();
+    public JsonObject toGsonElem() {
+        var res = new JsonObject();
         for (var entry : this)
             res.add(entry.getKey(), entry.getValue().toGsonElem());
         return res;
@@ -104,25 +116,10 @@ public final class JsonObject
         return getValue().entrySet().iterator();
     }
 
-    @Override
-    public Optional<JsonElement<?>> tryGet(String jsonPath) {
-        return jsonPath.matches(".*[^.]")
-               ? Optional.ofNullable(getValue().get(jsonPath))
-               : JsonElementIterable.super.tryGet(jsonPath);
-    }
-
     // ==== STATIC FUNCTIONS ================================================= //
 
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated //
-    static JsonObject from(com.google.gson.JsonObject jObj) {
-        return new JsonObject(new LinkedHashMap<>(jObj.asMap()
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Entry::getKey,
-                        entry -> Json.treeFromGsonTree(entry.getValue())
-                ))));
+    public Optional<JsonElement<?>> tryGet(String fieldName) {
+        return Optional.ofNullable(getValue().get(fieldName));
     }
 
 }

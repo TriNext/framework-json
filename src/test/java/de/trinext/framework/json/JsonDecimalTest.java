@@ -26,7 +26,8 @@ class JsonDecimalTest {
         ));
     }
 
-    @Test @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
+    @Test
+    @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
     void test_equals() {
         testForRandomDoubles(NRS_PER_TEST, randDouble -> {
             var jD = JsonDecimal.from(randDouble);
@@ -47,12 +48,11 @@ class JsonDecimalTest {
 
     @Test
     void test_from_literal() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInts -> assertEquals(
-                randBigInts, JsonDecimal.from(randBigInts).getValue()
-        ));
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
-                randBigDec, JsonDecimal.from(randBigDec).getValue()
-        ));
+        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+            assertEquals(randBigDec, JsonDecimal.from(randBigDec).getValue());
+            assertEquals(randBigDec.floatValue(), JsonDecimal.from(randBigDec.floatValue()).getValue().floatValue());
+            assertEquals(randBigDec.doubleValue(), JsonDecimal.from(randBigDec.doubleValue()).getValue().doubleValue());
+        });
     }
 
     @Test
@@ -85,6 +85,11 @@ class JsonDecimalTest {
                 new JsonPrimitive(randBigDec),
                 JsonDecimal.from(randBigDec).toGsonElem()
         ));
+    }
+
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonDecimal.class.getSimpleName(), JsonDecimal.from(0.1).typeName());
     }
 
 }

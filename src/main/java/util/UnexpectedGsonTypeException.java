@@ -10,7 +10,8 @@ import de.trinext.framework.json.GsonPrimitiveTypeName;
  * @author Dennis Woithe
  * @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore.
  */
-@Deprecated @SuppressWarnings("SerializableHasSerializationMethods")
+@Deprecated
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency", "SerializableHasSerializationMethods"})
 public class UnexpectedGsonTypeException extends IllegalArgumentException {
 
     // ==== CONSTRUCTORS ===================================================== //

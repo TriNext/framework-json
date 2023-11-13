@@ -34,6 +34,9 @@ dependencies {
     // Temporarily Wrapped Dependency
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Nullability Annotations
+    implementation("org.jetbrains:annotations:24.0.0")
 }
 
 tasks.check {

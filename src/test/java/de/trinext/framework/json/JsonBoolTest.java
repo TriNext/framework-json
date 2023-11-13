@@ -65,4 +65,10 @@ class JsonBoolTest {
         assertEquals(new JsonPrimitive(false), JsonBool.FALSE.toGsonElem());
     }
 
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonBool.class.getSimpleName(), JsonBool.TRUE.typeName());
+        assertEquals(JsonBool.class.getSimpleName(), JsonBool.FALSE.typeName());
+    }
+
 }

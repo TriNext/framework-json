@@ -6,18 +6,17 @@ import util.UnexpectedGsonTypeError;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "CyclicClassDependency"})
 public final class Json {
 
     private static final Gson GSON = new GsonBuilder()
             .serializeNulls()
             .create();
 
-    // ==== CONSTRUCTORS ===================================================== //
-
     private Json() { }
 
-    // ==== STATIC FUNCTIONS ================================================= //
+
+    // METHODS ========================================================>>
 
     @SuppressWarnings("WeakerAccess")
     public static JsonElement<?> treeFromString(CharSequence jsonInput) {
@@ -28,8 +27,8 @@ public final class Json {
     @Deprecated
     static JsonElement<?> treeFromGsonTree(com.google.gson.JsonElement jElem) {
         return switch (jElem) {
-            case com.google.gson.JsonObject jObj -> JsonObject.from(jObj);
-            case com.google.gson.JsonArray jArr -> JsonArray.from(jArr);
+            case JsonObject jObj -> JsonMap.from(jObj);
+            case JsonArray jArr -> JsonList.from(jArr);
             case com.google.gson.JsonNull jNull -> JsonNull.NULL;
             case com.google.gson.JsonPrimitive jPrim -> JsonPrimitive.from(jPrim);
             default -> throw new UnexpectedGsonTypeError(jElem, com.google.gson.JsonElement.class);
