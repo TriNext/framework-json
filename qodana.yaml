@@ -6,18 +6,6 @@ version: "1.0"
 #Specify inspection profile for code analysis
 profile:
   path: .idea/inspectionProfiles/Project.xml
-
 linter: jetbrains/qodana-jvm:latest
 projectJDK: 21
 failThreshold: 0
-paths:
-  - src/*
-severity:
-  info: ACCEPT
-  warning: ACCEPT
-  error: ERROR
-exclude:
-  - name: Paths to Exclude
-    paths:
-      - build.gradle.kts
-      - qodana.yaml
