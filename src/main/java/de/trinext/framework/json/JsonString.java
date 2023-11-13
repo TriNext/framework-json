@@ -12,12 +12,12 @@ import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_STRING_TYPE;
  * @see String java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
-public final class JsonString extends JsonPrimitive<CharSequence> {
+public final class JsonString extends JsonPrimitive<String> {
 
     // ==== CONSTRUCTORS ===================================================== //
 
     private JsonString(CharSequence value) {
-        super(value);
+        super(value.toString());
     }
 
     // METHODS ========================================================>>
@@ -38,7 +38,7 @@ public final class JsonString extends JsonPrimitive<CharSequence> {
 
     @Override
     public com.google.gson.JsonPrimitive toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue().toString());
+        return new com.google.gson.JsonPrimitive(getValue());
     }
 
     @Override

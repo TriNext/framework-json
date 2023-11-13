@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonObject;
 
 /**
- * The json representation of a mutable, unordered, string key-value storage of {@link JsonElement}s.
+ * The json representation of a mutable, ordered, string key-value storage of {@link JsonElement}s.
  *
  * @author Dennis Woithe
  * @see JsonObject gson equivalent

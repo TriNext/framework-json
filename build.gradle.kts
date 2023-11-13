@@ -5,12 +5,7 @@ import org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 plugins {
