@@ -22,6 +22,7 @@ public interface GsonHelper {
     // METHODS ========================================================>>
 
     /** Returns the type name of a {@link JsonElement}. */
+    @SuppressWarnings({"MethodWithMultipleReturnPoints", "IfCanBeAssertion"})
     static String gsonTypeName(JsonElement jElem) {
         if (jElem == null)
             throw new UnexpectedGsonTypeException(null, JsonElement.class);

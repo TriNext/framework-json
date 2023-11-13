@@ -47,5 +47,4 @@ public final class JsonBool extends JsonPrimitive<Boolean> {
         return getValue().toString();
     }
 
-
 }

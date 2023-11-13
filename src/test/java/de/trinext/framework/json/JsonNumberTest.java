@@ -1,11 +1,13 @@
 package de.trinext.framework.json;
 
+import java.math.BigDecimal;
+
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static test.util.TestHelper.testForRandomBigDecs;
-import static test.util.TestHelper.testForRandomBigInts;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static test.util.TestHelper.*;
 
 /**
  * @author Dennis Woithe
@@ -114,6 +116,60 @@ class JsonNumberTest {
                 JsonNumber.from(randBigDec),
                 JsonNumber.from(new JsonPrimitive(randBigDec))
         ));
+    }
+
+    @Test
+    void test_try_getters() {
+        testForRandomInts(NRS_PER_TEST, randBigInt -> {
+            var json = (JsonElement<?>) JsonNumber.from(randBigInt);
+            assertEquals(randBigInt, json.tryGetInt().orElseThrow());
+        });
+
+        testForRandomLongs(NRS_PER_TEST, randLong -> {
+            var json = (JsonElement<?>) JsonNumber.from(randLong);
+            assertEquals(randLong, json.tryGetLong().orElseThrow());
+        });
+
+        testForRandomDoubles(NRS_PER_TEST, randDouble -> {
+            var json = (JsonElement<?>) JsonNumber.from(randDouble);
+            assertEquals(randDouble, json.tryGetDouble().orElseThrow());
+        });
+
+        testForRandomBigInts(NRS_PER_TEST, randBigInt -> {
+            var json = (JsonElement<?>) JsonNumber.from(randBigInt);
+
+            assertEquals(randBigInt, json.tryGetBigInt().orElseThrow());
+            assertEquals(randBigInt, json.tryGetNumber().orElseThrow());
+
+            assertEquals(new BigDecimal(randBigInt), json.tryGetBigDec().orElseThrow());
+        });
+
+        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+            var json = (JsonElement<?>) JsonNumber.from(randBigDec);
+
+            assertEquals(randBigDec, json.tryGetBigDec().orElseThrow());
+            assertEquals(randBigDec, json.tryGetNumber().orElseThrow());
+        });
+    }
+
+    @Test
+    void test_try_getters_empty() {
+        var nonJNr = JsonString.from("not a number");
+        var hugeDecimal = BigDecimal.valueOf(Double.MAX_VALUE).multiply(BigDecimal.TEN);
+
+        assertTrue(nonJNr.tryGetInt().isEmpty());
+        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetInt().isEmpty());
+
+        assertTrue(nonJNr.tryGetLong().isEmpty());
+        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetLong().isEmpty());
+
+        assertTrue(nonJNr.tryGetDouble().isEmpty());
+        assertEquals(Double.POSITIVE_INFINITY, JsonDecimal.from(hugeDecimal).tryGetDouble().orElseThrow());
+
+
+        assertTrue(nonJNr.tryGetBigInt().isEmpty());
+        assertTrue(nonJNr.tryGetBigDec().isEmpty());
+        assertTrue(nonJNr.tryGetNumber().isEmpty());
     }
 
 }

@@ -65,7 +65,6 @@ public final class JsonList
         return getValue().contains(Json.treeFromInstance(elem));
     }
 
-
     public JsonList addArr(Object... elems) throws JsonFieldAlreadyExistsException {
         return add(elems);
     }

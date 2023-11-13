@@ -12,7 +12,7 @@ public class JsonFieldAlreadyExistsException extends RuntimeException {
     // ==== CONSTRUCTORS ===================================================== //
 
     JsonFieldAlreadyExistsException(String fieldName) {
-        super(fieldName + " was already added to JsonObject.");
+        super(fieldName + " was already added to " + JsonMap.class.getSimpleName() + "!");
     }
 
 }
