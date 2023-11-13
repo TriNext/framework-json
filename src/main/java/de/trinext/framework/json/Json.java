@@ -59,4 +59,11 @@ public final class Json {
         return new Gson().toJsonTree(value);
     }
 
+    /**
+     * Converts a {@link JsonElement} into an instance of the given class.
+     */
+    static <T, V> T instanceFromTree(JsonElement<V> jElem, Class<? extends T> cls) {
+        return GSON.fromJson(jElem.toGsonElem(), cls);
+    }
+
 }
