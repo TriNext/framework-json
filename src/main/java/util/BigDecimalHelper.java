@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings("InterfaceNeverImplemented")
+@SuppressWarnings({"unused", "WeakerAccess", "InterfaceNeverImplemented"})
 public interface BigDecimalHelper {
 
-    // ==== STATIC FUNCTIONS ================================================= //
+    // METHODS ========================================================>>
 
     /** Returns true if a {@link BigDecimal} has no decimal places. */
     static boolean isInteger(BigDecimal bd) {

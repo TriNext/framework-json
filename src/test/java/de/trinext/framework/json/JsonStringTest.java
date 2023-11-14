@@ -19,11 +19,10 @@ class JsonStringTest {
 
     @Test
     void test_hash_code() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        randStr.hashCode(),
-                        JsonString.from(randStr).hashCode()
-                ));
+        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+                randStr.hashCode(),
+                JsonString.from(randStr).hashCode()
+        ));
     }
 
     @Test @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
@@ -79,6 +78,26 @@ class JsonStringTest {
                         new JsonPrimitive(randStr),
                         JsonString.from(randStr).toGsonElem()
                 ));
+    }
+
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonString.class.getSimpleName(), JsonString.from("").typeName());
+    }
+
+
+    @Test
+    void test_try_getters() {
+        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+                randStr,
+                JsonString.from(randStr).tryGetString().orElseThrow()
+        ));
+    }
+
+    @Test
+    void test_try_getters_empty() {
+        var nonJNr = JsonInteger.from(0);
+        assertTrue(nonJNr.tryGetString().isEmpty());
     }
 
 }

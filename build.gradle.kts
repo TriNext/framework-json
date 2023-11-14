@@ -8,12 +8,7 @@ version = "1.0.0"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 plugins {
@@ -39,6 +34,9 @@ dependencies {
     // Temporarily Wrapped Dependency
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Nullability Annotations
+    implementation("org.jetbrains:annotations:24.0.0")
 }
 
 tasks.check {

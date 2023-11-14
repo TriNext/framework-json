@@ -10,7 +10,8 @@ import com.google.gson.JsonPrimitive;
  * @author Dennis Woithe
  * @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore.
  */
-@Deprecated @SuppressWarnings("SerializableHasSerializationMethods")
+@Deprecated
+@SuppressWarnings({"SerializableHasSerializationMethods", "unused", "WeakerAccess", "CyclicClassDependency"})
 public class UnexpectedGsonTypeError extends AssertionError {
 
     // ==== CONSTRUCTORS ===================================================== //

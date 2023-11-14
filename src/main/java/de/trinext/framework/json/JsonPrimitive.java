@@ -3,8 +3,11 @@ package de.trinext.framework.json;
 import util.UnexpectedGsonTypeError;
 
 /**
+ * The classification for a {@link JsonElement} that does not contain other {@link JsonElement}s.
+ *
  * @author Dennis Woithe
  */
+@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
 abstract sealed class JsonPrimitive<V>
         extends JsonElement<V>
         permits JsonBool, JsonNumber, JsonString
@@ -16,7 +19,8 @@ abstract sealed class JsonPrimitive<V>
         super(value);
     }
 
-    // ==== STATIC FUNCTIONS ================================================= //
+
+    // METHODS ========================================================>>
 
     /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
     @Deprecated

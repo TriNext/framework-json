@@ -5,34 +5,23 @@ import util.UnexpectedGsonTypeException;
 import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_BOOLEAN_TYPE;
 
 /**
+ * The json representation of a boolean value.
+ *
  * @author Dennis Woithe
+ * @see com.google.gson.JsonPrimitive#JsonPrimitive(Boolean) gson equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency"})
 public final class JsonBool extends JsonPrimitive<Boolean> {
-
-    // ==== CONSTANTS ======================================================== //
 
     public static final JsonBool TRUE = new JsonBool(true), FALSE = new JsonBool(false);
 
-    // ==== CONSTRUCTORS ===================================================== //
+    // ==== CONSTANTS ========================================================>>
 
     private JsonBool(boolean value) {
         super(value);
     }
 
-    // ==== METHODS ========================================================== //
-
-    @Override
-    public com.google.gson.JsonPrimitive toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue());
-    }
-
-    @Override
-    public String toString() {
-        return getValue().toString();
-    }
-
-    // ==== STATIC FUNCTIONS ================================================= //
+    // METHODS ========================================================>>
 
     public static JsonBool from(boolean value) {
         return value ? TRUE : FALSE;
@@ -46,5 +35,16 @@ public final class JsonBool extends JsonPrimitive<Boolean> {
         return jPrim.getAsBoolean() ? TRUE : FALSE;
     }
 
+    // ==== STATIC FUNCTIONS ================================================= //
+
+    @Override
+    public com.google.gson.JsonPrimitive toGsonElem() {
+        return new com.google.gson.JsonPrimitive(getValue());
+    }
+
+    @Override
+    public String toString() {
+        return getValue().toString();
+    }
 
 }

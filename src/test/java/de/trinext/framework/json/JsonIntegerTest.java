@@ -73,13 +73,17 @@ class JsonIntegerTest {
         );
     }
 
-
     @Test
     void test_to_gson_elem() {
         testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
                 new JsonPrimitive(randBigInt),
                 JsonInteger.from(randBigInt).toGsonElem()
         ));
+    }
+
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonInteger.class.getSimpleName(), JsonInteger.from(0).typeName());
     }
 
 }

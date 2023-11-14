@@ -1,6 +1,7 @@
 package de.trinext.framework.json;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static test.util.TestHelper.randomInts;
 /**
  * @author Dennis Woithe
  */
-class JsonArrayTest {
+class JsonListTest {
 
     private static final int ELEMS_PER_TEST = 100;
 
@@ -21,7 +22,7 @@ class JsonArrayTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var jArr = new JsonArray((Object[]) elems);
+        var jArr = new JsonList((Object[]) elems);
         for (var i = 0; i < elems.length; i++) {
             var res = jArr.tryGet(i);
             assertTrue(res.isPresent());
@@ -32,7 +33,7 @@ class JsonArrayTest {
 
     @Test
     void test_add() {
-        var jArr = new JsonArray();
+        var jArr = new JsonList();
         assertTrue(jArr.isEmpty());
         randomInts(ELEMS_PER_TEST).forEach(jArr::add);
         assertEquals(ELEMS_PER_TEST, jArr.size());
@@ -40,7 +41,7 @@ class JsonArrayTest {
 
     @Test
     void test_stream() {
-        var jArr = new JsonArray();
+        var jArr = new JsonList();
         randomInts(ELEMS_PER_TEST).forEach(jArr::add);
         assertArrayEquals(jArr.getValue().toArray(), jArr.stream().toArray());
     }
@@ -50,7 +51,7 @@ class JsonArrayTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var iter =  new JsonArray((Object[]) elems).iterator();
+        var iter = new JsonList((Object[]) elems).iterator();
         for (var i = 0; iter.hasNext(); i++)
             assertEquals(elems[i], iter.next());
     }
@@ -60,30 +61,36 @@ class JsonArrayTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var jArr = new JsonArray((Object[]) elems);
+        var jArr = new JsonList((Object[]) elems);
         assertEquals(Arrays.toString(elems), jArr.toString());
     }
 
     @Test
     void test_try_get_empty() {
-        var jArr = new JsonArray();
-        var res = jArr.tryGet("");
+        var jArr = new JsonList();
+        var res = jArr.tryGetPath("");
         assertTrue(res.isPresent());
         assertEquals(jArr, res.get());
     }
 
     @Test
     void test_try_get_index() {
-        var jArr = new JsonArray().add(10);
-        assertEquals(jArr.tryGet(0), jArr.tryGet("0"));
+        var jArr = new JsonList().add(10);
+        assertEquals(jArr.tryGet(0), jArr.tryGetPath("0"));
+        assertEquals(Optional.empty(), jArr.tryGetPath("0.x"));
     }
 
     @Test
     void test_try_get_nested_obj() {
-        var jArr = new JsonArray().addObj(obj -> obj.add("a", "b"));
-        var res = jArr.tryGet("0.a");
+        var jArr = new JsonList().addObj(obj -> obj.add("a", "b"));
+        var res = jArr.tryGetPath("0.a");
         assertTrue(res.isPresent());
         assertEquals(JsonString.from("b"), res.get());
+    }
+
+    @Test
+    void test_json_type_name() {
+        assertEquals(JsonList.class.getSimpleName(), new JsonList().typeName());
     }
 
 }
