@@ -33,22 +33,6 @@ public final class JsonMap
         super(fields);
     }
 
-    // ==== METHODS ========================================================== //
-
-// METHODS ========================================================>>
-
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated //
-    static JsonMap from(JsonObject jObj) {
-        return new JsonMap(new LinkedHashMap<>(jObj.asMap()
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Entry::getKey,
-                        entry -> Json.treeFromGsonTree(entry.getValue())
-                ))));
-    }
-
     /**
      * Add a JsonObject as a field.
      *
@@ -89,14 +73,6 @@ public final class JsonMap
             Object... arrFieldValue
     ) throws JsonFieldAlreadyExistsException {
         return add(fieldName, arrFieldValue);
-    }
-
-    @Override
-    public JsonObject toGsonElem() {
-        var res = new JsonObject();
-        for (var entry : this)
-            res.add(entry.getKey(), entry.getValue().toGsonElem());
-        return res;
     }
 
     @Override

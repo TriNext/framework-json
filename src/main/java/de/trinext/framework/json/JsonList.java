@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonArray;
-import util.GsonHelper;
 
 /**
  * The json representation of a mutable, ordered, numerically indexed, linear collection of {@link JsonElement}s.
@@ -15,7 +14,7 @@ import util.GsonHelper;
  * @see JsonArray gson equivalent
  * @see List java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess", "deprecation"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonList
         extends JsonContainer<List<JsonElement<?>>>
         implements Iterable<JsonElement<?>>
@@ -25,17 +24,10 @@ public final class JsonList
 
     /** Creates an empty JsonArray. */
     JsonList(Object... elems) {
-        super(Arrays.stream(elems).map(Json::treeFromInstance).collect(Collectors.toList()));
-    }
-
-// METHODS ========================================================>>
-
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated
-    static JsonList from(JsonArray jArr) {
-        return new JsonList(GsonHelper.arrayToStream(jArr)
-                .map(Json::treeFromGsonTree)
-                .collect(Collectors.toList()));
+        super(Arrays.stream(elems)
+                .map(Json::treeFromInstance)
+                .collect(Collectors.toList())
+        );
     }
 
     /** @return the amount of elements in this array. */
@@ -72,17 +64,6 @@ public final class JsonList
     @Override
     public Iterator<JsonElement<?>> iterator() {
         return getValue().iterator();
-    }
-
-    @Override
-    public JsonArray toGsonElem() {
-        return stream()
-                .map(JsonElement::toGsonElem)
-                .collect(
-                        JsonArray::new,
-                        JsonArray::add,
-                        JsonArray::addAll
-                );
     }
 
     public Stream<JsonElement<?>> stream() {

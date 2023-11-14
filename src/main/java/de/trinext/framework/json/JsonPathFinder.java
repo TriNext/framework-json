@@ -14,6 +14,7 @@ class JsonPathFinder {
 
     // ==== CONSTRUCTORS ===================================================== //
 
+    @SuppressWarnings("TypeMayBeWeakened")
     JsonPathFinder(JsonContainer<?> start, CharSequence jsonPath) {
         current = start;
         pathElems = new ArrayList<>(jsonPath.isEmpty() ? Collections.emptyList() : List.of(PATH_SEPARATOR.split(jsonPath)));

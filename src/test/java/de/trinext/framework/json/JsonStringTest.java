@@ -1,8 +1,6 @@
 package de.trinext.framework.json;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import util.UnexpectedGsonTypeException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static test.util.TestHelper.testForRandomStrings;
@@ -51,32 +49,6 @@ class JsonStringTest {
                 randStr -> assertEquals(
                         randStr,
                         JsonString.from(randStr).getValue()
-                ));
-    }
-
-    @Test
-    void test_from_gson() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        JsonString.from(randStr),
-                        JsonString.from(new com.google.gson.JsonPrimitive(randStr))
-                ));
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonString.from(new com.google.gson.JsonPrimitive(true))
-        );
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonString.from(new com.google.gson.JsonPrimitive(1))
-        );
-    }
-
-    @Test
-    void test_to_gson_elem() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        new JsonPrimitive(randStr),
-                        JsonString.from(randStr).toGsonElem()
                 ));
     }
 

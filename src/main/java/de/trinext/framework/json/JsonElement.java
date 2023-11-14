@@ -31,14 +31,6 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return getClass().getSimpleName();
     }
 
-    /**
-     * Converts this into the respective {@link com.google.gson.JsonElement}.
-     *
-     * @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore.
-     */
-    @Deprecated
-    abstract com.google.gson.JsonElement toGsonElem();
-
     @Override
     public final int hashCode() {
         return Objects.hashCode(value);

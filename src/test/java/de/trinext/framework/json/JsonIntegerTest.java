@@ -1,8 +1,6 @@
 package de.trinext.framework.json;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import util.UnexpectedGsonTypeException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static test.util.TestHelper.testForRandomBigInts;
@@ -55,30 +53,6 @@ class JsonIntegerTest {
             var randLong = randBigInt.longValue();
             assertEquals(randLong, JsonInteger.from(randLong).getValue().longValue());
         });
-    }
-
-    @Test
-    void test_from_gson() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
-                JsonInteger.from(randBigInt),
-                JsonInteger.from(new JsonPrimitive(randBigInt))
-        ));
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonInteger.from(new JsonPrimitive(""))
-        );
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonInteger.from(new JsonPrimitive(0.5))
-        );
-    }
-
-    @Test
-    void test_to_gson_elem() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
-                new JsonPrimitive(randBigInt),
-                JsonInteger.from(randBigInt).toGsonElem()
-        ));
     }
 
     @Test

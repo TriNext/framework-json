@@ -1,10 +1,6 @@
 package de.trinext.framework.json;
 
-import java.math.BigDecimal;
-
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import util.UnexpectedGsonTypeException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static test.util.TestHelper.*;
@@ -53,38 +49,6 @@ class JsonDecimalTest {
             assertEquals(randBigDec.floatValue(), JsonDecimal.from(randBigDec.floatValue()).getValue().floatValue());
             assertEquals(randBigDec.doubleValue(), JsonDecimal.from(randBigDec.doubleValue()).getValue().doubleValue());
         });
-    }
-
-    @Test
-    void test_from_gson() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
-                JsonDecimal.from(new BigDecimal(randBigInt)),
-                JsonDecimal.from(new JsonPrimitive(randBigInt))
-        ));
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
-                JsonDecimal.from(randBigDec),
-                JsonDecimal.from(new JsonPrimitive(randBigDec))
-        ));
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonDecimal.from(new com.google.gson.JsonPrimitive(""))
-        );
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonDecimal.from(new com.google.gson.JsonPrimitive(false))
-        );
-    }
-
-    @Test
-    void test_to_gson_elem() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
-                new JsonPrimitive(randBigInt),
-                JsonDecimal.from(randBigInt).toGsonElem()
-        ));
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
-                new JsonPrimitive(randBigDec),
-                JsonDecimal.from(randBigDec).toGsonElem()
-        ));
     }
 
     @Test
