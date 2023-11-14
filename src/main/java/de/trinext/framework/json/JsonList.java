@@ -53,12 +53,17 @@ public final class JsonList
         return this;
     }
 
+    public JsonList addArr(Object... elems) throws JsonFieldAlreadyExistsException {
+        return add(elems);
+    }
+
     public boolean contains(Object elem) {
         return getValue().contains(Json.treeFromInstance(elem));
     }
 
-    public JsonList addArr(Object... elems) throws JsonFieldAlreadyExistsException {
-        return add(elems);
+    public JsonList remove(Object elem) throws JsonFieldDoesNotExistException {
+        getValue().remove(Json.treeFromInstance(elem));
+        return this;
     }
 
     @Override

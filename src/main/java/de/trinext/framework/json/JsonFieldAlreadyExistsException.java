@@ -9,8 +9,6 @@ package de.trinext.framework.json;
 @SuppressWarnings({"SerializableHasSerializationMethods", "UncheckedExceptionClass"})
 public class JsonFieldAlreadyExistsException extends RuntimeException {
 
-    // ==== CONSTRUCTORS ===================================================== //
-
     JsonFieldAlreadyExistsException(String fieldName) {
         super(fieldName + " was already added to " + JsonMap.class.getSimpleName() + "!");
     }
