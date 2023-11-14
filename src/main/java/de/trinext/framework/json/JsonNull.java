@@ -22,13 +22,6 @@ public final class JsonNull extends JsonElement<Void> {
         super(null);
     }
 
-    // ==== METHODS ========================================================== //
-
-    @Override
-    public com.google.gson.JsonElement toGsonElem() {
-        return com.google.gson.JsonNull.INSTANCE;
-    }
-
     @Override
     public String toString() {
         return Objects.toString(null);
