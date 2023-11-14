@@ -29,6 +29,7 @@ class GsonHelperTest {
         assertEquals(JSON_STRING_TYPE, gsonTypeName(new JsonPrimitive("")));
         assertEquals(JSON_BOOLEAN_TYPE, gsonTypeName(new JsonPrimitive(true)));
         assertThrows(UnexpectedGsonTypeError.class, () -> gsonTypeName((Class<? extends JsonElement>) null));
+        assertThrows(UnexpectedGsonTypeException.class, () -> gsonTypeName((JsonElement) null));
     }
 
     @Test
