@@ -43,17 +43,17 @@ public final class JsonList
     // ==== METHODS ========================================================== //
 
     @SuppressWarnings("BoundedWildcard")
-    public JsonList addObj(Function<JsonMap, JsonMap> elem) throws JsonFieldAlreadyExistsException {
+    public JsonList addObj(Function<JsonMap, JsonMap> elem) {
         return add(elem.apply(new JsonMap()));
     }
 
 
-    public JsonList add(Object elem) throws JsonFieldAlreadyExistsException {
+    public JsonList add(Object elem) {
         getValue().add(Json.treeFromInstance(elem));
         return this;
     }
 
-    public JsonList addArr(Object... elems) throws JsonFieldAlreadyExistsException {
+    public JsonList addArr(Object... elems) {
         return add(elems);
     }
 
