@@ -5,7 +5,7 @@ import com.google.gson.*;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "CyclicClassDependency"})
+@SuppressWarnings({"unused", "CyclicClassDependency", "WeakerAccess"})
 public final class Json {
 
     private Json() { throw new AssertionError(); }

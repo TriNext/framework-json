@@ -61,9 +61,8 @@ public final class JsonList
         return getValue().contains(Json.treeFromInstance(elem));
     }
 
-    public JsonList remove(Object elem) throws JsonFieldDoesNotExistException {
-        getValue().remove(Json.treeFromInstance(elem));
-        return this;
+    public boolean removeAt(int idx) {
+        return getValue().remove(idx) != null;
     }
 
     @Override
