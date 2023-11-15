@@ -7,15 +7,15 @@ import com.google.gson.*;
  * @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore.
  */
 @Deprecated
-public class JsonGsonParser {
+class JsonGsonParser {
 
     private final com.google.gson.JsonElement rootElement;
 
-    public JsonGsonParser(com.google.gson.JsonElement gElem) {
+    JsonGsonParser(com.google.gson.JsonElement gElem) {
         this.rootElement = gElem;
     }
 
-    public JsonElement<?> parse() {
+    JsonElement<?> parse() {
         return parseElem(rootElement);
     }
 
@@ -24,7 +24,7 @@ public class JsonGsonParser {
             case JsonObject gObj -> parseMap(gObj);
             case JsonArray gArr -> parseList(gArr);
             case com.google.gson.JsonPrimitive gPrim -> parsePrimitive(gPrim);
-            case com.google.gson.JsonNull gNull -> JsonNull.NULL;
+            case com.google.gson.JsonNull ignored -> JsonNull.NULL;
             default -> throw new AssertionError("Unexpected value: " + gElem);
         };
     }

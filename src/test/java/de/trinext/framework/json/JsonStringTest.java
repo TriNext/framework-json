@@ -68,8 +68,8 @@ class JsonStringTest {
 
     @Test
     void test_try_getters_empty() {
-        var nonJNr = JsonInteger.from(0);
-        assertTrue(nonJNr.tryGetString().isEmpty());
+        var nonJStr = JsonInteger.from(0);
+        assertTrue(nonJStr.tryGetString().isEmpty());
     }
 
 }

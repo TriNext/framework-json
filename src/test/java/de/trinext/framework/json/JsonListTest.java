@@ -3,6 +3,8 @@ package de.trinext.framework.json;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.google.gson.JsonArray;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +16,19 @@ import static test.util.TestHelper.randomInts;
 class JsonListTest {
 
     private static final int ELEMS_PER_TEST = 100;
+
+    private static final int ARRAY_TEST_VALUE_1 = -1;
+    private static final int ARRAY_TEST_VALUE_2 = 0;
+    private static final int ARRAY_TEST_VALUE_3 = 1;
+
+    private JsonList testArr;
+    @BeforeEach
+    void setUp() {
+        testArr = new JsonList();
+        testArr.add(ARRAY_TEST_VALUE_1);
+        testArr.add(ARRAY_TEST_VALUE_2);
+        testArr.add(ARRAY_TEST_VALUE_3);
+    }
 
     // ==== METHODS ========================================================== //
 
@@ -37,6 +52,17 @@ class JsonListTest {
         assertTrue(jArr.isEmpty());
         randomInts(ELEMS_PER_TEST).forEach(jArr::add);
         assertEquals(ELEMS_PER_TEST, jArr.size());
+    }
+    @Test
+    void test_remove() {
+        var jArr = new JsonList();
+        assertTrue(jArr.isEmpty());
+        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
+        assertEquals(ELEMS_PER_TEST, jArr.size());
+        jArr.remove(jArr.tryGet(0).orElseThrow());
+        assertEquals(ELEMS_PER_TEST-1, jArr.size());
+        jArr.remove(0);
+        assertEquals(ELEMS_PER_TEST-2, jArr.size());
     }
 
     @Test
@@ -93,4 +119,45 @@ class JsonListTest {
         assertEquals(JsonList.class.getSimpleName(), new JsonList().typeName());
     }
 
+    @Test
+    void test_getSize() {
+        var jArr = new JsonList();
+        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
+        assertEquals(100, jArr.getValue().size());
+    }
+
+    @Test
+    void test_contains() {
+        assertTrue(testArr.contains(ARRAY_TEST_VALUE_1));
+        assertTrue(testArr.contains(ARRAY_TEST_VALUE_2));
+        assertTrue(testArr.contains(ARRAY_TEST_VALUE_3));
+        assertFalse(testArr.contains("fail"));
+        assertFalse(testArr.contains(null));
+    }
+
+    @Test
+    void test_size() {
+        var jArr = new JsonList();
+        assertEquals(0,jArr.size());
+        jArr.add(ARRAY_TEST_VALUE_1);
+        assertEquals(1,jArr.size());
+        jArr.add(ARRAY_TEST_VALUE_2);
+        assertEquals(2,jArr.size());
+        //TODO: check if size behaves correctly after removing an element
+    }
+    @Test
+    void test_addArr() {
+        var jArr = new JsonList().addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        assertEquals(1, jArr.size());
+        jArr.addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        assertEquals(2, jArr.size());
+    }
+
+    @Test
+    void test_json_list_from() {
+        var gsonJsonArray = new JsonArray();
+        gsonJsonArray.add(ARRAY_TEST_VALUE_1);
+        gsonJsonArray.add(ARRAY_TEST_VALUE_2);
+        gsonJsonArray.add(ARRAY_TEST_VALUE_3);
+    }
 }

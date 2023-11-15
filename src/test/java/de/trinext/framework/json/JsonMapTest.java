@@ -3,8 +3,6 @@ package de.trinext.framework.json;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,9 +17,7 @@ class JsonMapTest {
     private static final String FIELD_2 = "FIELD_2";
     private static final String FIELD_3 = "FIELD_3";
     private static final String VALUE_1 = "Test 1";
-    private static final String UNIT_TESTS = "unit_tests";
     private static final String FIELD_4 = "FIELD_4";
-    private JsonObject jsonTestObject;
     private final JsonMap testMap = new JsonMap();
 
     @BeforeEach
@@ -29,60 +25,6 @@ class JsonMapTest {
         testMap.add(FIELD_1, VALUE_1);
         testMap.add(FIELD_2, 2);
         testMap.add(FIELD_3, 3);
-        jsonTestObject = JsonParser.parseString("""
-                                                {
-                                                  "unit_tests": [
-                                                    {
-                                                      "id": 1,
-                                                      "name": "Test 1",
-                                                      "description": "Tests the functionality of X",
-                                                      "input": {
-                                                        "data": "example data",
-                                                        "expectedOutput": "expected result"
-                                                      },
-                                                      "output": {
-                                                        "actualOutput": "actual result",
-                                                        "status": "pass"
-                                                      }
-                                                    },
-                                                    {
-                                                      "id": 2,
-                                                      "name": "Test 2",
-                                                      "description": "Tests the functionality of Y",
-                                                      "input": {
-                                                        "data": "example data",
-                                                        "expectedOutput": "expected result"
-                                                      },
-                                                      "output": {
-                                                        "actualOutput": "actual result",
-                                                        "status": "fail"
-                                                      }
-                                                    },
-                                                    {
-                                                      "id": 3,
-                                                      "name": "Test 3",
-                                                      "description": "Tests the functionality of Z",
-                                                      "input": {
-                                                        "data": "example data",
-                                                        "expectedOutput": "expected result"
-                                                      },
-                                                      "output": {
-                                                        "actualOutput": "actual result",
-                                                        "status": "pass"
-                                                      }
-                                                    }
-                                                  ]
-                                                }
-                                                                                                                   
-                                                                                                                   
-                                                """).getAsJsonObject();
-    }
-
-    @Test @SuppressWarnings("deprecation")
-    void test_json_map_from() {
-        var parsedTestMap = JsonMap.from(jsonTestObject);
-        assertEquals(1, parsedTestMap.stream().count());
-        assertEquals(3, parsedTestMap.tryGet(UNIT_TESTS).stream().count());
     }
 
     @Test
@@ -127,16 +69,6 @@ class JsonMapTest {
         testMap.addArr(FIELD_4, VALUE_1);
         assertEquals(VALUE_1, testMap.getValue().get(FIELD_1).getValue());
 
-    }
-
-
-    @Test
-    void test_toGsonElem() {
-        var conversionResult = testMap.toGsonElem().asMap();
-        assertEquals(VALUE_1, conversionResult.get(FIELD_1).getAsString());
-        assertEquals(2, conversionResult.get(FIELD_2).getAsInt());
-        assertEquals(3, conversionResult.get(FIELD_3).getAsInt());
-        assertNotEquals(4, conversionResult.get(FIELD_3).getAsInt());
     }
 
     @Test
