@@ -62,6 +62,10 @@ public final class JsonMap
         return getValue().containsKey(Objects.requireNonNull(fieldName));
     }
 
+    public boolean removeKey(String key) {
+        return getValue().remove(key) != null;
+    }
+
     /**
      * Add a JsonArray as a field.
      *
@@ -97,5 +101,6 @@ public final class JsonMap
     public Optional<JsonElement<?>> tryGet(String fieldName) {
         return Optional.ofNullable(getValue().get(fieldName));
     }
+
 
 }

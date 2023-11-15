@@ -30,6 +30,26 @@ public abstract sealed class JsonContainer<V> extends JsonElement<V> permits Jso
         return new JsonPathFinder(this, jsonPath).find();
     }
 
+    public final boolean findPath(String jsonPath) {
+        return tryGetPath(jsonPath).isPresent();
+    }
+
+    @SuppressWarnings("ClassReferencesSubclass")
+    public final boolean removePath(String jsonPath) {
+        var finder = new JsonPathFinder(this, jsonPath);
+        if(finder.find().isPresent()) {
+            var parent = finder.elemPath();
+            var strPath = finder.stringPath();
+            var lastPathElem = strPath[strPath.length - 1];
+            return switch ((JsonContainer<?>) parent[strPath.length - 2]) {
+                case JsonList jList -> jList.removeAt(Integer.parseInt(lastPathElem));
+                case JsonMap jMap -> jMap.removeKey(lastPathElem);
+            };
+        }
+        return false;
+    }
+
+
     // ==== PRIMITIVE ======================================================== //
 
     /** @return {@link OptionalInt} whether the target of the passed path is a {@link JsonInteger} which can be represented as an {@code int}. */
@@ -51,7 +71,6 @@ public abstract sealed class JsonContainer<V> extends JsonElement<V> permits Jso
     }
 
     // ==== OBJECT =========================================================== //
-
 
     /** @return {@link Optional<Enum>} whether the target of the passed path is a {@link JsonString} which can be represented as an {@link Enum}. */
     public final <E extends Enum<E>> Optional<E> tryGetPathAsEnum(String jsonPath, Class<E> enumType) {
