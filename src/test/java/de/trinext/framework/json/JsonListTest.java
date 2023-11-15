@@ -59,10 +59,8 @@ class JsonListTest {
         assertTrue(jArr.isEmpty());
         randomInts(ELEMS_PER_TEST).forEach(jArr::add);
         assertEquals(ELEMS_PER_TEST, jArr.size());
-        jArr.remove(jArr.tryGet(0).orElseThrow());
+        jArr.removeAt(0);
         assertEquals(ELEMS_PER_TEST-1, jArr.size());
-        jArr.remove(0);
-        assertEquals(ELEMS_PER_TEST-2, jArr.size());
     }
 
     @Test

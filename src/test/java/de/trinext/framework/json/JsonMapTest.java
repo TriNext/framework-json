@@ -106,6 +106,12 @@ class JsonMapTest {
         assertNotEquals("\"" + VALUE_1 + "\"", testMap.tryGet(FIELD_2).orElseThrow().toString());
         assertThrows(NoSuchElementException.class,() -> testMap.tryGet(FIELD_4).orElseThrow().toString());
     }
+    @Test
+    void test_remove_key(){
+        assertEquals(3, testMap.getValue().size());
+        testMap.removeKey(FIELD_1);
+        assertEquals(2, testMap.getValue().size());
+    }
 
 
 }

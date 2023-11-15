@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JsonContainerTest {
+final class JsonContainerTest {
 
     private static final String TEST_STRING = "TRUE";
     private static final float FLOAT_CONSTANT_1 = 2.2f;
@@ -19,14 +19,8 @@ class JsonContainerTest {
     private static final double ROUNDING_ERROR_MARGIN = 0.00000001;
     private static final boolean BOOL_CONSTANT = Boolean.TRUE;
     private final JsonMap testMap = new JsonMap();
-    private static final Map<String, Integer> MAP_CONSTANT;
+    private static final Set<Integer> SET_CONSTANT = Set.of(1, 2, 3);
 
-    static {
-        MAP_CONSTANT = new HashMap<>();
-        MAP_CONSTANT.put("One", 1);
-        MAP_CONSTANT.put("TWO", 2);
-        MAP_CONSTANT.put("THREE", 3);
-    }
 
     private static final String //
             LIST_FIELD = "LIST_FIELD",
@@ -41,7 +35,7 @@ class JsonContainerTest {
             BIG_DEC_FIELD = "BIG_DEC_FIELD",
             BOOL_FIELD = "BOOL_FIELD",
             OBJ_FIELD = "OBJ_FIELD",
-            MAP_FIELD = "MAP_FIELD";
+            SET_FIELD = "SET_FIELD";
 
 
     private record TestObject(
@@ -51,7 +45,7 @@ class JsonContainerTest {
 
     private static final TestObject testObjectInstance = new TestObject(1, "2");
 
-    private static final List<Integer> testList = List.of(1, 2, 3);
+    private static final List<Integer> INT_LIST = List.of(1, 2, 3);
 
     enum TestEnum {This, Is, A, Test}
 
@@ -67,8 +61,8 @@ class JsonContainerTest {
         testMap.add(BIG_DEC_FIELD, BigDecimal.TEN);
         testMap.add(BOOL_FIELD, BOOL_CONSTANT);
         testMap.add(OBJ_FIELD, testObjectInstance);
-        testMap.add(LIST_FIELD, testList);
-        testMap.add(MAP_FIELD,MAP_CONSTANT);
+        testMap.add(LIST_FIELD, INT_LIST);
+        testMap.add(SET_FIELD,SET_CONSTANT);
     }
 
     @Test
@@ -175,16 +169,28 @@ class JsonContainerTest {
 
     @Test
     void test_try_get_path_as_stream_of() {
-        assertEquals(testList, testMap.tryGetPathAsStreamOf(LIST_FIELD, Integer.class).orElseThrow().toList());
+        assertEquals(INT_LIST, testMap.tryGetPathAsStreamOf(LIST_FIELD, Integer.class).orElseThrow().toList());
     }
     @Test
     void test_try_get_path_as_list_of() {
-        assertEquals(testList, testMap.tryGetPathAsListOf(LIST_FIELD, Integer.class).orElseThrow());
+        assertEquals(INT_LIST, testMap.tryGetPathAsListOf(LIST_FIELD, Integer.class).orElseThrow());
     }
     @Test
     void test_try_get_path_as_set_of() {
-        // TODO: Fix test
-        assertEquals(MAP_CONSTANT, testMap.tryGetPathAsSetOf(MAP_FIELD, HashMap.class).orElseThrow());
+        assertEquals(SET_CONSTANT, testMap.tryGetPathAsSetOf(SET_FIELD, Integer.class).orElseThrow());
+    }
+
+    @Test
+    void test_find_path() {
+        assertTrue(testMap.findPath(STRING_FIELD));
+    }
+
+
+
+    @Test
+    void test_remove_path() {
+        testMap.removePath(STRING_FIELD);
+        assertFalse(testMap.findPath(STRING_FIELD));
     }
 
 }
