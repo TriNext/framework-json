@@ -14,6 +14,7 @@ class JsonTextParser {
         this.json = json;
     }
 
+    @SuppressWarnings("deprecation")
     JsonElement<?> parse() {
         return new JsonGsonParser(JsonParser.parseString(json)).parse();
     }
