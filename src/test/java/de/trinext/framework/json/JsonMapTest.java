@@ -14,9 +14,9 @@ class JsonMapTest {
     void test_add_obj() {
         var jMap = new JsonMap();
         jMap.addObj("obj", obj -> obj.add("int", 1));
-        var jObj = jMap.tryGetPathAsInt("obj.int");
-        assertTrue(jObj.isPresent());
-        assertEquals(1, jObj.getAsInt());
+        var optInt = jMap.tryGetPathAsInt("obj.int");
+        assertTrue(optInt.isPresent());
+        assertEquals(1, optInt.getAsInt());
     }
 
     @Test

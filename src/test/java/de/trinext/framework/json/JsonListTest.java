@@ -22,28 +22,28 @@ class JsonListTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var jArr = new JsonList((Object[]) elems);
+        var jList = new JsonList((Object[]) elems);
         for (var i = 0; i < elems.length; i++) {
-            var res = jArr.tryGet(i);
+            var res = jList.tryGet(i);
             assertTrue(res.isPresent());
             assertEquals(elems[i], res.get());
         }
-        assertEquals(ELEMS_PER_TEST, jArr.size());
+        assertEquals(ELEMS_PER_TEST, jList.size());
     }
 
     @Test
     void test_add() {
-        var jArr = new JsonList();
-        assertTrue(jArr.isEmpty());
-        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
-        assertEquals(ELEMS_PER_TEST, jArr.size());
+        var jList = new JsonList();
+        assertTrue(jList.isEmpty());
+        randomInts(ELEMS_PER_TEST).forEach(jList::add);
+        assertEquals(ELEMS_PER_TEST, jList.size());
     }
 
     @Test
     void test_stream() {
-        var jArr = new JsonList();
-        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
-        assertArrayEquals(jArr.getValue().toArray(), jArr.stream().toArray());
+        var jList = new JsonList();
+        randomInts(ELEMS_PER_TEST).forEach(jList::add);
+        assertArrayEquals(jList.getValue().toArray(), jList.stream().toArray());
     }
 
     @Test
@@ -61,29 +61,29 @@ class JsonListTest {
         var elems = randomInts(ELEMS_PER_TEST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
-        var jArr = new JsonList((Object[]) elems);
-        assertEquals(Arrays.toString(elems), jArr.toString());
+        var jList = new JsonList((Object[]) elems);
+        assertEquals(Arrays.toString(elems), jList.toString());
     }
 
     @Test
     void test_try_get_empty() {
-        var jArr = new JsonList();
-        var res = jArr.tryGetPath("");
+        var jList = new JsonList();
+        var res = jList.tryGetPath("");
         assertTrue(res.isPresent());
-        assertEquals(jArr, res.get());
+        assertEquals(jList, res.get());
     }
 
     @Test
     void test_try_get_index() {
-        var jArr = new JsonList().add(10);
-        assertEquals(jArr.tryGet(0), jArr.tryGetPath("0"));
-        assertEquals(Optional.empty(), jArr.tryGetPath("0.x"));
+        var jList = new JsonList().add(10);
+        assertEquals(jList.tryGet(0), jList.tryGetPath("0"));
+        assertEquals(Optional.empty(), jList.tryGetPath("0.x"));
     }
 
     @Test
     void test_try_get_nested_obj() {
-        var jArr = new JsonList().addObj(obj -> obj.add("a", "b"));
-        var res = jArr.tryGetPath("0.a");
+        var jList = new JsonList().addObj(obj -> obj.add("a", "b"));
+        var res = jList.tryGetPath("0.a");
         assertTrue(res.isPresent());
         assertEquals(JsonString.from("b"), res.get());
     }

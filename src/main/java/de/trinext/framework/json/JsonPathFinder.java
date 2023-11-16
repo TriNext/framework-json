@@ -17,8 +17,8 @@ class JsonPathFinder {
 
     @SuppressWarnings("TypeMayBeWeakened")
     JsonPathFinder(JsonContainer<?> start, CharSequence jsonPath) {
-        current = start;
         pathElems = new ArrayList<>(jsonPath.isEmpty() ? Collections.emptyList() : List.of(PATH_SEPARATOR.split(jsonPath)));
+        current = start;
     }
 
 
@@ -32,8 +32,8 @@ class JsonPathFinder {
         while (!pathElems.isEmpty()) {
             var pathElem = pathElems.remove(0);
             var next = (switch (current) {
-                case JsonMap jObj -> jObj.tryGet(pathElem);
-                case JsonList jArr -> jArr.tryGet(Integer.parseInt(pathElem));
+                case JsonMap jMap -> jMap.tryGet(pathElem);
+                case JsonList jList -> jList.tryGet(Integer.parseInt(pathElem));
                 default -> Optional.ofNullable(pathElems.isEmpty() ? null : current);
             });
             if (next.isEmpty())
