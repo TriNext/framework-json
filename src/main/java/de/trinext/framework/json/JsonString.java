@@ -7,7 +7,7 @@ package de.trinext.framework.json;
  * @see com.google.gson.JsonPrimitive#JsonPrimitive(String) gson equivalent
  * @see String java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonString extends JsonPrimitive<String> {
 
     // ==== CONSTRUCTORS ===================================================== //

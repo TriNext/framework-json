@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
  * @see JsonObject gson equivalent
  * @see Map java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonMap
         extends JsonContainer<SequencedMap<String, JsonElement<?>>>
         implements Iterable<Entry<String, JsonElement<?>>>

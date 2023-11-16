@@ -5,7 +5,7 @@ package de.trinext.framework.json;
  *
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess", "CyclicClassDependency"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 abstract sealed class JsonPrimitive<V>
         extends JsonElement<V>
         permits JsonBool, JsonNumber, JsonString
