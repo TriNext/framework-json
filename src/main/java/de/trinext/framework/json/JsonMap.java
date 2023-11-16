@@ -6,13 +6,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonObject;
-
 /**
  * The json representation of a mutable, ordered, string key-value storage of {@link JsonElement}s.
  *
  * @author Dennis Woithe
- * @see JsonObject gson equivalent
  * @see Map java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})

@@ -6,7 +6,6 @@ import java.math.BigInteger;
  * The json representation of a potentially infinitely big integer.
  *
  * @author Dennis Woithe
- * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see BigInteger java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess", "OverloadedMethodsWithSameNumberOfParameters"})

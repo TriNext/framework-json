@@ -6,15 +6,15 @@ import com.google.gson.JsonParser;
  * @author Dennis Woithe
  */
 @SuppressWarnings("ClassCanBeRecord")
-public class JsonTextParser {
+class JsonTextParser {
 
     private final String json;
 
-    public JsonTextParser(String json) {
+    JsonTextParser(String json) {
         this.json = json;
     }
 
-    public JsonElement<?> parse() {
+    JsonElement<?> parse() {
         return new JsonGsonParser(JsonParser.parseString(json)).parse();
     }
 

@@ -5,7 +5,6 @@ package de.trinext.framework.json;
  * The json representation of a boolean value.
  *
  * @author Dennis Woithe
- * @see com.google.gson.JsonPrimitive#JsonPrimitive(Boolean) gson equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonBool extends JsonPrimitive<Boolean> {

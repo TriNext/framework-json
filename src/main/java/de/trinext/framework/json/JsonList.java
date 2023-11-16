@@ -5,13 +5,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonArray;
-
 /**
  * The json representation of a mutable, ordered, numerically indexed, linear collection of {@link JsonElement}s.
  *
  * @author Dennis Woithe
- * @see JsonArray gson equivalent
  * @see List java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})

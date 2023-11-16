@@ -11,7 +11,6 @@ import com.google.gson.JsonElement;
  * @param <N> the type of the number, either {@link BigDecimal} or {@link BigInteger}.
  *
  * @author Dennis Woithe
- * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see Number java equivalent
  */
 @SuppressWarnings("WeakerAccess")
