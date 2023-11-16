@@ -24,12 +24,12 @@ public final class JsonMap
     // ==== CONSTRUCTORS ===================================================== //
 
     /** Creates an empty JsonObject. */
-    JsonMap() {
+    public JsonMap() {
         this(new LinkedHashMap<>());
     }
 
     /** Creates an empty JsonObject. */
-    JsonMap(SequencedMap<String, JsonElement<?>> fields) {
+    public JsonMap(SequencedMap<String, JsonElement<?>> fields) {
         super(fields);
     }
 

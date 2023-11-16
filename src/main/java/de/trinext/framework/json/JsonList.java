@@ -22,9 +22,15 @@ public final class JsonList
 
     // ==== CONSTRUCTORS ===================================================== //
 
-    /** Creates an empty JsonArray. */
-    JsonList(Object... elems) {
+    public JsonList(Object... elems) {
         super(Arrays.stream(elems)
+                .map(Json::treeFromInstance)
+                .collect(Collectors.toList())
+        );
+    }
+
+    public JsonList(Collection<?> elems) {
+        super(elems.stream()
                 .map(Json::treeFromInstance)
                 .collect(Collectors.toList())
         );
