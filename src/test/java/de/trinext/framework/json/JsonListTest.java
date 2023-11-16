@@ -3,7 +3,6 @@ package de.trinext.framework.json;
 import java.util.Arrays;
 import java.util.Optional;
 
-import com.google.gson.JsonArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -149,13 +148,5 @@ class JsonListTest {
         assertEquals(1, jArr.size());
         jArr.addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
         assertEquals(2, jArr.size());
-    }
-
-    @Test
-    void test_json_list_from() {
-        var gsonJsonArray = new JsonArray();
-        gsonJsonArray.add(ARRAY_TEST_VALUE_1);
-        gsonJsonArray.add(ARRAY_TEST_VALUE_2);
-        gsonJsonArray.add(ARRAY_TEST_VALUE_3);
     }
 }

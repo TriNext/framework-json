@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class JsonPrimitiveTest {
 
     private static final String TEST_STRING = "Hello World";
-    private static final Boolean BOOL_CONSTANT = Boolean.TRUE;
+    private static final Boolean BOOL_CONSTANT = Boolean.FALSE;
     private static final Number NUMBER_CONSTANT = BigInteger.ONE;
     private record TestObject(int a, String b) {}
 
@@ -21,13 +21,10 @@ class JsonPrimitiveTest {
     @Test @SuppressWarnings("ConstantConditions")
     void test_try_from(){
         assertEquals("\"" + TEST_STRING + "\"", JsonPrimitive.tryFrom(TEST_STRING).toString());
-        assertNotEquals(TEST_STRING, JsonPrimitive.tryFrom(TEST_STRING).toString());
-        assertEquals("true", JsonPrimitive.tryFrom(BOOL_CONSTANT).toString());
-        assertNotEquals("false", JsonPrimitive.tryFrom(BOOL_CONSTANT).toString());
-        assertEquals(Boolean.TRUE, JsonPrimitive.tryFrom(BOOL_CONSTANT).getValue());
+        assertEquals("false", JsonPrimitive.tryFrom(BOOL_CONSTANT).toString());
+        assertEquals(Boolean.FALSE, JsonPrimitive.tryFrom(BOOL_CONSTANT).getValue());
         assertEquals(NUMBER_CONSTANT, JsonPrimitive.tryFrom(NUMBER_CONSTANT).getValue());
         assertThrows(IllegalArgumentException.class, () -> JsonPrimitive.tryFrom(testObjectInstance));
-
         assertThrows(NullPointerException.class, () -> JsonPrimitive.tryFrom(null).toString());
     }
 

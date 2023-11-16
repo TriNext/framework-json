@@ -2,7 +2,6 @@ package de.trinext.framework.json;
 
 import java.math.BigDecimal;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

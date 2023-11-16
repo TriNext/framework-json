@@ -12,6 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class JsonTest {
 
+    private static final String JSON_TREE_STRING = """
+                                                    {
+                                                        "a": [{}]
+                                                    }
+                                                   """;
+
     @Test
     void test_constructor() throws NoSuchMethodException {
         var constructor = Json.class.getDeclaredConstructor();
@@ -30,13 +36,7 @@ class JsonTest {
 
     @Test
     void test_tree_from_string() {
-        Json.treeFromString("""
-                                                 {
-                                                    "a": [
-                                                    {}
-                                                    ]
-                                                 }
-                                                 """);
+        Json.treeFromString(JSON_TREE_STRING);
     }
 
 

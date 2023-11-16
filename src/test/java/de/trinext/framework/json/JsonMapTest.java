@@ -57,7 +57,7 @@ class JsonMapTest {
     }
 
     @Test
-    void test_addArr() {
+    void test_add_arr() {
         var testArray = new String[]{FIELD_1, FIELD_2, FIELD_3};
         assertThrows(JsonFieldAlreadyExistsException.class,() -> testMap.addArr(FIELD_1, (Object[]) testArray));
         assertTrue(testMap.addArr(FIELD_4, (Object[]) testArray).contains(FIELD_4));
@@ -72,7 +72,7 @@ class JsonMapTest {
     }
 
     @Test
-    void test_toString() {
+    void test_to_string() {
         assertEquals(
                 "{\"" + FIELD_1 + "\":\"" + VALUE_1 + "\", " +
                         "\"" + FIELD_2 + "\":" + 2 + ", " +
@@ -101,7 +101,7 @@ class JsonMapTest {
     }
 
     @Test
-    void test_tryGet() {
+    void test_try_get() {
         assertEquals("\"" + VALUE_1 + "\"", testMap.tryGet(FIELD_1).orElseThrow().toString());
         assertNotEquals("\"" + VALUE_1 + "\"", testMap.tryGet(FIELD_2).orElseThrow().toString());
         assertThrows(NoSuchElementException.class,() -> testMap.tryGet(FIELD_4).orElseThrow().toString());

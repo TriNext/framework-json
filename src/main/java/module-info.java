@@ -9,5 +9,4 @@ import de.trinext.framework.json.Json;
 module framework.json {
     exports de.trinext.framework.json;
     requires com.google.gson;
-    requires org.jetbrains.annotations;
 }
