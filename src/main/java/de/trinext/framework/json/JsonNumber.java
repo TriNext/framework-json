@@ -14,7 +14,7 @@ import com.google.gson.JsonElement;
  * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see Number java equivalent
  */
-@SuppressWarnings({"WeakerAccess", "CyclicClassDependency"})
+@SuppressWarnings("WeakerAccess")
 public abstract sealed class JsonNumber<N extends Number>
         extends JsonPrimitive<N>
         permits JsonInteger, JsonDecimal

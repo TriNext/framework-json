@@ -9,7 +9,7 @@ import java.math.BigInteger;
  * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see BigInteger java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency", "OverloadedMethodsWithSameNumberOfParameters"})
+@SuppressWarnings({"unused", "WeakerAccess", "OverloadedMethodsWithSameNumberOfParameters"})
 public final class JsonInteger extends JsonNumber<BigInteger> {
 
     // ==== CONSTRUCTORS ===================================================== //

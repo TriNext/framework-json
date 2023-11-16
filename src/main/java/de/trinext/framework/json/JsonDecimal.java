@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see BigDecimal java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess", "WeakerAccess", "CyclicClassDependency"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonDecimal extends JsonNumber<BigDecimal> {
 
     // ==== CONSTRUCTORS ===================================================== //
