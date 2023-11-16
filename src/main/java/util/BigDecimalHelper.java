@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"unused", "WeakerAccess", "InterfaceNeverImplemented"})
+@SuppressWarnings({"unused", "InterfaceNeverImplemented"})
 public interface BigDecimalHelper {
 
     // METHODS ========================================================>>

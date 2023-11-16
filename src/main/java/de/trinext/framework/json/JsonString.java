@@ -6,7 +6,7 @@ package de.trinext.framework.json;
  * @author Dennis Woithe
  * @see String java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess"}) // TODO: Zu CharSequence erweitern
 public final class JsonString extends JsonPrimitive<String> {
 
     // ==== CONSTRUCTORS ===================================================== //
