@@ -5,8 +5,6 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * The classification for a {@link JsonElement} that contains other {@link JsonElement}s.
  *
@@ -17,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract sealed class JsonContainer<V> extends JsonElement<V> permits JsonList, JsonMap {
 
-    JsonContainer(@NotNull V value) {
+    JsonContainer(V value) {
         super(value);
     }
 

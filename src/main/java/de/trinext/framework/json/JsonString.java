@@ -22,7 +22,8 @@ public final class JsonString extends JsonPrimitive<String> {
 
     @Override
     public String toString() {
-        return "\"" + getValue() + "\"";
+        // TODO: Remove gson dependency
+        return new com.google.gson.JsonPrimitive(getValue()).toString();
     }
 
 }
