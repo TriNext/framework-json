@@ -2,7 +2,6 @@ package de.trinext.framework.json;
 
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import util.UnexpectedGsonTypeException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static test.util.TestHelper.testForRandomStrings;
@@ -19,11 +18,10 @@ class JsonStringTest {
 
     @Test
     void test_hash_code() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        randStr.hashCode(),
-                        JsonString.from(randStr).hashCode()
-                ));
+        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+                randStr.hashCode(),
+                JsonString.from(randStr).hashCode()
+        ));
     }
 
     @Test @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
@@ -41,7 +39,7 @@ class JsonStringTest {
     void test_to_string() {
         testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> assertEquals(
-                        "\"" + randStr + "\"",
+                        new JsonPrimitive(randStr).toString(),
                         JsonString.from(randStr).toString()
                 ));
     }
@@ -56,29 +54,23 @@ class JsonStringTest {
     }
 
     @Test
-    void test_from_gson() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        JsonString.from(randStr),
-                        JsonString.from(new com.google.gson.JsonPrimitive(randStr))
-                ));
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonString.from(new com.google.gson.JsonPrimitive(true))
-        );
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonString.from(new com.google.gson.JsonPrimitive(1))
-        );
+    void test_json_type_name() {
+        assertEquals(JsonString.class.getSimpleName(), JsonString.from("").typeName());
+    }
+
+
+    @Test
+    void test_try_getters() {
+        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+                randStr,
+                JsonString.from(randStr).tryGetString().orElseThrow()
+        ));
     }
 
     @Test
-    void test_to_gson_elem() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
-                randStr -> assertEquals(
-                        new JsonPrimitive(randStr),
-                        JsonString.from(randStr).toGsonElem()
-                ));
+    void test_try_getters_empty() {
+        var nonJNr = JsonInteger.from(0);
+        assertTrue(nonJNr.tryGetString().isEmpty());
     }
 
 }

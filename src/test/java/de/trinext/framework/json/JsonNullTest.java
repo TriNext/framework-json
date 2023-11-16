@@ -33,8 +33,8 @@ class JsonNullTest {
     }
 
     @Test
-    void test_to_gson_elem() {
-        assertEquals(com.google.gson.JsonNull.INSTANCE, JsonNull.NULL.toGsonElem());
+    void test_json_type_name() {
+        assertEquals(JsonNull.class.getSimpleName(), JsonNull.NULL.typeName());
     }
 
 }

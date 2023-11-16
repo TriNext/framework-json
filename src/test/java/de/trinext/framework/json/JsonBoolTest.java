@@ -1,8 +1,6 @@
 package de.trinext.framework.json;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import util.UnexpectedGsonTypeException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,19 +48,9 @@ class JsonBoolTest {
     }
 
     @Test
-    void test_from_gson() {
-        assertThrows(
-                UnexpectedGsonTypeException.class,
-                () -> JsonBool.from(new JsonPrimitive(""))
-        );
-        assertEquals(JsonBool.TRUE, JsonBool.from(new JsonPrimitive(true)));
-        assertEquals(JsonBool.FALSE, JsonBool.from(new JsonPrimitive(false)));
-    }
-
-    @Test
-    void test_to_gson_elem() {
-        assertEquals(new JsonPrimitive(true), JsonBool.TRUE.toGsonElem());
-        assertEquals(new JsonPrimitive(false), JsonBool.FALSE.toGsonElem());
+    void test_json_type_name() {
+        assertEquals(JsonBool.class.getSimpleName(), JsonBool.TRUE.typeName());
+        assertEquals(JsonBool.class.getSimpleName(), JsonBool.FALSE.typeName());
     }
 
 }

@@ -1,45 +1,28 @@
 package de.trinext.framework.json;
 
-import util.UnexpectedGsonTypeException;
-
-import static de.trinext.framework.json.GsonPrimitiveTypeName.JSON_STRING_TYPE;
-
 /**
+ * The json representation of a string of characters.
+ *
  * @author Dennis Woithe
+ * @see String java equivalent
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
-public final class JsonString extends JsonPrimitive<CharSequence> {
+@SuppressWarnings({"unused", "WeakerAccess"}) // TODO: Zu CharSequence erweitern
+public final class JsonString extends JsonPrimitive<String> {
 
     // ==== CONSTRUCTORS ===================================================== //
 
     private JsonString(CharSequence value) {
-        super(value);
-    }
-
-    // ==== METHODS ========================================================== //
-
-    @Override
-    public com.google.gson.JsonPrimitive toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue().toString());
-    }
-
-    @Override
-    public String toString() {
-        return "\"" + getValue() + "\"";
-    }
-
-    // ==== STATIC FUNCTIONS ================================================= //
-
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated
-    static JsonString from(com.google.gson.JsonPrimitive jPrim) {
-        if (!jPrim.isString())
-            throw new UnexpectedGsonTypeException(jPrim, JSON_STRING_TYPE);
-        return new JsonString(jPrim.getAsString());
+        super(value.toString());
     }
 
     static JsonString from(CharSequence charSeq) {
         return new JsonString(charSeq);
+    }
+
+    @Override
+    public String toString() {
+        // TODO: Remove gson dependency
+        return new com.google.gson.JsonPrimitive(getValue()).toString();
     }
 
 }

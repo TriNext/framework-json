@@ -4,13 +4,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.google.gson.JsonElement;
-import util.GsonHelper;
 
-// INNER TYPES ========================================================>>
 /**
- * @param <N> is the type of backing {@link Number}
+ * The classification for any {@link JsonElement} that represents a number.
+ *
+ * @param <N> the type of the number, either {@link BigDecimal} or {@link BigInteger}.
  *
  * @author Dennis Woithe
+ * @see Number java equivalent
  */
 @SuppressWarnings("WeakerAccess")
 public abstract sealed class JsonNumber<N extends Number>
@@ -24,18 +25,6 @@ public abstract sealed class JsonNumber<N extends Number>
         super(value);
     }
 
-    // METHODS ========================================================>>
-
-    /** @deprecated Gets removed when {@link com.google.gson} is not wrapped anymore. */
-    @Deprecated
-    static JsonNumber<?> from(com.google.gson.JsonPrimitive jPrim) {
-        return GsonHelper.gsonNrIsInt(jPrim)
-               ? JsonInteger.from(jPrim)
-               : JsonDecimal.from(jPrim);
-    }
-
-    // ==== STATIC FUNCTIONS ================================================= //
-
     public static JsonNumber<?> from(Number value) {
         return switch (value) {
             case Byte integer -> JsonInteger.from((byte) integer);
@@ -48,11 +37,6 @@ public abstract sealed class JsonNumber<N extends Number>
             case BigDecimal decimal -> JsonDecimal.from(decimal);
             default -> JsonDecimal.from(new BigDecimal(value.toString()));
         };
-    }
-
-    @Override
-    public JsonElement toGsonElem() {
-        return new com.google.gson.JsonPrimitive(getValue());
     }
 
 }
