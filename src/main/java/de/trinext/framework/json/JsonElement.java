@@ -161,4 +161,112 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetStreamOf(elemCls).map(stream -> stream.collect(Collectors.toSet()));
     }
 
+
+    // ==== PRIMITIVE ======================================================== //
+
+    /** @return {@link OptionalInt} whether the target of the passed path is a {@link JsonInteger} which can be represented as an {@code int}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final OptionalInt tryGetPathAsInt(String jsonPath) {
+        var res = this instanceof JsonContainer<?> jCon ? jCon.tryGetPath(jsonPath) : Optional.<JsonElement<?>>empty();
+        return res.isPresent() ? res.get().tryGetInt() : OptionalInt.empty();
+    }
+
+    /** @return {@link OptionalLong} whether the target of the passed path is a {@link JsonInteger} which can be represented as a {@code long}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final OptionalLong tryGetPathAsLong(String jsonPath) {
+        var res = this instanceof JsonContainer<?> jCon ? jCon.tryGetPath(jsonPath) : Optional.<JsonElement<?>>empty();
+        return res.isPresent() ? res.get().tryGetLong() : OptionalLong.empty();
+    }
+
+    /** @return {@link OptionalDouble} whether the target of the passed path is a {@link JsonDecimal} which can be represented as a {@code double}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final OptionalDouble tryGetPathAsDouble(String jsonPath) {
+        var res = this instanceof JsonContainer<?> jCon ? jCon.tryGetPath(jsonPath) : Optional.<JsonElement<?>>empty();
+        return res.isPresent() ? res.get().tryGetDouble() : OptionalDouble.empty();
+    }
+
+    // ==== OBJECT =========================================================== //
+
+    /** @return {@link Optional<Enum>} whether the target of the passed path is a {@link JsonString} which can be represented as an {@link Enum}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final <E extends Enum<E>> Optional<E> tryGetPathAsEnum(String jsonPath, Class<E> enumType) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(e -> e.tryGetEnum(enumType))
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<Number>} whether the target of the passed path is a {@link JsonNumber}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final Optional<Number> tryGetPathAsNumber(String jsonPath) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(JsonElement::tryGetNumber)
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<String>} whether the target of the passed path is a {@link JsonString}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final Optional<String> tryGetPathAsString(String jsonPath) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(JsonElement::tryGetString)
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<BigInteger>} whether the target of the passed path is a {@link JsonInteger}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final Optional<BigInteger> tryGetPathAsBigInt(String jsonPath) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(JsonElement::tryGetBigInt)
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<BigDecimal>} whether the target of the passed path is a {@link JsonDecimal}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final Optional<BigDecimal> tryGetPathAsBigDec(String jsonPath) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(JsonElement::tryGetBigDec)
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<Boolean>} whether the target of the passed path is a {@link JsonBool}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final Optional<Boolean> tryGetPathAsBool(String jsonPath) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(JsonElement::tryGetBool)
+               : Optional.empty();
+    }
+
+    // ==== CONTAINER ======================================================== //
+
+    /** @return {@link Optional<JsonMap>} whether the target of the passed path is a {@link JsonMap}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final <T> Optional<T> tryGetPathAsObj(String jsonPath, Class<? extends T> cls) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(e -> e.tryGetObj(cls))
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<JsonList>} whether the target of the passed path is a {@link JsonList}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final <T> Optional<Stream<T>> tryGetPathAsStreamOf(String jsonPath, Class<? extends T> elemCls) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(e -> e.tryGetStreamOf(elemCls))
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<JsonList>} whether the target of the passed path is a {@link JsonList}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final <T> Optional<List<T>> tryGetPathAsListOf(String jsonPath, Class<? extends T> elemCls) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(e -> e.tryGetListOf(elemCls))
+               : Optional.empty();
+    }
+
+    /** @return {@link Optional<JsonList>} whether the target of the passed path is a {@link JsonList}. */
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    public final <T> Optional<Set<T>> tryGetPathAsSetOf(String jsonPath, Class<? extends T> elemCls) {
+        return this instanceof JsonContainer<?> jCon
+               ? jCon.tryGetPath(jsonPath).flatMap(e -> e.tryGetSetOf(elemCls))
+               : Optional.empty();
+    }
+
 }
