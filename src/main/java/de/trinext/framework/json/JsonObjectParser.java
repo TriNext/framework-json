@@ -14,6 +14,7 @@ class JsonObjectParser {
         this.object = object;
     }
 
+    @SuppressWarnings("deprecation")
     JsonElement<?> parse() {
         return new JsonGsonParser(new Gson().toJsonTree(object)).parse();
     }

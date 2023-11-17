@@ -7,7 +7,6 @@ import java.math.BigDecimal;
  * The json representation of a potentially infinitely precise decimal number.
  *
  * @author Dennis Woithe
- * @see com.google.gson.JsonPrimitive#JsonPrimitive(Number) gson equivalent
  * @see BigDecimal java equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})

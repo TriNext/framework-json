@@ -19,17 +19,17 @@ class JsonGsonParser {
         return parseElem(rootElement);
     }
 
-    private JsonElement<?> parseElem(com.google.gson.JsonElement gElem) {
+    private static JsonElement<?> parseElem(com.google.gson.JsonElement gElem) {
         return switch (gElem) {
             case JsonObject gObj -> parseMap(gObj);
             case JsonArray gArr -> parseList(gArr);
             case com.google.gson.JsonPrimitive gPrim -> parsePrimitive(gPrim);
             case com.google.gson.JsonNull ignored -> JsonNull.NULL;
-            default -> throw new AssertionError("Unexpected value: " + gElem);
+            default -> throwUnexpectedValueError(gElem);
         };
     }
 
-    private JsonMap parseMap(JsonObject gObj) {
+    private static JsonMap parseMap(JsonObject gObj) {
         var map = new JsonMap();
         gObj.entrySet().forEach(entry -> map.add(
                 entry.getKey(),
@@ -39,20 +39,24 @@ class JsonGsonParser {
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
-    private JsonList parseList(JsonArray gArr) {
+    private static JsonList parseList(JsonArray gArr) {
         var list = new JsonList();
         gArr.forEach(elem -> list.add(parseElem(elem)));
         return list;
     }
 
-    private JsonPrimitive<?> parsePrimitive(com.google.gson.JsonPrimitive gObj) {
+    private static JsonPrimitive<?> parsePrimitive(com.google.gson.JsonPrimitive gObj) {
         if(gObj.isNumber())
             return JsonNumber.from(gObj.getAsNumber());
         if(gObj.isBoolean())
             return JsonBool.from(gObj.getAsBoolean());
         if (gObj.isString())
             return JsonString.from(gObj.getAsString());
-        throw new AssertionError("Unexpected value: " + gObj);
+        return throwUnexpectedValueError(gObj);
+    }
+
+    private static <X> X throwUnexpectedValueError(com.google.gson.JsonElement gElem) {
+        throw new AssertionError("Unexpected value: " + gElem);
     }
 
 }

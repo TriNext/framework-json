@@ -6,7 +6,6 @@ import java.util.Objects;
  * The json representation of no value.
  *
  * @author Dennis Woithe
- * @see com.google.gson.JsonNull gson equivalent
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class JsonNull extends JsonElement<Void> {

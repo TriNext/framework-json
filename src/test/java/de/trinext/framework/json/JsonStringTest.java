@@ -1,5 +1,6 @@
 package de.trinext.framework.json;
 
+import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class JsonStringTest {
     void test_to_string() {
         testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> assertEquals(
-                        "\"" + randStr + "\"",
+                        new JsonPrimitive(randStr).toString(),
                         JsonString.from(randStr).toString()
                 ));
     }
