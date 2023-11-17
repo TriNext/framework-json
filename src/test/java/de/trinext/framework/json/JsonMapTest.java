@@ -1,7 +1,6 @@
 package de.trinext.framework.json;
 
-import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,56 +17,56 @@ class JsonMapTest {
     private static final String FIELD_3 = "FIELD_3";
     private static final String VALUE_1 = "Test 1";
     private static final String FIELD_4 = "FIELD_4";
-    private final JsonMap testMap = new JsonMap();
+    private final JsonMap jsonTestMap = new JsonMap();
+
+    private final Map<String, JsonElement<?>> testMap = new LinkedHashMap<>();
 
     @BeforeEach
     void setUp() {
-        testMap.add(FIELD_1, VALUE_1);
-        testMap.add(FIELD_2, 2);
-        testMap.add(FIELD_3, 3);
+        jsonTestMap.add(FIELD_1, VALUE_1);
+        jsonTestMap.add(FIELD_2, 2);
+        jsonTestMap.add(FIELD_3, 3);
+        testMap.put(FIELD_1, JsonString.from(VALUE_1));
+        testMap.put(FIELD_2, JsonInteger.from(2));
+        testMap.put(FIELD_3, JsonInteger.from(3));
     }
 
     @Test
     void test_json_map_iterator() {
-        var iterations = new AtomicInteger();
-        testMap.iterator().forEachRemaining(x -> iterations.incrementAndGet());
-        assertEquals(3, iterations.get());
-        var testmapIterator = testMap.iterator();
-        assertTrue(testmapIterator.hasNext());
-        var firstEntry = testmapIterator.next();
-        assertEquals(FIELD_1, firstEntry.getKey());
-        assertEquals(VALUE_1, firstEntry.getValue().tryGetString().orElseThrow());
-        assertTrue(testmapIterator.hasNext());
-        var secondEntry = testmapIterator.next();
-        assertEquals(FIELD_2, secondEntry.getKey());
-        assertEquals(2, secondEntry.getValue().tryGetInt().orElseThrow());
-        var thirdEntry = testmapIterator.next();
-        assertEquals(FIELD_3, thirdEntry.getKey());
-        assertEquals(3, thirdEntry.getValue().tryGetInt().orElseThrow());
-        assertFalse(testmapIterator.hasNext());
+        var jIter = jsonTestMap.iterator();
+        var testIter = testMap.entrySet().iterator();
+        while (jIter.hasNext() && testIter.hasNext()) {
+            var jEntry = jIter.next();
+            var testEntry = testIter.next();
+            assertEquals(testEntry.getKey(), jEntry.getKey());
+            assertEquals(testEntry.getValue(), jEntry.getValue());
+        }
+        assertFalse(jIter.hasNext());
+        assertFalse(testIter.hasNext());
     }
 
     @Test
     void test_contains() {
-        assertTrue(testMap.contains(FIELD_1));
-        assertTrue(testMap.contains(FIELD_2));
-        assertTrue(testMap.contains(FIELD_3));
-        assertFalse(testMap.contains("fail"));
-        assertThrows(NullPointerException.class,() -> testMap.contains(null));
+        assertTrue(jsonTestMap.contains(FIELD_1));
+        assertTrue(jsonTestMap.contains(FIELD_2));
+        assertTrue(jsonTestMap.contains(FIELD_3));
+        assertFalse(jsonTestMap.contains(FIELD_4));
+        assertThrows(IllegalArgumentException.class, () -> jsonTestMap.contains(null));
     }
 
     @Test
     void test_add_arr() {
         var testArray = new String[]{FIELD_1, FIELD_2, FIELD_3};
-        assertThrows(JsonFieldAlreadyExistsException.class,() -> testMap.addArr(FIELD_1, (Object[]) testArray));
-        assertTrue(testMap.addArr(FIELD_4, (Object[]) testArray).contains(FIELD_4));
+        assertThrows(JsonFieldAlreadyExistsException.class, () -> jsonTestMap.addArr(FIELD_1, (Object[]) testArray));
+        assertTrue(jsonTestMap.addArr(FIELD_4, (Object[]) testArray).contains(FIELD_4));
 
     }
+
     @Test
     void test_add() {
-        assertThrows(JsonFieldAlreadyExistsException.class,() -> testMap.add(FIELD_1, VALUE_1));
-        testMap.addArr(FIELD_4, VALUE_1);
-        assertEquals(VALUE_1, testMap.getValue().get(FIELD_1).getValue());
+        assertThrows(JsonFieldAlreadyExistsException.class, () -> jsonTestMap.add(FIELD_1, VALUE_1));
+        jsonTestMap.addArr(FIELD_4, VALUE_1);
+        assertEquals(VALUE_1, jsonTestMap.getValue().get(FIELD_1).getValue());
 
     }
 
@@ -76,14 +75,14 @@ class JsonMapTest {
         assertEquals(
                 "{\"" + FIELD_1 + "\":\"" + VALUE_1 + "\", " +
                         "\"" + FIELD_2 + "\":" + 2 + ", " +
-                        "\"" + FIELD_3 + "\":" + 3 + "}", testMap.toString());
+                        "\"" + FIELD_3 + "\":" + 3 + "}", jsonTestMap.toString());
     }
 
     @Test
     void test_stream() {
-        assertEquals(3, testMap.stream().count());
-        assertTrue(testMap.stream().anyMatch(x -> x.getValue().getValue().equals(VALUE_1)));
-        assertEquals(testMap.getValue().entrySet().stream().toList(), testMap.stream().toList());
+        assertEquals(3, jsonTestMap.stream().count());
+        assertTrue(jsonTestMap.stream().anyMatch(x -> x.getValue().getValue().equals(VALUE_1)));
+        assertEquals(jsonTestMap.getValue().entrySet().stream().toList(), jsonTestMap.stream().toList());
     }
 
     @Test
@@ -102,15 +101,16 @@ class JsonMapTest {
 
     @Test
     void test_try_get() {
-        assertEquals("\"" + VALUE_1 + "\"", testMap.tryGet(FIELD_1).orElseThrow().toString());
-        assertNotEquals("\"" + VALUE_1 + "\"", testMap.tryGet(FIELD_2).orElseThrow().toString());
-        assertThrows(NoSuchElementException.class,() -> testMap.tryGet(FIELD_4).orElseThrow().toString());
+        assertEquals("\"" + VALUE_1 + "\"", jsonTestMap.tryGet(FIELD_1).orElseThrow().toString());
+        assertNotEquals("\"" + VALUE_1 + "\"", jsonTestMap.tryGet(FIELD_2).orElseThrow().toString());
+        assertThrows(NoSuchElementException.class, () -> jsonTestMap.tryGet(FIELD_4).orElseThrow().toString());
     }
+
     @Test
-    void test_remove_key(){
-        assertEquals(3, testMap.getValue().size());
-        testMap.removeKey(FIELD_1);
-        assertEquals(2, testMap.getValue().size());
+    void test_remove_key() {
+        assertEquals(3, jsonTestMap.getValue().size());
+        jsonTestMap.removeKey(FIELD_1);
+        assertEquals(2, jsonTestMap.getValue().size());
     }
 
 

@@ -56,6 +56,8 @@ public final class JsonMap
 
     /** Returns true if this object has a field with the passed name. */
     public boolean contains(String fieldName) {
+        if (fieldName == null)
+            throw new IllegalArgumentException("fieldName can not be null!");
         return getValue().containsKey(Objects.requireNonNull(fieldName));
     }
 
