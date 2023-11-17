@@ -150,22 +150,31 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     }
 
     /** @return {@link Optional<Stream>} whether this is a {@link JsonList} which elements represent the passed class. */
-    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis"})
+    @SuppressWarnings({"ClassReferencesSubclass", "InstanceofThis", "BoundedWildcard"})
     public final <T> Optional<Stream<T>> tryGetStreamOf(Function<JsonElement<?>, ? extends T> mapper) {
         return this instanceof JsonList jList
                ? Optional.of(jList.stream().map(mapper))
                : Optional.empty();
     }
 
-
     /** @return {@link Optional<List>} (mutable) whether this is a {@link JsonList} which elements represent the passed class. */
     public final <T> Optional<List<T>> tryGetListOf(Class<? extends T> elemCls) {
         return tryGetStreamOf(elemCls).map(stream -> stream.collect(Collectors.toList()));
     }
 
+    /** @return {@link Optional<List>} (mutable) whether this is a {@link JsonList} which elements represent the passed class. */
+    public final <T> Optional<List<T>> tryGetListOf(Function<JsonElement<?>, ? extends T> mapper) {
+        return tryGetStreamOf(mapper).map(stream -> stream.collect(Collectors.toList()));
+    }
+
     /** @return {@link Optional<Set>} (mutable) whether this is a {@link JsonList} which elements represent the passed class. */
     public final <T> Optional<Set<T>> tryGetSetOf(Class<? extends T> elemCls) {
         return tryGetStreamOf(elemCls).map(stream -> stream.collect(Collectors.toSet()));
+    }
+
+    /** @return {@link Optional<Set>} (mutable) whether this is a {@link JsonList} which elements represent the passed class. */
+    public final <T> Optional<Set<T>> tryGetSetOf(Function<JsonElement<?>, ? extends T> mapper) {
+        return tryGetStreamOf(mapper).map(stream -> stream.collect(Collectors.toSet()));
     }
 
 
