@@ -1,7 +1,6 @@
 package de.trinext.framework.json;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -148,5 +147,34 @@ class JsonListTest {
         assertEquals(1, jArr.size());
         jArr.addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
         assertEquals(2, jArr.size());
+    }
+
+    @Test
+    void test_try_get_list_of() {
+        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        var res = jArr.tryGetListOf(Integer.class);
+        assertTrue(res.isPresent());
+        assertEquals(3, res.get().size());
+        assertEquals(ARRAY_TEST_VALUE_1, res.get().get(0));
+        assertEquals(ARRAY_TEST_VALUE_2, res.get().get(1));
+        assertEquals(ARRAY_TEST_VALUE_3, res.get().get(2));
+    }
+
+    @Test
+    void test_try_get_list_of_mapper() {
+        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        var res = jArr.tryGetListOf(JsonElement::tryGetInt);
+        assertTrue(res.isPresent());
+        assertEquals(3, res.get().size());
+        assertEquals(ARRAY_TEST_VALUE_1, res.get().get(0).orElseThrow());
+        assertEquals(ARRAY_TEST_VALUE_2, res.get().get(1).orElseThrow());
+        assertEquals(ARRAY_TEST_VALUE_3, res.get().get(2).orElseThrow());
+    }
+
+    @Test
+    void test_constructor() {
+        var intList = new ArrayList<>(List.of(1, -1, 0));
+        var jsonList = new JsonList(intList);
+        assertEquals(intList, jsonList.tryGetPathAsListOf("",Integer.class).orElseThrow());
     }
 }

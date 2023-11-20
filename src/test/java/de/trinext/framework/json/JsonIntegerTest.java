@@ -59,5 +59,10 @@ class JsonIntegerTest {
     void test_json_type_name() {
         assertEquals(JsonInteger.class.getSimpleName(), JsonInteger.from(0).typeName());
     }
+    @Test
+    void test_try_get_int() {
+        var jInt = JsonInteger.from(0);
+        assertEquals(0, jInt.tryGetInt().orElseThrow());
+    }
 
 }

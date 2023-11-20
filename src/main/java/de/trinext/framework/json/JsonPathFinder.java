@@ -10,6 +10,7 @@ class JsonPathFinder {
 
     private static final Pattern PATH_SEPARATOR = Pattern.compile("(?<!\\\\)\\.");
     private final List<String> pathElems;
+    private final String[] strPath;
     private JsonElement<?>[] discovered;
     private JsonElement<?> current;
 
@@ -18,6 +19,8 @@ class JsonPathFinder {
     @SuppressWarnings("TypeMayBeWeakened")
     JsonPathFinder(JsonContainer<?> start, CharSequence jsonPath) {
         pathElems = new ArrayList<>(jsonPath.isEmpty() ? Collections.emptyList() : List.of(PATH_SEPARATOR.split(jsonPath)));
+        strPath = pathElems.toArray(String[]::new);
+        discovered = new JsonElement[pathElems.size()];
         current = start;
     }
 
@@ -51,7 +54,7 @@ class JsonPathFinder {
     }
 
     String[] stringPath() {
-        return pathElems.toArray(String[]::new);
+        return strPath;
     }
 
 }

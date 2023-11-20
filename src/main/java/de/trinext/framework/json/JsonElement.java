@@ -118,8 +118,15 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     /** @return {@link Optional<BigInteger>} whether this is a {@link JsonInteger}. */
     @SuppressWarnings("InstanceofThis")
     public final Optional<BigInteger> tryGetBigInt() {
-        return this instanceof JsonInteger j
-               ? Optional.of(j.getValue()) : Optional.empty();
+        try {
+            return switch (this) {
+                case JsonInteger jInt -> Optional.of(jInt.getValue());
+                case JsonDecimal jDec -> Optional.of(jDec.getValue().toBigIntegerExact());
+                default -> Optional.empty();
+            };
+        } catch (ArithmeticException ae) {
+            return Optional.empty();
+        }
     }
 
     /** @return {@link Optional<BigDecimal>} whether this is a {@link JsonNumber}. */

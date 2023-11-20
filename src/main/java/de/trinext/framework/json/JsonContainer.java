@@ -52,7 +52,7 @@ public abstract sealed class JsonContainer<V> extends JsonElement<V> permits Jso
             var parent = finder.elemPath();
             var strPath = finder.stringPath();
             var lastPathElem = strPath[strPath.length - 1];
-            return switch ((JsonContainer<?>) parent[strPath.length - 2]) {
+            return switch ((JsonContainer<?>) parent[parent.length - 1]) {
                 case JsonList jList -> jList.removeAt(Integer.parseInt(lastPathElem));
                 case JsonMap jMap -> jMap.removeKey(lastPathElem);
             };

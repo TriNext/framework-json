@@ -53,4 +53,12 @@ class JsonBoolTest {
         assertEquals(JsonBool.class.getSimpleName(), JsonBool.FALSE.typeName());
     }
 
+    @Test
+    void test_try_get_path_as_bool_empty() {
+        var testMap = new JsonMap();
+        testMap.add("existingPath", Boolean.TRUE);
+        assertTrue(JsonBool.TRUE.tryGetPathAsBool("existingPath").isEmpty());
+        assertTrue(JsonBool.TRUE.tryGetPathAsBool("fakePath").isEmpty());
+    }
+
 }

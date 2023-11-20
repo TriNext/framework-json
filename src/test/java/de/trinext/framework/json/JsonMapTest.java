@@ -12,12 +12,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class JsonMapTest {
 
-    private static final String FIELD_1 = "FIELD_1";
-    private static final String FIELD_2 = "FIELD_2";
-    private static final String FIELD_3 = "FIELD_3";
-    private static final String VALUE_1 = "Test 1";
-    private static final String FIELD_4 = "FIELD_4";
+    private static final String
+            FIELD_1 = "FIELD_1",
+            FIELD_2 = "FIELD_2",
+            FIELD_3 = "FIELD_3",
+            VALUE_1 = "Test 1",
+            FIELD_4 = "FIELD_4",
+            STRING_FIELD = "STRING_FIELD",
+            INT_FIELD = "INT_FIELD",
+            NON_EXISTEND_FIELD = "NON_EXISTEND_FIELD",
+            TEST_STRING = "TRUE";
     private final JsonMap jsonTestMap = new JsonMap();
+    private final JsonMap jsonPathTestMap = new JsonMap();
 
     private final Map<String, JsonElement<?>> testMap = new LinkedHashMap<>();
 
@@ -29,6 +35,8 @@ class JsonMapTest {
         testMap.put(FIELD_1, JsonString.from(VALUE_1));
         testMap.put(FIELD_2, JsonInteger.from(2));
         testMap.put(FIELD_3, JsonInteger.from(3));
+        jsonPathTestMap.add(STRING_FIELD, TEST_STRING);
+        jsonPathTestMap.add(INT_FIELD, 2);
     }
 
     @Test
@@ -112,6 +120,33 @@ class JsonMapTest {
         jsonTestMap.removeKey(FIELD_1);
         assertEquals(2, jsonTestMap.getValue().size());
     }
+
+    @Test
+    void test_try_get_path() {
+        assertTrue(jsonPathTestMap.tryGetPath(INT_FIELD).isPresent());
+        assertTrue(jsonPathTestMap.tryGetPath(NON_EXISTEND_FIELD).isEmpty());
+    }
+
+    @Test
+    void test_find_path() {
+        assertTrue(jsonPathTestMap.findPath(STRING_FIELD));
+    }
+    @Test
+    void test_remove_path() {
+        assertTrue(jsonPathTestMap.findPath(STRING_FIELD));
+        jsonPathTestMap.removePath(STRING_FIELD);
+        assertFalse(jsonPathTestMap.findPath(STRING_FIELD));
+        //var jList = new JsonList(1,2,3);
+        assertThrows(IllegalArgumentException.class, () -> jsonPathTestMap.removePath(""));
+        //TODO: fix out of bounds exception
+        //jList.removePath("5");
+    }
+    // TODO: fix add method for doublicate nested elements to prevent tests from breaking
+//    @Test
+//    void test_remove_path_nested() {
+//        testMap.removePath(NESTED_FIELD + "." + STRING_FIELD);
+//        assertFalse(testMap.findPath(NESTED_FIELD + "." + STRING_FIELD));
+//    }
 
 
 }

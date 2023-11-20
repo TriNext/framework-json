@@ -51,13 +51,14 @@ public final class JsonList
     }
 
 
-    public JsonList add(Object elem) {
-        getValue().add(Json.treeFromInstance(elem));
+    public JsonList add(Object... elems) {
+        for (var elem : elems)
+            getValue().add(Json.treeFromInstance(elem));
         return this;
     }
 
     public JsonList addArr(Object... elems) {
-        return add(elems);
+        return add(new JsonList(elems));
     }
 
     public boolean contains(Object elem) {

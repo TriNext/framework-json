@@ -13,6 +13,7 @@ class JsonStringTest {
 
     private static final int WORDS_PER_TEST = 100;
     private static final int WORD_LENGTH = 10;
+    private static final String TEST = "TEST";
 
     // ==== METHODS ========================================================== //
 
@@ -72,5 +73,12 @@ class JsonStringTest {
         var nonJStr = JsonInteger.from(0);
         assertTrue(nonJStr.tryGetString().isEmpty());
     }
-
+    @Test
+    void test_try_get_path_as_string_empty() {
+        var nonJStr = JsonInteger.from(0);
+        var testMap = new JsonMap();
+        testMap.add("existingPath", TEST);
+        assertTrue(nonJStr.tryGetPathAsString("existingPath").isEmpty());
+        assertTrue(nonJStr.tryGetPathAsString("fakePath").isEmpty());
+    }
 }

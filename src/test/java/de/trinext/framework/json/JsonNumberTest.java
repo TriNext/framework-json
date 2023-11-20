@@ -13,7 +13,9 @@ import static test.util.TestHelper.*;
  */
 class JsonNumberTest {
 
-    private static final int NRS_PER_TEST = 100;
+    private static final int NRS_PER_TEST = 100, INT_CONSTANT = 1;
+
+    private static final String EXISTING_PATH = "EXISTING_PATH";
 
     // ==== METHODS ========================================================== //
 
@@ -123,6 +125,25 @@ class JsonNumberTest {
         assertTrue(nonJNr.tryGetBigInt().isEmpty());
         assertTrue(nonJNr.tryGetBigDec().isEmpty());
         assertTrue(nonJNr.tryGetNumber().isEmpty());
+    }
+
+    @Test
+    void try_get_int() {
+        assertEquals(2, Json.treeFromInstance(2).tryGetInt().orElseThrow());
+        assertEquals(2, Json.treeFromInstance(2.0).tryGetInt().orElseThrow());
+    }
+
+    @Test
+    void test_try_get_path_as_number_empty() {
+        var nonJNr = JsonString.from("not a number");
+        var testMap = new JsonMap();
+        testMap.add(EXISTING_PATH, INT_CONSTANT);
+        assertTrue(nonJNr.tryGetPathAsInt(EXISTING_PATH).isEmpty());
+        assertTrue(nonJNr.tryGetPathAsLong(EXISTING_PATH).isEmpty());
+        assertTrue(nonJNr.tryGetPathAsDouble(EXISTING_PATH).isEmpty());
+        assertTrue(nonJNr.tryGetPathAsBigInt(EXISTING_PATH).isEmpty());
+        assertTrue(nonJNr.tryGetPathAsBigDec(EXISTING_PATH).isEmpty());
+        assertTrue(nonJNr.tryGetPathAsNumber(EXISTING_PATH).isEmpty());
     }
 
 }
