@@ -10,7 +10,7 @@ class JsonPathFinder {
 
     private static final Pattern PATH_SEPARATOR = Pattern.compile("(?<!\\\\)\\.");
     private final List<String> pathElems;
-    private JsonElement<?>[] discovered;
+    private final JsonElement<?>[] discovered;
     private JsonElement<?> current;
 
     // ==== CONSTRUCTORS ===================================================== //
@@ -18,6 +18,7 @@ class JsonPathFinder {
     @SuppressWarnings("TypeMayBeWeakened")
     JsonPathFinder(JsonContainer<?> start, CharSequence jsonPath) {
         pathElems = new ArrayList<>(jsonPath.isEmpty() ? Collections.emptyList() : List.of(PATH_SEPARATOR.split(jsonPath)));
+        discovered = new JsonElement<?>[pathElems.size()];
         current = start;
     }
 
@@ -27,7 +28,6 @@ class JsonPathFinder {
     Optional<JsonElement<?>> find() {
         if (pathElems.isEmpty())
             return Optional.of(current);
-        discovered = new JsonElement<?>[pathElems.size()];
         var index = 0;
         while (!pathElems.isEmpty()) {
             var pathElem = pathElems.remove(0);
@@ -45,7 +45,7 @@ class JsonPathFinder {
     }
 
     JsonElement<?>[] elemPath() {
-        if (discovered == null)
+        if (Arrays.stream(discovered).anyMatch(Objects::isNull))
             throw new IllegalStateException("No path was discovered yet!");
         return discovered.clone();
     }
