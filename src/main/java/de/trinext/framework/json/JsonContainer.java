@@ -31,6 +31,8 @@ public abstract sealed class JsonContainer<V> extends JsonElement<V> permits Jso
 
     @SuppressWarnings("ClassReferencesSubclass")
     public final boolean removePath(String jsonPath) {
+        if (jsonPath.isEmpty())
+            throw new IllegalArgumentException("Cannot remove root element");
         var finder = new JsonPathFinder(this, jsonPath);
         if (finder.find().isPresent()) {
             var parent = finder.elemPath();
