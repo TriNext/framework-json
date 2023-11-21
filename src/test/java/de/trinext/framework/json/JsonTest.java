@@ -6,17 +6,13 @@ import java.lang.reflect.Modifier;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestConstants.*;
 
 /**
  * @author Dennis Woithe
  */
 class JsonTest {
 
-    private static final String JSON_TREE_STRING = """
-                                                    {
-                                                        "a": [{}]
-                                                    }
-                                                   """;
 
     @Test
     void test_constructor() throws NoSuchMethodException {
@@ -36,7 +32,7 @@ class JsonTest {
 
     @Test
     void test_tree_from_string() {
-        Json.treeFromString(JSON_TREE_STRING);
+        Json.treeFromString(JSON_TREE_STRING_ARRAY_WITH_EMPTY_OBJECT);
     }
 
 

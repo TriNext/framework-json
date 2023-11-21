@@ -4,16 +4,13 @@ import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestConstants.*;
 import static test.util.TestHelper.testForRandomStrings;
 
 /**
  * @author Dennis Woithe
  */
 class JsonStringTest {
-
-    private static final int WORDS_PER_TEST = 100;
-    private static final int WORD_LENGTH = 10;
-    private static final String TEST = "TEST";
 
     // ==== METHODS ========================================================== //
 
@@ -77,8 +74,8 @@ class JsonStringTest {
     void test_try_get_path_as_string_empty() {
         var nonJStr = JsonInteger.from(0);
         var testMap = new JsonMap();
-        testMap.add("existingPath", TEST);
-        assertTrue(nonJStr.tryGetPathAsString("existingPath").isEmpty());
-        assertTrue(nonJStr.tryGetPathAsString("fakePath").isEmpty());
+        testMap.add(STRING_FIELD, STRING_CONSTANT);
+        assertTrue(nonJStr.tryGetPathAsString(STRING_FIELD).isEmpty());
+        assertTrue(testMap.tryGetPathAsString(INT_FIELD).isEmpty());
     }
 }

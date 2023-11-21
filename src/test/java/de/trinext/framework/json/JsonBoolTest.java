@@ -3,6 +3,7 @@ package de.trinext.framework.json;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestConstants.*;
 
 /**
  * @author Dennis Woithe
@@ -56,9 +57,9 @@ class JsonBoolTest {
     @Test
     void test_try_get_path_as_bool_empty() {
         var testMap = new JsonMap();
-        testMap.add("existingPath", Boolean.TRUE);
-        assertTrue(JsonBool.TRUE.tryGetPathAsBool("existingPath").isEmpty());
-        assertTrue(JsonBool.TRUE.tryGetPathAsBool("fakePath").isEmpty());
+        testMap.add(BOOL_FIELD_TRUE, Boolean.TRUE);
+        assertTrue(JsonBool.TRUE.tryGetPathAsBool(BOOL_FIELD_FALSE).isEmpty());
+        assertTrue(testMap.tryGetPathAsBool(BOOL_FIELD_FALSE).isEmpty());
     }
 
 }

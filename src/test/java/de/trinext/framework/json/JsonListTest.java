@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestConstants.*;
 import static test.util.TestHelper.randomInts;
 
 /**
@@ -15,9 +16,6 @@ class JsonListTest {
 
     private static final int ELEMS_PER_TEST = 100;
 
-    private static final int ARRAY_TEST_VALUE_1 = -1;
-    private static final int ARRAY_TEST_VALUE_2 = 0;
-    private static final int ARRAY_TEST_VALUE_3 = 1;
 
     private JsonList testArr;
     @BeforeEach
