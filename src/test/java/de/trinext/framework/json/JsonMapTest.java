@@ -119,7 +119,6 @@ class JsonMapTest {
     void test_find_path() {
         assertTrue(jsonPathTestMap.findPath(STRING_FIELD));
     }
-    @Disabled("Disabled until path removal is fixed")
     @Test
     void test_remove_path() {
         assertTrue(jsonPathTestMap.findPath(STRING_FIELD));
