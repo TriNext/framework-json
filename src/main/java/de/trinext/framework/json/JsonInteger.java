@@ -43,7 +43,7 @@ public final class JsonInteger extends JsonNumber<BigInteger> {
 
     @Override
     public String toString() {
-        return getValue().toString(10);
+        return value.toString(10);
     }
 
 }

@@ -19,6 +19,10 @@ public final class JsonList
 
     // ==== CONSTRUCTORS ===================================================== //
 
+    public JsonList() {
+        super(new ArrayList<>());
+    }
+
     public JsonList(Object... elems) {
         super(Arrays.stream(elems)
                 .map(Json::treeFromInstance)
@@ -35,12 +39,12 @@ public final class JsonList
 
     /** @return the amount of elements in this array. */
     public int size() {
-        return getValue().size();
+        return value.size();
     }
 
     /** @return whether this array is empty. */
     public boolean isEmpty() {
-        return getValue().isEmpty();
+        return value.isEmpty();
     }
 
     // ==== METHODS ========================================================== //
@@ -50,9 +54,8 @@ public final class JsonList
         return add(elem.apply(new JsonMap()));
     }
 
-
     public JsonList add(Object elem) {
-        getValue().add(Json.treeFromInstance(elem));
+        value.add(Json.treeFromInstance(elem));
         return this;
     }
 
@@ -60,30 +63,39 @@ public final class JsonList
         return add(elems);
     }
 
+    public JsonList addAll(Iterable<?> it) {
+        it.forEach(this::add);
+        return this;
+    }
+
     public boolean contains(Object elem) {
-        return getValue().contains(Json.treeFromInstance(elem));
+        return value.contains(Json.treeFromInstance(elem));
     }
 
     public boolean removeAt(int idx) {
-        return getValue().remove(idx) != null;
+        return value.remove(idx) != null;
+    }
+
+    public void clear() {
+        value.clear();
     }
 
     @Override
     public Iterator<JsonElement<?>> iterator() {
-        return getValue().iterator();
+        return value.iterator();
     }
 
     public Stream<JsonElement<?>> stream() {
-        return getValue().stream();
+        return value.stream();
     }
 
     @Override
     public String toString() {
-        return getValue().toString();
+        return value.toString();
     }
 
     public Optional<JsonElement<?>> tryGet(int idx) {
-        return Optional.ofNullable(getValue().get(idx));
+        return Optional.ofNullable(value.get(idx));
     }
 
 }

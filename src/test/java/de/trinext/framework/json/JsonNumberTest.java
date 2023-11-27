@@ -2,7 +2,6 @@ package de.trinext.framework.json;
 
 import java.math.BigDecimal;
 
-import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,15 +52,15 @@ class JsonNumberTest {
         testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
             assertEquals(
                     randBigDec.floatValue(),
-                    JsonNumber.from(randBigDec.floatValue()).getValue().floatValue()
+                    JsonNumber.from(randBigDec.floatValue()).value.floatValue()
             );
             assertEquals(
                     randBigDec.doubleValue(),
-                    JsonNumber.from(randBigDec.doubleValue()).getValue().doubleValue()
+                    JsonNumber.from(randBigDec.doubleValue()).value.doubleValue()
             );
             assertEquals(
                     randBigDec,
-                    JsonNumber.from(randBigDec).getValue()
+                    JsonNumber.from(randBigDec).value
             );
         });
     }
@@ -96,12 +95,12 @@ class JsonNumberTest {
 
                 @Override
                 public String toString() {
-                    return randBigDec.toString();
+                    return randBigDec.toPlainString();
                 }
             };
             assertEquals(
                     randBigDec,
-                    JsonNumber.from(anonNr).getValue()
+                    JsonNumber.from(anonNr).value
             );
         });
     }
@@ -111,19 +110,19 @@ class JsonNumberTest {
         var nonJNr = JsonString.from("not a number");
         var hugeDecimal = BigDecimal.valueOf(Double.MAX_VALUE).multiply(BigDecimal.TEN);
 
-        assertTrue(nonJNr.tryGetInt().isEmpty());
-        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetInt().isEmpty());
+        assertTrue(nonJNr.tryGetAsInt().isEmpty());
+        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetAsInt().isEmpty());
 
-        assertTrue(nonJNr.tryGetLong().isEmpty());
-        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetLong().isEmpty());
+        assertTrue(nonJNr.tryGetAsLong().isEmpty());
+        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetAsLong().isEmpty());
 
-        assertTrue(nonJNr.tryGetDouble().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, JsonDecimal.from(hugeDecimal).tryGetDouble().orElseThrow());
+        assertTrue(nonJNr.tryGetAsDouble().isEmpty());
+        assertEquals(Double.POSITIVE_INFINITY, JsonDecimal.from(hugeDecimal).tryGetAsDouble().orElseThrow());
 
 
-        assertTrue(nonJNr.tryGetBigInt().isEmpty());
-        assertTrue(nonJNr.tryGetBigDec().isEmpty());
-        assertTrue(nonJNr.tryGetNumber().isEmpty());
+        assertTrue(nonJNr.tryGetAsBigInt().isEmpty());
+        assertTrue(nonJNr.tryGetAsBigDec().isEmpty());
+        assertTrue(nonJNr.tryGetAsNumber().isEmpty());
     }
 
 }
