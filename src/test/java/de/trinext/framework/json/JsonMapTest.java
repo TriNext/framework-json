@@ -1,5 +1,6 @@
 package de.trinext.framework.json;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
@@ -10,8 +11,9 @@ import static test.util.TestConstants.*;
 /**
  * @author Dennis Woithe
  */
-class JsonMapTest {
+@SuppressWarnings("SimpleDateFormatWithoutLocale") class JsonMapTest {
     private final JsonMap jsonTestMap = new JsonMap();
+    private final JsonMap dateTimeTestMap = new JsonMap();
     private final JsonMap jsonPathTestMap = new JsonMap();
     private final Map<String, JsonElement<?>> testMap = new LinkedHashMap<>();
 
@@ -20,6 +22,10 @@ class JsonMapTest {
         jsonTestMap.add(FIELD_1, STRING_CONSTANT);
         jsonTestMap.add(FIELD_2, 2);
         jsonTestMap.add(FIELD_3, 3);
+        dateTimeTestMap.add(DATE_FIELD, DATE_CONSTANT);
+        dateTimeTestMap.add(TIME_FIELD, TIME_CONSTANT);
+        dateTimeTestMap.add(DATE_TIME_FIELD, DATE_CONSTANT + " " + TIME_CONSTANT);
+        dateTimeTestMap.add(FIELD_1, STRING_CONSTANT);
         testMap.put(FIELD_1, JsonString.from(STRING_CONSTANT));
         testMap.put(FIELD_2, JsonInteger.from(2));
         testMap.put(FIELD_3, JsonInteger.from(3));
@@ -62,7 +68,7 @@ class JsonMapTest {
     void test_add() {
         assertThrows(JsonFieldAlreadyExistsException.class, () -> jsonTestMap.add(FIELD_1, STRING_CONSTANT));
         jsonTestMap.addArr(FIELD_4, STRING_CONSTANT);
-        assertEquals(STRING_CONSTANT, jsonTestMap.getValue().get(FIELD_1).getValue());
+        assertEquals(STRING_CONSTANT, jsonTestMap.value.get(FIELD_1).value);
 
     }
 
@@ -77,8 +83,8 @@ class JsonMapTest {
     @Test
     void test_stream() {
         assertEquals(3, jsonTestMap.stream().count());
-        assertTrue(jsonTestMap.stream().anyMatch(x -> x.getValue().getValue().equals(STRING_CONSTANT)));
-        assertEquals(jsonTestMap.getValue().entrySet().stream().toList(), jsonTestMap.stream().toList());
+        assertTrue(jsonTestMap.stream().anyMatch(x -> x.getValue().value.equals(STRING_CONSTANT)));
+        assertEquals(jsonTestMap.value.entrySet().stream().toList(), jsonTestMap.stream().toList());
     }
 
     @Test
@@ -104,9 +110,13 @@ class JsonMapTest {
 
     @Test
     void test_remove_key() {
-        assertEquals(3, jsonTestMap.getValue().size());
-        jsonTestMap.removeKey(FIELD_1);
-        assertEquals(2, jsonTestMap.getValue().size());
+        var size = jsonTestMap.value.size();
+        var returnValue = jsonTestMap.removeKey(FIELD_1);
+        assertTrue(returnValue);
+        assertEquals(size - 1 , jsonTestMap.value.size());
+        returnValue = jsonTestMap.removeKey(FIELD_1);
+        assertFalse(returnValue);
+        assertEquals(size - 1 , jsonTestMap.value.size());
     }
 
     @Test
@@ -137,5 +147,58 @@ class JsonMapTest {
 //        assertFalse(testMap.findPath(NESTED_FIELD + "." + STRING_FIELD));
 //    }
 
+    @Test
+    void test_try_get_as_date() {
+        var date = dateTimeTestMap.tryGet(DATE_FIELD).orElseThrow().tryGetAsDate(DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(date.isPresent());
+        assertEquals("1995.01.03", date.get().format(DateTimeFormatter.ofPattern("yyyy.dd.MM")));
+        date = dateTimeTestMap.tryGet(FIELD_1).orElseThrow().tryGetAsDate(DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(date.isEmpty());
+    }
+
+    @Test
+    void test_try_get_as_time() {
+        var time = dateTimeTestMap.tryGet(TIME_FIELD).orElseThrow().tryGetAsTime(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        assertTrue(time.isPresent());
+        assertEquals("56:12:34", time.get().format(DateTimeFormatter.ofPattern("ss:HH:mm")));
+        time = dateTimeTestMap.tryGet(FIELD_1).orElseThrow().tryGetAsTime(DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(time.isEmpty());
+    }
+
+    @Test
+    void test_try_get_as_date_time() {
+        var dateTime = dateTimeTestMap.tryGet(DATE_TIME_FIELD).orElseThrow().tryGetAsDateTime(DateTimeFormatter.ofPattern("dd.MM/yyyy HH:mm:ss"));
+        assertTrue(dateTime.isPresent());
+        assertEquals("1995.01.03 56:12:34", dateTime.get().format(DateTimeFormatter.ofPattern("yyyy.dd.MM ss:HH:mm")));
+        dateTime = dateTimeTestMap.tryGet(FIELD_1).orElseThrow().tryGetAsDateTime(DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(dateTime.isEmpty());
+    }
+
+    @Test
+    void test_try_get_path_as_date() {
+        var date = dateTimeTestMap.tryGetPathAsDate(DATE_FIELD, DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(date.isPresent());
+        assertEquals("1995.01.03", date.get().format(DateTimeFormatter.ofPattern("yyyy.dd.MM")));
+        date = dateTimeTestMap.tryGetPathAsDate(FIELD_1, DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(date.isEmpty());
+    }
+
+    @Test
+    void test_try_get_path_as_time() {
+        var time = dateTimeTestMap.tryGetPathAsTime(TIME_FIELD, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        assertTrue(time.isPresent());
+        assertEquals("56:12:34", time.get().format(DateTimeFormatter.ofPattern("ss:HH:mm")));
+        time = dateTimeTestMap.tryGetPathAsTime(FIELD_1, DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(time.isEmpty());
+    }
+
+    @Test
+    void test_try_get_path_as_date_time() {
+        var dateTime = dateTimeTestMap.tryGetPathAsDateTime(DATE_TIME_FIELD, DateTimeFormatter.ofPattern("dd.MM/yyyy HH:mm:ss"));
+        assertTrue(dateTime.isPresent());
+        assertEquals("1995.01.03 56:12:34", dateTime.get().format(DateTimeFormatter.ofPattern("yyyy.dd.MM ss:HH:mm")));
+        dateTime = dateTimeTestMap.tryGetPathAsDateTime(FIELD_1, DateTimeFormatter.ofPattern("dd.MM/yyyy"));
+        assertTrue(dateTime.isEmpty());
+    }
 
 }

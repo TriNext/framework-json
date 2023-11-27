@@ -18,8 +18,8 @@ class JsonPrimitiveTest {
     void test_try_from(){
         assertEquals("\"" + STRING_CONSTANT + "\"", JsonPrimitive.tryFrom(STRING_CONSTANT).toString());
         assertEquals("false", JsonPrimitive.tryFrom(BOOL_CONSTANT_FALSE).toString());
-        assertEquals(Boolean.FALSE, JsonPrimitive.tryFrom(BOOL_CONSTANT_FALSE).getValue());
-        assertEquals(NUMBER_CONSTANT, JsonPrimitive.tryFrom(NUMBER_CONSTANT).getValue());
+        assertEquals(Boolean.FALSE, JsonPrimitive.tryFrom(BOOL_CONSTANT_FALSE).value);
+        assertEquals(NUMBER_CONSTANT, JsonPrimitive.tryFrom(NUMBER_CONSTANT).value);
         assertThrows(IllegalArgumentException.class, () -> JsonPrimitive.tryFrom(testObjectInstance));
         assertThrows(NullPointerException.class, () -> JsonPrimitive.tryFrom(null).toString());
     }

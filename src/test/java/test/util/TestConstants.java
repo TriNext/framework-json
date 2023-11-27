@@ -41,6 +41,12 @@ public final class TestConstants {
             FIELD_3 = "FIELD_3",
             FIELD_4 = "FIELD_4",
             EXISTING_PATH = "EXISTING_PATH",
+
+            DATE_FIELD = "DATE_FIELD",
+            DATE_CONSTANT = "01.03/1995",
+            DATE_TIME_FIELD = "DATE_TIME_FIELD",
+            TIME_FIELD = "TIME_FIELD",
+            TIME_CONSTANT = "12:34:56",
             JSON_TREE_STRING_ARRAY_WITH_EMPTY_OBJECT = """
                                 {
                                     "a": [{}]

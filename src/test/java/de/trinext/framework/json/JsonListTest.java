@@ -236,11 +236,27 @@ class JsonListTest {
         //TODO: check if size behaves correctly after removing an element
     }
     @Test
-    void test_addArr() {
+    void test_add_arr() {
         var jArr = new JsonList().addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
         assertEquals(1, jArr.size());
         jArr.addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
         assertEquals(2, jArr.size());
+    }
+
+    @Test
+     void test_add_all() {
+        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        assertEquals(3, jArr.size());
+        jArr.addAll(List.of(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3));
+        assertEquals(6, jArr.size());
+    }
+
+    @Test
+    void test_clear() {
+        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
+        assertEquals(3, jArr.size());
+        jArr.clear();
+        assertEquals(0, jArr.size());
     }
 
     @Test
@@ -271,5 +287,4 @@ class JsonListTest {
         var jsonList = new JsonList(intList);
         assertEquals(intList, jsonList.tryGetPathAsListOf("",Integer.class).orElseThrow());
     }
-
 }

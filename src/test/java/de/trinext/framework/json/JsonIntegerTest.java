@@ -62,7 +62,7 @@ class JsonIntegerTest {
     @Test
     void test_try_get_int() {
         var jInt = JsonInteger.from(0);
-        assertEquals(0, jInt.tryGetInt().orElseThrow());
+        assertEquals(0, jInt.tryGetAsInt().orElseThrow());
     }
 
 }

@@ -54,8 +54,9 @@ public final class JsonList
         return add(elem.apply(new JsonMap()));
     }
 
-    public JsonList add(Object elem) {
-        value.add(Json.treeFromInstance(elem));
+    public JsonList add(Object... elems) {
+        for (var elem : elems)
+            value.add(Json.treeFromInstance(elem));
         return this;
     }
 

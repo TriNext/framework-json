@@ -126,8 +126,8 @@ class JsonNumberTest {
 
     @Test
     void try_get_int() {
-        assertEquals(2, Json.treeFromInstance(2).tryGetInt().orElseThrow());
-        assertEquals(2, Json.treeFromInstance(2.0).tryGetInt().orElseThrow());
+        assertEquals(2, Json.treeFromInstance(2).tryGetAsInt().orElseThrow());
+        assertEquals(2, Json.treeFromInstance(2.0).tryGetAsInt().orElseThrow());
     }
 
     @Test

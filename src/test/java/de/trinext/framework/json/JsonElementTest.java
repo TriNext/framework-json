@@ -52,7 +52,7 @@ class JsonElementTest {
     @Test
     void test_try_get_enum() {
         var jsonString = JsonString.from(TestEnum.TEST.toString());
-        assertEquals(TestEnum.TEST, jsonString.tryGetEnum(TestEnum.class).orElseThrow());
+        assertEquals(TestEnum.TEST, jsonString.tryGetAsEnum(TestEnum.class).orElseThrow());
     }
 
     @Test
@@ -64,7 +64,7 @@ class JsonElementTest {
     @Test
     void test_try_enum_empty() {
         var nonJStr = JsonInteger.from(0);
-        assertTrue(nonJStr.tryGetEnum(TestEnum.class).isEmpty());
+        assertTrue(nonJStr.tryGetAsEnum(TestEnum.class).isEmpty());
     }
 
     @Test
@@ -141,7 +141,7 @@ class JsonElementTest {
     @Test
     void test_try_get_path_as_object_empty() {
         var jsonInteger = JsonInteger.from(0);
-        assertTrue(jsonInteger.tryGetPathAsObj(INT_FIELD, JsonElement::tryGetInt).isEmpty());
+        assertTrue(jsonInteger.tryGetPathAsObj(INT_FIELD, JsonElement::tryGetAsInt).isEmpty());
         //noinspection ReturnOfNull
         assertTrue(testMap.tryGetPathAsObj(INT_FIELD, jsonElement -> null).isEmpty());
     }
@@ -167,31 +167,31 @@ class JsonElementTest {
 
     @Test
     void test_try_get_object() {
-        assertEquals(TEST_OBJECT_INSTANCE, Json.treeFromInstance(TEST_OBJECT_INSTANCE).tryGetObj(TestObject.class).orElseThrow());
-        assertTrue(Json.treeFromInstance(TEST_OBJECT_INSTANCE).tryGetObj(Integer.class).isEmpty());
+        assertEquals(TEST_OBJECT_INSTANCE, Json.treeFromInstance(TEST_OBJECT_INSTANCE).tryGetAsObj(TestObject.class).orElseThrow());
+        assertTrue(Json.treeFromInstance(TEST_OBJECT_INSTANCE).tryGetAsObj(Integer.class).isEmpty());
     }
 
     @Test
     void test_try_get_set_of() {
-        assertEquals(SET_CONSTANT, Json.treeFromInstance(SET_CONSTANT).tryGetSetOf(Integer.class).orElseThrow());
+        assertEquals(SET_CONSTANT, Json.treeFromInstance(SET_CONSTANT).tryGetAsSetOf(Integer.class).orElseThrow());
     }
     @Test
     void test_try_get_set_of_mapper() {
         assertTrue(SET_CONSTANT.containsAll(
                 Json.treeFromInstance(SET_CONSTANT).
-                        tryGetSetOf(jsonElement -> jsonElement.tryGetInt().orElseThrow())
+                        tryGetAsSetOf(jsonElement -> jsonElement.tryGetAsInt().orElseThrow())
                         .orElseThrow()));
     }
 
     @Test
     void test_try_get_stream_of_empty() {
         var nonJStream = JsonInteger.from(0);
-        assertTrue(nonJStream.tryGetStreamOf(jsonElement -> jsonElement.tryGetInt().orElseThrow()).isEmpty());
+        assertTrue(nonJStream.tryGetAsStreamOf(jsonElement -> jsonElement.tryGetAsInt().orElseThrow()).isEmpty());
     }
 
     @Test
     void test_try_get_path_as_stream_of_empty() {
         var jsonInteger = JsonInteger.from(0);
-        assertTrue(jsonInteger.tryGetPathAsStreamOf(INT_FIELD, jsonElement -> jsonElement.tryGetInt().orElseThrow()).isEmpty());
+        assertTrue(jsonInteger.tryGetPathAsStreamOf(INT_FIELD, jsonElement -> jsonElement.tryGetAsInt().orElseThrow()).isEmpty());
     }
 }

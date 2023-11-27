@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -139,15 +140,27 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     }
 
     public final Optional<LocalDate> tryGetAsDate(DateTimeFormatter formatter) {
-        return tryGetAsString().map(s -> LocalDate.parse(s, formatter));
+        try {
+            return tryGetAsString().map(s -> LocalDate.parse(s, formatter));
+        } catch (DateTimeParseException parseException) {
+            return Optional.empty();
+        }
     }
 
     public final Optional<LocalTime> tryGetAsTime(DateTimeFormatter formatter) {
-        return tryGetAsString().map(s -> LocalTime.parse(s, formatter));
+        try {
+            return tryGetAsString().map(s -> LocalTime.parse(s, formatter));
+        } catch (DateTimeParseException parseException) {
+            return Optional.empty();
+        }
     }
 
     public final Optional<LocalDateTime> tryGetAsDateTime(DateTimeFormatter formatter) {
-        return tryGetAsString().map(s -> LocalDateTime.parse(s, formatter));
+        try {
+            return tryGetAsString().map(s -> LocalDateTime.parse(s, formatter));
+        } catch (DateTimeParseException parseException) {
+            return Optional.empty();
+        }
     }
 
     public final <T> Optional<T> tryGetAsObj(Class<? extends T> cls) {
