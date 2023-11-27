@@ -45,9 +45,9 @@ class JsonDecimalTest {
     @Test
     void test_from_literal() {
         testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
-            assertEquals(randBigDec, JsonDecimal.from(randBigDec).getValue());
-            assertEquals(randBigDec.floatValue(), JsonDecimal.from(randBigDec.floatValue()).getValue().floatValue());
-            assertEquals(randBigDec.doubleValue(), JsonDecimal.from(randBigDec.doubleValue()).getValue().doubleValue());
+            assertEquals(randBigDec, JsonDecimal.from(randBigDec).value);
+            assertEquals(randBigDec.floatValue(), JsonDecimal.from(randBigDec.floatValue()).value.floatValue());
+            assertEquals(randBigDec.doubleValue(), JsonDecimal.from(randBigDec.doubleValue()).value.doubleValue());
         });
     }
 

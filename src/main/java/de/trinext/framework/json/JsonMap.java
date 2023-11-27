@@ -45,12 +45,12 @@ public final class JsonMap
      * Add anything as a field.
      *
      * @param fieldName has to be a unique name
-     * @param value can be any object
+     * @param fieldValue can be any object
      */
-    public JsonMap add(String fieldName, Object value) throws JsonFieldAlreadyExistsException {
-        if (getValue().containsKey(Objects.requireNonNull(fieldName)))
+    public JsonMap add(String fieldName, Object fieldValue) throws JsonFieldAlreadyExistsException {
+        if (value.containsKey(Objects.requireNonNull(fieldName)))
             throw new JsonFieldAlreadyExistsException(fieldName);
-        getValue().put(fieldName, Json.treeFromInstance(value));
+        value.put(fieldName, Json.treeFromInstance(fieldValue));
         return this;
     }
 
@@ -58,11 +58,11 @@ public final class JsonMap
     public boolean contains(String fieldName) {
         if (fieldName == null)
             throw new IllegalArgumentException("fieldName can not be null!");
-        return getValue().containsKey(Objects.requireNonNull(fieldName));
+        return value.containsKey(Objects.requireNonNull(fieldName));
     }
 
     public boolean removeKey(String key) {
-        return getValue().remove(key) != null;
+        return value.remove(key) != null;
     }
 
     /**
@@ -80,25 +80,25 @@ public final class JsonMap
 
     @Override
     public String toString() {
-        return getValue().entrySet()
+        return value.entrySet()
                 .stream()
                 .map(entry -> "\"" + entry.getKey() + "\":" + entry.getValue())
                 .collect(Collectors.joining(", ", "{", "}"));
     }
 
     public Stream<Entry<String, JsonElement<?>>> stream() {
-        return getValue().entrySet().stream();
+        return value.entrySet().stream();
     }
 
     @Override
     public Iterator<Entry<String, JsonElement<?>>> iterator() {
-        return getValue().entrySet().iterator();
+        return value.entrySet().iterator();
     }
 
     // ==== STATIC FUNCTIONS ================================================= //
 
     public Optional<JsonElement<?>> tryGet(String fieldName) {
-        return Optional.ofNullable(getValue().get(fieldName));
+        return Optional.ofNullable(value.get(fieldName));
     }
 
 

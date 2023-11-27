@@ -12,6 +12,10 @@ import static test.util.TestHelper.testForRandomStrings;
  */
 class JsonStringTest {
 
+    private static final int WORDS_PER_TEST = 100;
+
+    private static final int WORD_LENGTH = 10;
+
     // ==== METHODS ========================================================== //
 
     @Test
@@ -47,7 +51,7 @@ class JsonStringTest {
         testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> assertEquals(
                         randStr,
-                        JsonString.from(randStr).getValue()
+                        JsonString.from(randStr).value
                 ));
     }
 
@@ -56,19 +60,18 @@ class JsonStringTest {
         assertEquals(JsonString.class.getSimpleName(), JsonString.from("").typeName());
     }
 
-
     @Test
     void test_try_getters() {
         testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
                 randStr,
-                JsonString.from(randStr).tryGetString().orElseThrow()
+                JsonString.from(randStr).tryGetAsString().orElseThrow()
         ));
     }
 
     @Test
     void test_try_getters_empty() {
-        var nonJStr = JsonInteger.from(0);
-        assertTrue(nonJStr.tryGetString().isEmpty());
+        var nonJNr = JsonInteger.from(0);
+        assertTrue(nonJNr.tryGetAsString().isEmpty());
     }
     @Test
     void test_try_get_path_as_string_empty() {

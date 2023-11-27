@@ -45,13 +45,13 @@ class JsonIntegerTest {
     void test_from_literal() {
         testForRandomBigInts(NRS_PER_TEST, randBigInt -> {
             var randByte = randBigInt.byteValue();
-            assertEquals(randByte, JsonInteger.from(randByte).getValue().byteValue());
+            assertEquals(randByte, JsonInteger.from(randByte).value.byteValue());
             var randShort = randBigInt.shortValue();
-            assertEquals(randShort, JsonInteger.from(randShort).getValue().shortValue());
+            assertEquals(randShort, JsonInteger.from(randShort).value.shortValue());
             var randInt = randBigInt.intValue();
-            assertEquals(randInt, JsonInteger.from(randInt).getValue().intValue());
+            assertEquals(randInt, JsonInteger.from(randInt).value.intValue());
             var randLong = randBigInt.longValue();
-            assertEquals(randLong, JsonInteger.from(randLong).getValue().longValue());
+            assertEquals(randLong, JsonInteger.from(randLong).value.longValue());
         });
     }
 

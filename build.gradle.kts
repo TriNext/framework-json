@@ -11,6 +11,10 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
+tasks.withType(JavaCompile::class.java) {
+    options.compilerArgs.add("--enable-preview")
+}
+
 plugins {
     `java-library`
     `maven-publish`

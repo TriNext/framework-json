@@ -58,7 +58,7 @@ public final class JsonDecimal extends JsonNumber<BigDecimal> {
      */
     @Override
     public String toString() {
-        return getValue().toPlainString();
+        return value.toPlainString();
     }
 
 }

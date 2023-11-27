@@ -14,8 +14,8 @@ class JsonBoolTest {
 
     @Test
     void test_get_value() {
-        assertTrue(JsonBool.TRUE.getValue());
-        assertFalse(JsonBool.FALSE.getValue());
+        assertTrue(JsonBool.TRUE.value);
+        assertFalse(JsonBool.FALSE.value);
     }
 
     @Test

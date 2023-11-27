@@ -13,7 +13,7 @@ class JsonNullTest {
 
     @Test
     void test_get_value() {
-        assertNull(JsonNull.NULL.getValue());
+        assertNull(JsonNull.NULL.value);
     }
 
     @Test
