@@ -1,5 +1,5 @@
 # Finding Bugs / Adding Features
-If you want to report a bug a request a new feature, please [submit an issue](https://github.com/TriNext/framework-json/issues/new).
+If you want to report a bug or request a new feature, please [submit an issue](https://github.com/TriNext/framework-json/issues/new).
 
 # Functionality
 
