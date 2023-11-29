@@ -26,8 +26,9 @@ public final class JsonMap
     }
 
     /** Creates an empty JsonObject. */
-    public JsonMap(SequencedMap<String, JsonElement<?>> fields) {
-        super(fields);
+    @SuppressWarnings("BoundedWildcard")
+    public JsonMap(Map<String, JsonElement<?>> fields) {
+        super(new LinkedHashMap<>(fields));
     }
 
     /**
@@ -45,59 +46,84 @@ public final class JsonMap
      * Add anything as a field.
      *
      * @param fieldName has to be a unique name
-     * @param value can be any object
+     * @param fieldValue can be any object
      */
-    public JsonMap add(String fieldName, Object value) throws JsonFieldAlreadyExistsException {
-        if (getValue().containsKey(Objects.requireNonNull(fieldName)))
+    public JsonMap add(String fieldName, Object fieldValue) throws JsonFieldAlreadyExistsException {
+        if (value.containsKey(Objects.requireNonNull(fieldName)))
             throw new JsonFieldAlreadyExistsException(fieldName);
-        getValue().put(fieldName, Json.treeFromInstance(value));
+        value.put(fieldName, Json.treeFromInstance(fieldValue));
         return this;
     }
 
-    /** Returns true if this object has a field with the passed name. */
-    public boolean contains(String fieldName) {
-        return getValue().containsKey(Objects.requireNonNull(fieldName));
+    public boolean contains(String key) {
+        if (key == null)
+            throw new IllegalArgumentException("key can not be null!");
+        return value.containsKey(Objects.requireNonNull(key));
     }
 
     public boolean removeKey(String key) {
-        return getValue().remove(key) != null;
+        return value.remove(key) != null;
     }
 
-    /**
-     * Add a JsonArray as a field.
-     *
-     * @param fieldName has to be a unique name
-     * @param arrFieldValue an array of values
-     */
-    public JsonMap addArr(
-            String fieldName,
-            Object... arrFieldValue
-    ) throws JsonFieldAlreadyExistsException {
-        return add(fieldName, arrFieldValue);
+    public JsonMap addList(String key, Object... values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, byte[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, short[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, int[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, long[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, float[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, double[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, boolean[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, char[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, Iterable<?> values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
     }
 
     @Override
     public String toString() {
-        return getValue().entrySet()
+        return value.entrySet()
                 .stream()
                 .map(entry -> "\"" + entry.getKey() + "\":" + entry.getValue())
                 .collect(Collectors.joining(", ", "{", "}"));
     }
 
     public Stream<Entry<String, JsonElement<?>>> stream() {
-        return getValue().entrySet().stream();
+        return value.entrySet().stream();
     }
 
     @Override
     public Iterator<Entry<String, JsonElement<?>>> iterator() {
-        return getValue().entrySet().iterator();
+        return value.entrySet().iterator();
     }
-
-    // ==== STATIC FUNCTIONS ================================================= //
 
     public Optional<JsonElement<?>> tryGet(String fieldName) {
-        return Optional.ofNullable(getValue().get(fieldName));
+        return Optional.ofNullable(value.get(fieldName));
     }
-
 
 }

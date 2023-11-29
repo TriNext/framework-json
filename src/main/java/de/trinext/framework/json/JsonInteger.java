@@ -17,13 +17,9 @@ public final class JsonInteger extends JsonNumber<BigInteger> {
         super(value);
     }
 
-    // METHODS ========================================================>>
-
     public static JsonInteger from(byte value) {
         return from((long) value);
     }
-
-    // ==== STATIC FUNCTIONS ================================================= //
 
     public static JsonInteger from(long value) {
         return from(BigInteger.valueOf(value));
@@ -43,7 +39,7 @@ public final class JsonInteger extends JsonNumber<BigInteger> {
 
     @Override
     public String toString() {
-        return getValue().toString(10);
+        return value.toString(10);
     }
 
 }

@@ -1,64 +1,61 @@
-package de.trinext.framework.json;
+package de.trinext.framework.json.element;
 
 import org.junit.jupiter.api.Test;
 
 /**
  * @author Dennis Woithe
  */
-final class JsonMapTest {
+final class JsonElementObjectTest {
 
     @Test
-    void test_constructor() {
+    void test_try_get_as_number(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_constructor_map() {
+    void test_try_get_as_string(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_add_obj() {
+    void test_try_get_as_big_int(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_add() {
+    void test_try_get_as_big_dec(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_contains() {
+    void test_try_get_as_bool(){
+        // TODO: Implement me!
+    }
+
+    // ------------------------------------------------------------------------ //
+
+    @Test
+    void test_try_get_path_as_number(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_remove_key() {
+    void test_try_get_path_as_string(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_add_list() {
+    void test_try_get_path_as_big_int(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_to_string() {
+    void test_try_get_path_as_big_dec(){
         // TODO: Implement me!
     }
 
     @Test
-    void test_stream() {
-        // TODO: Implement me!
-    }
-
-    @Test
-    void test_iterator() {
-        // TODO: Implement me!
-    }
-
-    @Test
-    void test_try_get() {
+    void test_try_get_path_as_bool(){
         // TODO: Implement me!
     }
 

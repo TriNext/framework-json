@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class BigDecimalHelperTest {
 
-    // ==== METHODS ========================================================== //
 
     @Test
     void test_is_integer() {
