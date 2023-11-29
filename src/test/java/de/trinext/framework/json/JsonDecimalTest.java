@@ -3,20 +3,17 @@ package de.trinext.framework.json;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.util.TestHelper.*;
+import static test.util.TestConstants.NRS_PER_TEST;
+import static test.util.RandomHelper.*;
 
 /**
  * @author Dennis Woithe
  */
 class JsonDecimalTest {
 
-    private static final int NRS_PER_TEST = 50;
-
-    // ==== METHODS ========================================================== //
-
     @Test
     void test_hash_code() {
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
+        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
                 randBigDec.hashCode(),
                 JsonDecimal.from(randBigDec).hashCode()
         ));
@@ -25,7 +22,7 @@ class JsonDecimalTest {
     @Test
     @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
     void test_equals() {
-        testForRandomDoubles(NRS_PER_TEST, randDouble -> {
+        runForRandomDoubles(NRS_PER_TEST, randDouble -> {
             var jD = JsonDecimal.from(randDouble);
             assertTrue(jD.equals(JsonDecimal.from(randDouble)));
             assertTrue(jD.equals(JsonDecimal.from(randDouble)));
@@ -36,7 +33,7 @@ class JsonDecimalTest {
 
     @Test
     void test_to_string() {
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
+        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> assertEquals(
                 randBigDec.toPlainString(),
                 JsonDecimal.from(randBigDec).toString()
         ));
@@ -44,7 +41,7 @@ class JsonDecimalTest {
 
     @Test
     void test_from_literal() {
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
             assertEquals(randBigDec, JsonDecimal.from(randBigDec).value);
             assertEquals(randBigDec.floatValue(), JsonDecimal.from(randBigDec.floatValue()).value.floatValue());
             assertEquals(randBigDec.doubleValue(), JsonDecimal.from(randBigDec.doubleValue()).value.doubleValue());

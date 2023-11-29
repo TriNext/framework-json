@@ -10,8 +10,6 @@ import static test.util.TestConstants.*;
  */
 class JsonBoolTest {
 
-    // ==== METHODS ========================================================== //
-
     @Test
     void test_get_value() {
         assertTrue(JsonBool.TRUE.value);
@@ -55,11 +53,17 @@ class JsonBoolTest {
     }
 
     @Test
-    void test_try_get_path_as_bool_empty() {
-        var testMap = new JsonMap();
-        testMap.add(BOOL_FIELD_TRUE, Boolean.TRUE);
-        assertTrue(JsonBool.TRUE.tryGetPathAsBool(BOOL_FIELD_FALSE).isEmpty());
-        assertTrue(testMap.tryGetPathAsBool(BOOL_FIELD_FALSE).isEmpty());
+    void test_try_get_path_as_bool() {
+        var map = new JsonMap();
+        map.add(field(1), Boolean.TRUE);
+        map.add(field(2), Boolean.FALSE);
+        map.add(field(3), true);
+        map.add(field(4), false);
+        assertTrue(map.tryGetPathAsBool(field(1)).orElseThrow());
+        assertFalse(map.tryGetPathAsBool(field(2)).orElseThrow());
+        assertTrue(map.tryGetPathAsBool(field(3)).orElseThrow());
+        assertFalse(map.tryGetPathAsBool(field(4)).orElseThrow());
     }
+
 
 }

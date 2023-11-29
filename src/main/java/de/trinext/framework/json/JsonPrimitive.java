@@ -17,12 +17,11 @@ abstract sealed class JsonPrimitive<V>
         super(value);
     }
 
-    static JsonPrimitive<?> tryFrom(Object obj) {
+    static JsonPrimitive<?> from(Object obj) {
         return switch (obj) {
-            case Boolean val -> JsonBool.from(val);
+            case Boolean val -> JsonBool.from((boolean) val);
             case Number val -> JsonNumber.from(val);
-            case CharSequence val -> JsonString.from(val);
-            default -> throw new IllegalArgumentException("Received instance of unexpected type \"" + obj.getClass() + "\". Pass a json-primitive instead.");
+            default -> JsonString.from(obj.toString());
         };
     }
 

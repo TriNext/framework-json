@@ -1865,7 +1865,9 @@
     <inspection_tool class="LambdaCanBeMethodCall" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="LambdaCanBeReplacedWithAnonymous" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="LambdaParameterHidingMemberVariable" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="LambdaParameterNamingConvention" enabled="true" level="TYPO" enabled_by_default="true" editorAttributes="TYPO" />
+    <inspection_tool class="LambdaParameterNamingConvention" enabled="true" level="TYPO" enabled_by_default="true" editorAttributes="TYPO">
+      <option name="m_regex" value="[a-z_][A-Za-z\d]*" />
+    </inspection_tool>
     <inspection_tool class="LambdaParameterTypeCanBeSpecified" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="LambdaUnfriendlyMethodOverload" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="LanguageDetectionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -2086,7 +2088,9 @@
     <inspection_tool class="MethodOverridesStaticMethod" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     <inspection_tool class="MethodRefCanBeReplacedWithLambda" enabled="true" level="INFORMATION" enabled_by_default="true" />
     <inspection_tool class="MethodReturnAlwaysConstant" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="MethodWithMultipleLoops" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
+    <inspection_tool class="MethodWithMultipleLoops" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES">
+      <scope name="Tests" level="WEAK WARNING" enabled="false" />
+    </inspection_tool>
     <inspection_tool class="MicronautDataMethodInconsistency" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="MicronautDataRepositoryMethodParameters" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MicronautDataRepositoryMethodReturnType" enabled="true" level="WARNING" enabled_by_default="true" />

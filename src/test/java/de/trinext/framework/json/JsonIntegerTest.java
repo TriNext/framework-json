@@ -3,21 +3,17 @@ package de.trinext.framework.json;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.util.TestHelper.testForRandomBigInts;
+import static test.util.TestConstants.NRS_PER_TEST;
+import static test.util.RandomHelper.runForRandomBigInts;
 
 /**
  * @author Dennis Woithe
  */
 class JsonIntegerTest {
 
-    private static final int NRS_PER_TEST = 100;
-
-
-    // ==== METHODS ========================================================== //
-
     @Test
     void test_hash_code() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
+        runForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
                 randBigInt.hashCode(),
                 JsonInteger.from(randBigInt).hashCode()
         ));
@@ -25,7 +21,7 @@ class JsonIntegerTest {
 
     @Test @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
     void test_equals() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> {
+        runForRandomBigInts(NRS_PER_TEST, randBigInt -> {
             var jI = JsonInteger.from(randBigInt);
             assertTrue(jI.equals(JsonInteger.from(randBigInt)));
             assertFalse(jI.equals(randBigInt));
@@ -35,7 +31,7 @@ class JsonIntegerTest {
 
     @Test
     void test_to_string() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
+        runForRandomBigInts(NRS_PER_TEST, randBigInt -> assertEquals(
                 String.valueOf(randBigInt),
                 JsonInteger.from(randBigInt).toString()
         ));
@@ -43,7 +39,7 @@ class JsonIntegerTest {
 
     @Test @SuppressWarnings("OverlyLongLambda")
     void test_from_literal() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> {
+        runForRandomBigInts(NRS_PER_TEST, randBigInt -> {
             var randByte = randBigInt.byteValue();
             assertEquals(randByte, JsonInteger.from(randByte).value.byteValue());
             var randShort = randBigInt.shortValue();

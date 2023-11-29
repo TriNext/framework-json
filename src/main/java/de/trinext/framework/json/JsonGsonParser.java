@@ -45,6 +45,7 @@ class JsonGsonParser {
         return list;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     private static JsonPrimitive<?> parsePrimitive(com.google.gson.JsonPrimitive gObj) {
         if(gObj.isNumber())
             return JsonNumber.from(gObj.getAsNumber());

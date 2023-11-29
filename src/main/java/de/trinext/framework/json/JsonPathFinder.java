@@ -1,6 +1,7 @@
 package de.trinext.framework.json;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import de.trinext.framework.json.JsonPathFinder.JsonPathIterator.JsonPathElem;
@@ -34,7 +35,7 @@ class JsonPathFinder {
 
     // ==== METHODS ========================================================== //
 
-    boolean hasFlag(int flag) {
+    private boolean hasFlag(int flag) {
         return (throwFlags & flag) != 0;
     }
 
@@ -42,9 +43,11 @@ class JsonPathFinder {
 
         String restOfPath;
 
-        JsonPathElem current, last;
+        JsonPathElem currentPathElem, lastPathElem;
 
         JsonPathIterator(String jsonPath) {
+            currentPathElem = null;
+            lastPathElem = null;
             restOfPath = jsonPath;
         }
 
@@ -53,7 +56,7 @@ class JsonPathFinder {
         }
 
         JsonPathElem read() {
-            last = current;
+            lastPathElem = currentPathElem;
             var sb = new StringBuilder();
             var trimSep = false;
             for (var i = 0; i < restOfPath.length(); i++) {
@@ -73,7 +76,7 @@ class JsonPathFinder {
                 sb.append(c);
             }
             restOfPath = restOfPath.substring(sb.length() + (trimSep ? 1 : 0));
-            return (current = new JsonPathElem(sb.toString()));
+            return (currentPathElem = new JsonPathElem(sb.toString()));
         }
 
         class JsonPathElem {
@@ -131,7 +134,7 @@ class JsonPathFinder {
         while (pathIterator.hasNext()) {
             var nextPathElem = pathIterator.read();
             Optional<? extends JsonElement<?>> next;
-            if (pathIterator.last != null && pathIterator.last.isStar()) {
+            if (pathIterator.lastPathElem != null && pathIterator.lastPathElem.isStar()) {
                 assert current instanceof JsonList;
                 next = findNextAfterStar(nextPathElem, (JsonList) current);
 
@@ -194,7 +197,7 @@ class JsonPathFinder {
         return Optional.of(res);
     }
 
-
+    @SuppressWarnings("serial")
     class InvalidJsonPathTargetException extends RuntimeException {
 
         InvalidJsonPathTargetException(JsonPathElem pathElem, JsonElement<?> parent) {
@@ -207,6 +210,7 @@ class JsonPathFinder {
 
     }
 
+    @SuppressWarnings("serial")
     class JsonPathFormatException extends RuntimeException {
 
         JsonPathFormatException(String message) {
