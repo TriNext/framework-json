@@ -1,3 +1,6 @@
+# Finding Bugs / Adding Features
+If you want to report a bug a request a new feature, please [submit an issue](https://github.com/TriNext/framework-json/issues/new).
+
 # Functionality
 
 This artifact retains 3 different functionalities:
