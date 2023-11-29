@@ -1,5 +1,6 @@
 package de.trinext.framework.json;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.*;
@@ -8,8 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import com.google.gson.JsonSyntaxException;
 
 import static de.trinext.framework.json.JsonPathFinder.NO_FLAGS;
 import static java.util.stream.Collectors.toList;
@@ -68,28 +67,28 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
 
     // ==== PRIMITIVE ==== //
 
+    public final Optional<Byte> tryGetAsByte() {
+        return tryGetAsNumber().map(Number::byteValue);
+    }
+
+    public final Optional<Short> tryGetAsShort() {
+        return tryGetAsNumber().map(Number::shortValue);
+    }
+
     public final OptionalInt tryGetAsInt() {
-        try {
-            return switch (this) {
-                case JsonInteger jInt -> OptionalInt.of(jInt.value.intValueExact());
-                case JsonDecimal jDec -> OptionalInt.of(jDec.value.intValueExact());
-                default -> OptionalInt.empty();
-            };
-        } catch (ArithmeticException ae) {
-            return OptionalInt.empty();
-        }
+        var nr = tryGetAsNumber();
+        return nr.map(Number::intValue).map(OptionalInt::of)
+                .orElseGet(OptionalInt::empty);
     }
 
     public final OptionalLong tryGetAsLong() {
-        try {
-            return switch (this) {
-                case JsonInteger jInt -> OptionalLong.of(jInt.value.longValueExact());
-                case JsonDecimal jDec -> OptionalLong.of(jDec.value.longValueExact());
-                default -> OptionalLong.empty();
-            };
-        } catch (ArithmeticException ae) {
-            return OptionalLong.empty();
-        }
+        var nr = tryGetAsNumber();
+        return nr.map(Number::longValue).map(OptionalLong::of)
+                .orElseGet(OptionalLong::empty);
+    }
+
+    public final Optional<Float> tryGetAsFloat() {
+        return tryGetAsNumber().map(Number::floatValue);
     }
 
     public final OptionalDouble tryGetAsDouble() {
@@ -98,11 +97,18 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
                 .orElseGet(OptionalDouble::empty);
     }
 
-    // ==== OBJECT =========================================================== //
-
-    public final <E extends Enum<E>> Optional<E> tryGetAsEnum(Class<E> enumType) {
-        return tryGetAsString().map(s -> Enum.valueOf(enumType, s));
+    @SuppressWarnings("InstanceofThis")
+    public final Optional<Boolean> tryGetAsBool() {
+        return this instanceof JsonBool j
+               ? Optional.of(j.value) : Optional.empty();
     }
+
+    @SuppressWarnings("ReturnOfNull")
+    public final Optional<Character> tryGetAsChar() {
+        return tryGetAsString().map(s -> s.length() == 1 ? s.charAt(0) : null);
+    }
+
+    // ==== OBJECT =========================================================== //
 
     public final Optional<Number> tryGetAsNumber() {
         return switch (this) {
@@ -133,11 +139,8 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         };
     }
 
-    @SuppressWarnings("InstanceofThis")
-    public final Optional<Boolean> tryGetAsBool() {
-        return this instanceof JsonBool j
-               ? Optional.of(j.value) : Optional.empty();
-    }
+
+    // ==== DATETIME =========================================================== //
 
     public final Optional<LocalDate> tryGetAsDate(DateTimeFormatter formatter) {
         try {
@@ -163,12 +166,20 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         }
     }
 
+
+    // ==== CLASS/ENUM =========================================================== //
+
+    public final <E extends Enum<E>> Optional<E> tryGetAsEnum(Class<E> enumType) {
+        return tryGetAsString().map(s -> Enum.valueOf(enumType, s));
+    }
+
     public final <T> Optional<T> tryGetAsObj(Class<? extends T> cls) {
-        try {
-            return Optional.of(Json.instanceFromTree(this, cls));
-        } catch (JsonSyntaxException jse) {
-            return Optional.empty();
-        }
+        return tryGetAsObj(e -> Json.instanceFromTree(e, cls));
+    }
+
+    @SuppressWarnings("BoundedWildcard")
+    public final <T> Optional<T> tryGetAsObj(Function<JsonElement<?>, ? extends T> mapper) {
+        return Optional.ofNullable(mapper.apply(this));
     }
 
     // ==== COLLECTION/STREAM ======================================================== //
@@ -200,6 +211,74 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetAsStreamOf(elemCls).map(stream -> stream.collect(toSet()));
     }
 
+
+    // ==== ARRAY ======================================================== //
+
+    public final <T> Optional<T[]> tryGetAsArrayOf(Function<JsonElement<?>, ? extends T> mapper, Class<? extends T> elemCls) {
+        return tryGetAsStreamOf(mapper).map(stream -> stream.toArray(length -> (T[]) Array.newInstance(elemCls, length)));
+    }
+
+    public final <T> Optional<T[]> tryGetAsArrayOf(Class<? extends T> elemCls) {
+        return tryGetAsStreamOf(elemCls).map(stream -> stream.toArray(length -> (T[]) Array.newInstance(elemCls, length)));
+    }
+
+    public final Optional<byte[]> tryGetAsByteArray() {
+        return tryGetAsArrayOf(Byte.class).map(bytes -> {
+            var res = new byte[bytes.length];
+            for (var i = 0; i < bytes.length; i++)
+                res[i] = bytes[i];
+            return res;
+        });
+    }
+
+    public final Optional<short[]> tryGetAsShortArray() {
+        return tryGetAsArrayOf(Short.class).map(shorts -> {
+            var res = new short[shorts.length];
+            for (var i = 0; i < shorts.length; i++)
+                res[i] = shorts[i];
+            return res;
+        });
+    }
+
+    public final Optional<int[]> tryGetAsIntArray() {
+        return tryGetAsStreamOf(Integer.class).map(stream -> stream.mapToInt(Integer::intValue).toArray());
+    }
+
+    public final Optional<long[]> tryGetAsLongArray() {
+        return tryGetAsStreamOf(Long.class).map(stream -> stream.mapToLong(Long::longValue).toArray());
+    }
+
+    public final Optional<float[]> tryGetAsFloatArray() {
+        return tryGetAsArrayOf(Float.class).map(floats -> {
+            var res = new float[floats.length];
+            for (var i = 0; i < floats.length; i++)
+                res[i] = floats[i];
+            return res;
+        });
+    }
+
+    public final Optional<double[]> tryGetAsDoubleArray() {
+        return tryGetAsStreamOf(Double.class).map(stream -> stream.mapToDouble(Double::doubleValue).toArray());
+    }
+
+    public final Optional<boolean[]> tryGetAsBooleanArray() {
+        return tryGetAsArrayOf(Boolean.class).map(bools -> {
+            var res = new boolean[bools.length];
+            for (var i = 0; i < bools.length; i++)
+                res[i] = bools[i];
+            return res;
+        });
+    }
+
+    public final Optional<char[]> tryGetAsCharArray() {
+        return tryGetAsArrayOf(Character.class).map(chars -> {
+            var res = new char[chars.length];
+            for (var i = 0; i < chars.length; i++)
+                res[i] = chars[i];
+            return res;
+        });
+    }
+
     // ==== PATH >> PRIMITIVE ======================================================== //
 
     @SuppressWarnings("InstanceofThis")
@@ -207,6 +286,14 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return this instanceof JsonContainer<?> jCon
                ? new JsonPathFinder(jCon, jsonPath, NO_FLAGS).find()
                : Optional.empty();
+    }
+
+    public final Optional<Byte> tryGetPathAsByte(String jsonPath) {
+        return tryGetPath(jsonPath).flatMap(JsonElement::tryGetAsByte);
+    }
+
+    public final Optional<Short> tryGetPathAsShort(String jsonPath) {
+        return tryGetPath(jsonPath).flatMap(JsonElement::tryGetAsShort);
     }
 
     public final OptionalInt tryGetPathAsInt(String jsonPath) {
@@ -222,6 +309,10 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     public final OptionalDouble tryGetPathAsDouble(String jsonPath) {
         var res = tryGetPath(jsonPath);
         return res.isPresent() ? res.get().tryGetAsDouble() : OptionalDouble.empty();
+    }
+
+    public final Optional<Float> tryGetPathAsFloat(String jsonPath) {
+        return tryGetPath(jsonPath).flatMap(JsonElement::tryGetAsFloat);
     }
 
     // ==== PATH >> OBJECT =========================================================== //
@@ -246,6 +337,8 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetPath(jsonPath).flatMap(JsonElement::tryGetAsBool);
     }
 
+    // ==== PATH >> DATETIME =========================================================== //
+
     public final Optional<LocalDate> tryGetPathAsDate(String jsonPath, DateTimeFormatter formatter) {
         return tryGetPathAsString(jsonPath).flatMap(s -> tryGetAsDate(formatter));
     }
@@ -258,7 +351,7 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetPathAsString(jsonPath).flatMap(s -> tryGetAsDateTime(formatter));
     }
 
-    // ==== PATH >> OBJECT =================== //
+    // ==== PATH >> CLASS/ENUM =================== //
 
     public final <E extends Enum<E>> Optional<E> tryGetPathAsEnum(String jsonPath, Class<E> enumType) {
         return tryGetPathAsString(jsonPath).map(e -> Enum.valueOf(enumType, e));
@@ -268,7 +361,8 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetPathAsObj(jsonPath, e -> Json.instanceFromTree(e, cls));
     }
 
-    public final <T> Optional<T> tryGetPathAsObj(String jsonPath, Function<? super JsonElement<?>, ? extends T> mapper) {
+    @SuppressWarnings("BoundedWildcard")
+    public final <T> Optional<T> tryGetPathAsObj(String jsonPath, Function<JsonElement<?>, ? extends T> mapper) {
         return tryGetPath(jsonPath).map(mapper);
     }
 

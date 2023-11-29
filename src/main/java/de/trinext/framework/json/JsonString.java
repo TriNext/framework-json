@@ -16,7 +16,7 @@ public final class JsonString extends JsonPrimitive<String> {
         super(value.toString());
     }
 
-    static JsonString from(CharSequence charSeq) {
+    public static JsonString from(CharSequence charSeq) {
         return new JsonString(charSeq);
     }
 

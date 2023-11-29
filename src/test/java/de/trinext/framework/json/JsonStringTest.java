@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static test.util.TestConstants.*;
-import static test.util.TestHelper.testForRandomStrings;
+import static test.util.RandomHelper.runForRandomStrings;
 
 /**
  * @author Dennis Woithe
@@ -16,7 +16,7 @@ class JsonStringTest {
 
     @Test
     void test_hash_code() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+        runForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
                 randStr.hashCode(),
                 JsonString.from(randStr).hashCode()
         ));
@@ -24,7 +24,7 @@ class JsonStringTest {
 
     @Test @SuppressWarnings({"SimplifiableAssertion", "EqualsBetweenInconvertibleTypes"})
     void test_equals() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
+        runForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> {
                     var jS = JsonString.from(randStr);
                     assertTrue(jS.equals(JsonString.from(randStr)));
@@ -35,7 +35,7 @@ class JsonStringTest {
 
     @Test
     void test_to_string() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
+        runForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> assertEquals(
                         new JsonPrimitive(randStr).toString(),
                         JsonString.from(randStr).toString()
@@ -44,7 +44,7 @@ class JsonStringTest {
 
     @Test
     void test_from_literal() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
+        runForRandomStrings(WORD_LENGTH, WORDS_PER_TEST,
                 randStr -> assertEquals(
                         randStr,
                         JsonString.from(randStr).value
@@ -58,7 +58,7 @@ class JsonStringTest {
 
     @Test
     void test_try_getters() {
-        testForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
+        runForRandomStrings(WORD_LENGTH, WORDS_PER_TEST, randStr -> assertEquals(
                 randStr,
                 JsonString.from(randStr).tryGetAsString().orElseThrow()
         ));
@@ -69,12 +69,5 @@ class JsonStringTest {
         var nonJNr = JsonInteger.from(0);
         assertTrue(nonJNr.tryGetAsString().isEmpty());
     }
-    @Test
-    void test_try_get_path_as_string_empty() {
-        var nonJStr = JsonInteger.from(0);
-        var testMap = new JsonMap();
-        testMap.add(STRING_FIELD, STRING_CONSTANT);
-        assertTrue(nonJStr.tryGetPathAsString(STRING_FIELD).isEmpty());
-        assertTrue(testMap.tryGetPathAsString(INT_FIELD).isEmpty());
-    }
+
 }

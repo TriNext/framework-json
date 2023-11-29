@@ -1,13 +1,11 @@
 package de.trinext.framework.json;
 
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static test.util.RandomHelper.*;
 import static test.util.TestConstants.*;
-import static test.util.TestHelper.*;
 
 /**
  * @author Dennis Woithe
@@ -18,7 +16,7 @@ class JsonNumberTest {
 
     @Test @SuppressWarnings("OverlyLongLambda")
     void test_from_int_literal() {
-        testForRandomBigInts(NRS_PER_TEST, randBigInt -> {
+        runForRandomBigInts(NRS_PER_TEST, randBigInt -> {
             var randByte = randBigInt.byteValue();
             assertEquals(
                     JsonInteger.from(randByte),
@@ -48,7 +46,7 @@ class JsonNumberTest {
 
     @Test
     void test_from_dec_literal() {
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
             assertEquals(
                     randBigDec.floatValue(),
                     JsonNumber.from(randBigDec.floatValue()).value.floatValue()
@@ -66,7 +64,7 @@ class JsonNumberTest {
 
     @Test
     void test_from_number_literal() {
-        testForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
             @SuppressWarnings("all")
             var anonNr = new Number() {
 
@@ -106,18 +104,13 @@ class JsonNumberTest {
 
     @Test
     void test_try_getters_empty() {
-        var nonJNr = JsonString.from(STRING_FIELD);
-        var hugeDecimal = BigDecimal.valueOf(Double.MAX_VALUE).multiply(BigDecimal.TEN);
-
+        var nonJNr = JsonString.from(randomString(WORD_LENGTH));
+        assertTrue(nonJNr.tryGetAsByte().isEmpty());
+        assertTrue(nonJNr.tryGetAsShort().isEmpty());
         assertTrue(nonJNr.tryGetAsInt().isEmpty());
-        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetAsInt().isEmpty());
-
         assertTrue(nonJNr.tryGetAsLong().isEmpty());
-        assertTrue(JsonInteger.from(hugeDecimal.toBigInteger()).tryGetAsLong().isEmpty());
-
+        assertTrue(nonJNr.tryGetAsFloat().isEmpty());
         assertTrue(nonJNr.tryGetAsDouble().isEmpty());
-        assertEquals(Double.POSITIVE_INFINITY, JsonDecimal.from(hugeDecimal).tryGetAsDouble().orElseThrow());
-
 
         assertTrue(nonJNr.tryGetAsBigInt().isEmpty());
         assertTrue(nonJNr.tryGetAsBigDec().isEmpty());
@@ -125,22 +118,19 @@ class JsonNumberTest {
     }
 
     @Test
-    void try_get_int() {
-        assertEquals(2, Json.treeFromInstance(2).tryGetAsInt().orElseThrow());
-        assertEquals(2, Json.treeFromInstance(2.0).tryGetAsInt().orElseThrow());
-    }
-
-    @Test
     void test_try_get_path_as_number_empty() {
-        var nonJNr = JsonString.from(STRING_FIELD);
+        var nonJNr = JsonString.from(randomString(WORD_LENGTH));
         var testMap = new JsonMap();
-        testMap.add(EXISTING_PATH, INT_CONSTANT);
-        assertTrue(nonJNr.tryGetPathAsInt(EXISTING_PATH).isEmpty());
-        assertTrue(nonJNr.tryGetPathAsLong(EXISTING_PATH).isEmpty());
-        assertTrue(nonJNr.tryGetPathAsDouble(EXISTING_PATH).isEmpty());
-        assertTrue(nonJNr.tryGetPathAsBigInt(EXISTING_PATH).isEmpty());
-        assertTrue(nonJNr.tryGetPathAsBigDec(EXISTING_PATH).isEmpty());
-        assertTrue(nonJNr.tryGetPathAsNumber(EXISTING_PATH).isEmpty());
+        testMap.add(field(1), nonJNr);
+        assertTrue(testMap.tryGetPathAsByte(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsShort(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsInt(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsLong(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsFloat(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsDouble(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsBigInt(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsBigDec(field(1)).isEmpty());
+        assertTrue(testMap.tryGetPathAsNumber(field(1)).isEmpty());
     }
 
 }

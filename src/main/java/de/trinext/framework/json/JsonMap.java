@@ -26,8 +26,9 @@ public final class JsonMap
     }
 
     /** Creates an empty JsonObject. */
-    public JsonMap(SequencedMap<String, JsonElement<?>> fields) {
-        super(fields);
+    @SuppressWarnings("BoundedWildcard")
+    public JsonMap(Map<String, JsonElement<?>> fields) {
+        super(new LinkedHashMap<>(fields));
     }
 
     /**
@@ -54,28 +55,54 @@ public final class JsonMap
         return this;
     }
 
-    /** Returns true if this object has a field with the passed name. */
-    public boolean contains(String fieldName) {
-        if (fieldName == null)
-            throw new IllegalArgumentException("fieldName can not be null!");
-        return value.containsKey(Objects.requireNonNull(fieldName));
+    public boolean contains(String key) {
+        if (key == null)
+            throw new IllegalArgumentException("key can not be null!");
+        return value.containsKey(Objects.requireNonNull(key));
     }
 
     public boolean removeKey(String key) {
         return value.remove(key) != null;
     }
 
-    /**
-     * Add a JsonArray as a field.
-     *
-     * @param fieldName has to be a unique name
-     * @param arrFieldValue an array of values
-     */
-    public JsonMap addArr(
-            String fieldName,
-            Object... arrFieldValue
-    ) throws JsonFieldAlreadyExistsException {
-        return add(fieldName, arrFieldValue);
+    public JsonMap addList(String key, Object... values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, byte[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, short[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, int[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, long[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, float[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, double[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, boolean[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, char[] values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
+    }
+
+    public JsonMap addList(String key, Iterable<?> values) throws JsonFieldAlreadyExistsException {
+        return add(key, new JsonList(values));
     }
 
     @Override
@@ -95,11 +122,8 @@ public final class JsonMap
         return value.entrySet().iterator();
     }
 
-    // ==== STATIC FUNCTIONS ================================================= //
-
     public Optional<JsonElement<?>> tryGet(String fieldName) {
         return Optional.ofNullable(value.get(fieldName));
     }
-
 
 }

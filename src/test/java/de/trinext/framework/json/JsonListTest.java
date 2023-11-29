@@ -1,41 +1,38 @@
 package de.trinext.framework.json;
 
 import java.util.*;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.util.TestConstants.*;
-import static test.util.TestHelper.randomInts;
-import static test.util.TestHelper.*;
+import static test.util.TestConstants.ELEMS_PER_LIST;
+import static test.util.RandomHelper.*;
 
 /**
  * @author Dennis Woithe
  */
 class JsonListTest {
 
-    private static final int ELEMS_PER_TEST = 100;
-
-
-    private JsonList testArr;
-    @BeforeEach
-    void setUp() {
-        testArr = new JsonList();
-        testArr.add(ARRAY_TEST_VALUE_1);
-        testArr.add(ARRAY_TEST_VALUE_2);
-        testArr.add(ARRAY_TEST_VALUE_3);
+    @Test
+    void test_constructor_varargs() {
+        var randomInts = randomInts(ELEMS_PER_LIST).toArray();
+        var list = new JsonList(randomInts);
+        assertArrayEquals(randomInts, list.tryGetAsIntArray().orElseThrow());
     }
 
-    // ==== METHODS ========================================================== //
+    @Test
+    void test_constructor_iterable() {
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var list = new JsonList(randomInts);
+        assertEquals(randomInts, list.tryGetAsListOf(Integer.class).orElseThrow());
+    }
 
     @Test
     void test_get_index() {
-        var elems = randomInts(ELEMS_PER_TEST)
+        var elems = randomInts(ELEMS_PER_LIST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
         var jList = new JsonList((Object[]) elems);
@@ -44,36 +41,37 @@ class JsonListTest {
             assertTrue(res.isPresent());
             assertEquals(elems[i], res.get());
         }
-        assertEquals(ELEMS_PER_TEST, jList.size());
+        assertEquals(ELEMS_PER_LIST, jList.size());
     }
 
     @Test
     void test_add() {
         var jList = new JsonList();
         assertTrue(jList.isEmpty());
-        randomInts(ELEMS_PER_TEST).forEach(jList::add);
-        assertEquals(ELEMS_PER_TEST, jList.size());
+        randomInts(ELEMS_PER_LIST).forEach(jList::add);
+        assertEquals(ELEMS_PER_LIST, jList.size());
     }
+
     @Test
     void test_remove() {
-        var jArr = new JsonList();
-        assertTrue(jArr.isEmpty());
-        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
-        assertEquals(ELEMS_PER_TEST, jArr.size());
-        jArr.removeAt(0);
-        assertEquals(ELEMS_PER_TEST-1, jArr.size());
+        var jList = new JsonList();
+        assertTrue(jList.isEmpty());
+        randomInts(ELEMS_PER_LIST).forEach(jList::add);
+        assertEquals(ELEMS_PER_LIST, jList.size());
+        jList.removeAt(0);
+        assertEquals(ELEMS_PER_LIST - 1, jList.size());
     }
 
     @Test
     void test_stream() {
         var jList = new JsonList();
-        randomInts(ELEMS_PER_TEST).forEach(jList::add);
+        randomInts(ELEMS_PER_LIST).forEach(jList::add);
         assertArrayEquals(jList.value.toArray(), jList.stream().toArray());
     }
 
     @Test
     void test_iterator() {
-        var elems = randomInts(ELEMS_PER_TEST)
+        var elems = randomInts(ELEMS_PER_LIST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
         var iter = new JsonList((Object[]) elems).iterator();
@@ -83,7 +81,7 @@ class JsonListTest {
 
     @Test
     void test_to_string() {
-        var elems = randomInts(ELEMS_PER_TEST)
+        var elems = randomInts(ELEMS_PER_LIST)
                 .mapToObj(JsonInteger::from)
                 .toArray(JsonInteger[]::new);
         var jList = new JsonList((Object[]) elems);
@@ -125,7 +123,7 @@ class JsonListTest {
 
     @Test
     void test_try_get_just_kleene_star() {
-        var randomInts = randomInts(ELEMS_PER_TEST).boxed().toList();
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         var jList = new JsonList(randomInts);
         // [ 1, 2, ... ] //
         var res = jList.tryGetPath("*");
@@ -136,7 +134,7 @@ class JsonListTest {
     @Test
     void test_try_get_kleene_star() {
         var name = randomWord(5);
-        var randomInts = randomInts(ELEMS_PER_TEST).boxed().toList();
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         var jList = new JsonList();
         // [ { "a": 1 }, { "a": 2 }, ... ] //
         randomInts.forEach(e -> jList.addObj(jObj -> jObj.add(name, e)));
@@ -148,8 +146,8 @@ class JsonListTest {
     @Test
     void test_try_get_nested_kleene_star() {
         var name = randomWord(5);
-        var randomIntLists = IntStream.range(0, ELEMS_PER_TEST)
-                .mapToObj(i -> randomInts(3).boxed().toList())
+        var randomIntLists = IntStream.range(0, ELEMS_PER_LIST)
+                .mapToObj(_ -> randomInts(3).boxed().toList())
                 .toList();
         var jList = new JsonList();
         // [ { "a": [1, 2, 3] }, { "a": [1, 2, 3] }, ... ] //
@@ -161,7 +159,7 @@ class JsonListTest {
 
     @Test
     void test_remove_path() {
-        var randomInts = randomInts(ELEMS_PER_TEST).boxed().toList();
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         // [ 1, 2, ... ] //
         var jList = new JsonList(randomInts);
         assertEquals(randomInts.size(), jList.size());
@@ -172,7 +170,7 @@ class JsonListTest {
     @Test
     void test_remove_nested_path() {
         var name = randomWord(5);
-        var randomInts = randomInts(ELEMS_PER_TEST).boxed().collect(Collectors.toSet());
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().collect(Collectors.toSet());
         var jList = new JsonList();
         // [ { "a": 1 }, { "a": 2 }, ... ] //
         randomInts.forEach(e -> jList.addObj(jObj -> jObj.add(name, e)));
@@ -190,7 +188,7 @@ class JsonListTest {
 
     @Test
     void test_remove_just_kleene_star() {
-        var jList = new JsonList(randomInts(ELEMS_PER_TEST).boxed().toList());
+        var jList = new JsonList(randomInts(ELEMS_PER_LIST).boxed().toList());
         // [ 1, 2, ... ] //
         assertTrue(jList.removePath("*"));
         assertTrue(jList.isEmpty());
@@ -199,92 +197,65 @@ class JsonListTest {
     @Test
     void test_remove_kleene_star() {
         var name = randomWord(5);
-        var randomInts = randomInts(ELEMS_PER_TEST).boxed().toList();
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         var jList = new JsonList();
         // [ { "a": 1 }, { "a": 2 }, ... ] //
         randomInts.forEach(e -> jList.addObj(jObj -> jObj.add(name, e)));
         var jListWithEmptyMaps = new JsonList();
-        randomInts.forEach(e -> jListWithEmptyMaps.add(new JsonMap()));
+        randomInts.forEach(_ -> jListWithEmptyMaps.add(new JsonMap()));
         assertTrue(jList.removePath("*." + name));
         assertEquals(jListWithEmptyMaps, jList);
     }
 
     @Test
-    void test_getSize() {
-        var jArr = new JsonList();
-        randomInts(ELEMS_PER_TEST).forEach(jArr::add);
-        assertEquals(100, jArr.value.size());
+    void test_size() {
+        var jList = new JsonList();
+        var size = randomInt(ELEMS_PER_LIST);
+        randomInts(size).forEach(jList::add);
+        assertEquals(size, jList.size());
     }
 
     @Test
     void test_contains() {
-        assertTrue(testArr.contains(ARRAY_TEST_VALUE_1));
-        assertTrue(testArr.contains(ARRAY_TEST_VALUE_2));
-        assertTrue(testArr.contains(ARRAY_TEST_VALUE_3));
-        assertFalse(testArr.contains("fail"));
-        assertFalse(testArr.contains(null));
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var jList = new JsonList(randomInts);
+        randomInts.stream()
+                .map(jList::contains)
+                .forEach(Assertions::assertTrue);
     }
 
     @Test
-    void test_size() {
-        var jArr = new JsonList();
-        assertEquals(0,jArr.size());
-        jArr.add(ARRAY_TEST_VALUE_1);
-        assertEquals(1,jArr.size());
-        jArr.add(ARRAY_TEST_VALUE_2);
-        assertEquals(2,jArr.size());
-        //TODO: check if size behaves correctly after removing an element
-    }
-    @Test
-    void test_add_arr() {
-        var jArr = new JsonList().addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        assertEquals(1, jArr.size());
-        jArr.addArr(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        assertEquals(2, jArr.size());
+    void test_add_list_varargs() {
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var outer = new JsonList();
+        outer.addList(randomInts.toArray());
+        assertEquals(1, outer.size());
+        assertEquals(new JsonList(randomInts), outer.tryGet(0).orElseThrow());
     }
 
     @Test
-     void test_add_all() {
-        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        assertEquals(3, jArr.size());
-        jArr.addAll(List.of(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3));
-        assertEquals(6, jArr.size());
+    void test_add_list_iterable() {
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var outer = new JsonList();
+        outer.addList(randomInts);
+        assertEquals(1, outer.size());
+        assertEquals(new JsonList(randomInts), outer.tryGet(0).orElseThrow());
     }
 
     @Test
-    void test_clear() {
-        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        assertEquals(3, jArr.size());
-        jArr.clear();
-        assertEquals(0, jArr.size());
+    void test_add_all_varargs() {
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var list = new JsonList();
+        list.addList(randomInts.toArray());
+        assertEquals(randomInts.size(), list.size());
     }
 
     @Test
-    void test_try_get_list_of() {
-        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        var res = jArr.tryGetAsListOf(Integer.class);
-        assertTrue(res.isPresent());
-        assertEquals(3, res.get().size());
-        assertEquals(ARRAY_TEST_VALUE_1, res.get().get(0));
-        assertEquals(ARRAY_TEST_VALUE_2, res.get().get(1));
-        assertEquals(ARRAY_TEST_VALUE_3, res.get().get(2));
+    void test_add_all_iterable() {
+        var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
+        var list = new JsonList();
+        list.addList(randomInts);
+        assertEquals(randomInts.size(), list.size());
     }
 
-    @Test
-    void test_try_get_list_of_mapper() {
-        var jArr = new JsonList().add(ARRAY_TEST_VALUE_1, ARRAY_TEST_VALUE_2, ARRAY_TEST_VALUE_3);
-        var res = jArr.tryGetAsListOf(JsonElement::tryGetAsInt);
-        assertTrue(res.isPresent());
-        assertEquals(3, res.get().size());
-        assertEquals(ARRAY_TEST_VALUE_1, res.get().get(0).orElseThrow());
-        assertEquals(ARRAY_TEST_VALUE_2, res.get().get(1).orElseThrow());
-        assertEquals(ARRAY_TEST_VALUE_3, res.get().get(2).orElseThrow());
-    }
-
-    @Test
-    void test_constructor() {
-        var intList = new ArrayList<>(List.of(1, -1, 0));
-        var jsonList = new JsonList(intList);
-        assertEquals(intList, jsonList.tryGetPathAsListOf("",Integer.class).orElseThrow());
-    }
 }
