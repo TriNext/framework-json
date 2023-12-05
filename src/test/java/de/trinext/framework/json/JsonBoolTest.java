@@ -3,18 +3,17 @@ package de.trinext.framework.json;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static test.util.TestConstants.*;
 
 /**
  * @author Dennis Woithe
  */
 class JsonBoolTest {
 
-    // ==== METHODS ========================================================== //
-
     @Test
     void test_get_value() {
-        assertTrue(JsonBool.TRUE.getValue());
-        assertFalse(JsonBool.FALSE.getValue());
+        assertTrue(JsonBool.TRUE.value);
+        assertFalse(JsonBool.FALSE.value);
     }
 
     @Test
@@ -52,5 +51,19 @@ class JsonBoolTest {
         assertEquals(JsonBool.class.getSimpleName(), JsonBool.TRUE.typeName());
         assertEquals(JsonBool.class.getSimpleName(), JsonBool.FALSE.typeName());
     }
+
+    @Test
+    void test_try_get_path_as_bool() {
+        var map = new JsonMap();
+        map.add(field(1), Boolean.TRUE);
+        map.add(field(2), Boolean.FALSE);
+        map.add(field(3), true);
+        map.add(field(4), false);
+        assertTrue(map.tryGetPathAsBool(field(1)).orElseThrow());
+        assertFalse(map.tryGetPathAsBool(field(2)).orElseThrow());
+        assertTrue(map.tryGetPathAsBool(field(3)).orElseThrow());
+        assertFalse(map.tryGetPathAsBool(field(4)).orElseThrow());
+    }
+
 
 }
