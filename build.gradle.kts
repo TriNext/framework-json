@@ -3,7 +3,7 @@
 import org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension
 
 group = "de.trinext"
-version = "1.0.0"
+version = "1.0.5"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
