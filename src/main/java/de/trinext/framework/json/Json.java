@@ -3,6 +3,7 @@ package de.trinext.framework.json;
 import java.net.http.HttpResponse.BodyHandler;
 import java.net.http.HttpResponse.BodySubscribers;
 import java.nio.charset.Charset;
+import java.util.stream.Collector;
 
 import com.google.gson.Gson;
 
@@ -68,6 +69,13 @@ public final class Json {
                 BodySubscribers.ofString(responseBodyCharset),
                 (jsonString) -> new Gson().fromJson(jsonString, cls)
         );
+    }
+
+    /**
+     * A {@link Collector} that collects {@link JsonElement}s to a {@link JsonList}.
+     */
+    public static Collector<JsonElement<?>, JsonList, JsonList> collector() {
+        return Collector.of(JsonList::new, JsonList::add, JsonList::addAll);
     }
 
 }
