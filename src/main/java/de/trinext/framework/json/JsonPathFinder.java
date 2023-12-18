@@ -197,21 +197,12 @@ class JsonPathFinder {
         return Optional.of(res);
     }
 
+
+    /**
+     * @author Dennis Woithe
+     */
     @SuppressWarnings("serial")
-    class InvalidJsonPathTargetException extends RuntimeException {
-
-        InvalidJsonPathTargetException(JsonPathElem pathElem, JsonElement<?> parent) {
-            super("Could not find \"" + pathElem + "\" in " + parent.getClass().getSimpleName() + " " + parent);
-        }
-
-        InvalidJsonPathTargetException(JsonPathElem pathElem, JsonList listSearchedWithStar, JsonContainer<?> containerInListSearchedWithStar) {
-            super("Could not find \"" + pathElem + "\" in " + listSearchedWithStar + "\nSpecifically not in: " + containerInListSearchedWithStar);
-        }
-
-    }
-
-    @SuppressWarnings("serial")
-    class JsonPathFormatException extends RuntimeException {
+    private class JsonPathFormatException extends RuntimeException {
 
         JsonPathFormatException(String message) {
             super(message + " Whole path: \"" + fullJsonPath + "\"");

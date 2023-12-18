@@ -1,6 +1,5 @@
 package de.trinext.framework.json;
 
-import de.trinext.framework.json.JsonPathFinder.InvalidJsonPathTargetException;
 import org.junit.jupiter.api.Test;
 import test.util.RandomHelper;
 

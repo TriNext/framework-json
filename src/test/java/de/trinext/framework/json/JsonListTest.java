@@ -1,6 +1,7 @@
 package de.trinext.framework.json;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -8,13 +9,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.util.TestConstants.ELEMS_PER_LIST;
 import static test.util.RandomHelper.*;
+import static test.util.TestConstants.ELEMS_PER_LIST;
 
 /**
  * @author Dennis Woithe
  */
-class JsonListTest {
+final class JsonListTest {
 
     @Test
     void test_constructor_varargs() {
@@ -147,7 +148,7 @@ class JsonListTest {
     void test_try_get_nested_kleene_star() {
         var name = randomWord(5);
         var randomIntLists = IntStream.range(0, ELEMS_PER_LIST)
-                .mapToObj(_ -> randomInts(3).boxed().toList())
+                .mapToObj(ignored -> randomInts(3).boxed().toList())
                 .toList();
         var jList = new JsonList();
         // [ { "a": [1, 2, 3] }, { "a": [1, 2, 3] }, ... ] //
@@ -202,7 +203,7 @@ class JsonListTest {
         // [ { "a": 1 }, { "a": 2 }, ... ] //
         randomInts.forEach(e -> jList.addObj(jObj -> jObj.add(name, e)));
         var jListWithEmptyMaps = new JsonList();
-        randomInts.forEach(_ -> jListWithEmptyMaps.add(new JsonMap()));
+        randomInts.forEach(ignored -> jListWithEmptyMaps.add(new JsonMap()));
         assertTrue(jList.removePath("*." + name));
         assertEquals(jListWithEmptyMaps, jList);
     }
@@ -246,7 +247,7 @@ class JsonListTest {
     void test_add_all_varargs() {
         var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         var list = new JsonList();
-        list.addList(randomInts.toArray());
+        list.addAll(randomInts.toArray());
         assertEquals(randomInts.size(), list.size());
     }
 
@@ -254,7 +255,7 @@ class JsonListTest {
     void test_add_all_iterable() {
         var randomInts = randomInts(ELEMS_PER_LIST).boxed().toList();
         var list = new JsonList();
-        list.addList(randomInts);
+        list.addAll(randomInts);
         assertEquals(randomInts.size(), list.size());
     }
 

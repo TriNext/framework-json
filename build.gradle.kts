@@ -16,10 +16,10 @@ tasks.withType(JavaCompile::class.java) {
 }
 
 plugins {
-    `java-library`
-    `maven-publish`
+    id("java-library")
+    id("maven-publish")
     id("java")
-    jacoco
+    id("jacoco")
     id("org.owasp.dependencycheck") version "8.4.0"
 }
 
