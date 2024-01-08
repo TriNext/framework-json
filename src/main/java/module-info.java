@@ -1,13 +1,15 @@
 import de.trinext.framework.json.Json;
 
 /**
- * Currently a wrapper for com.google.gson
+ * Json-(de-)serialization library
  *
  * @see Json
  */
 @SuppressWarnings("MissingJavadoc") //
 module framework.json {
     exports de.trinext.framework.json;
-    requires com.google.gson;
+    // custom body handlers
     requires java.net.http;
+    // object creation utility
+    requires de.trinext.framework.util;
 }

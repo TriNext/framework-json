@@ -3,7 +3,7 @@
 import org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension
 
 group = "de.trinext"
-version = "1.0.6"
+version = "1.1.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -16,15 +16,22 @@ tasks.withType(JavaCompile::class.java) {
 }
 
 plugins {
-    `java-library`
-    `maven-publish`
+    id("java-library")
+    id("maven-publish")
     id("java")
-    jacoco
+    id("jacoco")
     id("org.owasp.dependencycheck") version "8.4.0"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/trinext/framework-util")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("TONYS_GITHUB_USERNAME")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("TONYS_PAT")
+        }
+    }
 }
 
 dependencies {
@@ -35,9 +42,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 
-    // Temporarily Wrapped Dependency
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("de.trinext:framework-util:0.0.9")
 }
 
 tasks.check {

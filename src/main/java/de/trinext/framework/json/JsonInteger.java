@@ -1,5 +1,6 @@
 package de.trinext.framework.json;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -21,6 +22,14 @@ public final class JsonInteger extends JsonNumber<BigInteger> {
         return from((long) value);
     }
 
+    public static JsonInteger from(short value) {
+        return from((long) value);
+    }
+
+    public static JsonInteger from(int value) {
+        return from((long) value);
+    }
+
     public static JsonInteger from(long value) {
         return from(BigInteger.valueOf(value));
     }
@@ -29,12 +38,24 @@ public final class JsonInteger extends JsonNumber<BigInteger> {
         return new JsonInteger(value);
     }
 
-    public static JsonInteger from(short value) {
-        return from((long) value);
+    /** Returns this number as a {@link BigInteger}. */
+    @Override
+    public BigInteger getAsBigInt() {
+        return value;
     }
 
-    public static JsonInteger from(int value) {
-        return from((long) value);
+    @Override
+    public BigDecimal getAsBigDec() {
+        return convert(BigDecimal::new, BigDecimal.class);
+    }
+
+    /**
+     * Always returns {@code false} as this method is only relevant for
+     * instances of {@link JsonNumber} without a more concretely specified subtype.
+     */
+    @Override
+    public boolean hasDecimalPlaces() {
+        return false;
     }
 
     @Override

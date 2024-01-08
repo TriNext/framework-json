@@ -1,8 +1,7 @@
 package de.trinext.framework.json;
 
-import de.trinext.framework.json.JsonPathFinder.InvalidJsonPathTargetException;
 import org.junit.jupiter.api.Test;
-import test.util.RandomHelper;
+import de.trinext.framework.util.RandomHelper;
 
 import static de.trinext.framework.json.JsonPathFinder.THROW_INVALID_TARGET_EXCPT;
 import static de.trinext.framework.json.JsonPathFinder.THROW_PATH_FORMAT_EXCPT;
@@ -17,9 +16,9 @@ class JsonPathTest {
     @Test
     void testFind1() {
         var jCon = new JsonList()
-                .addObj(o -> o.add("a", 10))
-                .addObj(o -> o.add("a", 15))
-                .addObj(o -> o.add("a", 20));
+                .addObj(o -> o.add(field(1), 10))
+                .addObj(o -> o.add(field(1), 15))
+                .addObj(o -> o.add(field(1), 20));
         var path = new JsonPathFinder(jCon, "*", THROW_PATH_FORMAT_EXCPT | THROW_INVALID_TARGET_EXCPT);
         var res = path.find();
         assertTrue(res.isPresent());
@@ -36,7 +35,7 @@ class JsonPathTest {
         var path = new JsonPathFinder(jCon, "*!" + field(1), THROW_PATH_FORMAT_EXCPT | THROW_INVALID_TARGET_EXCPT);
         var res = path.find();
         assertTrue(res.isPresent());
-        assertEquals(new JsonList(randInts), res.get());
+        assertEquals(JsonList.from(randInts), res.get());
     }
 
     @Test
@@ -49,7 +48,7 @@ class JsonPathTest {
         var path = new JsonPathFinder(jCon, "*." + field(1), THROW_PATH_FORMAT_EXCPT | THROW_INVALID_TARGET_EXCPT);
         var res = path.find();
         assertTrue(res.isPresent());
-        assertEquals(new JsonList(randInts[0], randInts[1]), res.get());
+        assertEquals(JsonList.from(randInts[0], randInts[1]), res.get());
     }
 
     @Test

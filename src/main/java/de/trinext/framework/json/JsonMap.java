@@ -6,6 +6,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.trinext.framework.util.lang.ClassChecker;
+import de.trinext.framework.util.lang.ClassHelper;
+
 /**
  * The json representation of a mutable, ordered, string key-value storage of {@link JsonElement}s.
  *
@@ -20,15 +23,40 @@ public final class JsonMap
 
     // ==== CONSTRUCTORS ===================================================== //
 
-    /** Creates an empty JsonObject. */
+    /** Creates an empty JsonMap. */
     public JsonMap() {
         this(new LinkedHashMap<>());
     }
 
-    /** Creates an empty JsonObject. */
     @SuppressWarnings("BoundedWildcard")
     public JsonMap(Map<String, JsonElement<?>> fields) {
         super(new LinkedHashMap<>(fields));
+    }
+
+    /**
+     * Creates a JsonMap from the given object.
+     *
+     * @param obj an object or record instance.
+     * @throws IllegalArgumentException if the given object is null, an array, enum or primitive
+     */
+    public static JsonMap from(Object obj) {
+        if (obj == null)
+            throw new IllegalArgumentException("obj can not be null!");
+        var objCls = obj.getClass();
+        var map = new JsonMap();
+        new ClassChecker<>(objCls, IllegalArgumentException::new)
+                .isNotEnum().isNotArray().isNotPrimitive()
+                .map(ClassHelper::allFieldsOf)
+                .filter(f -> !f.isSynthetic())
+                .peek(f -> f.setAccessible(true))
+                .forEach(f -> {
+                    try {
+                        map.add(f.getName(), f.get(obj));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        return map;
     }
 
     /**
@@ -66,43 +94,43 @@ public final class JsonMap
     }
 
     public JsonMap addList(String key, Object... values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, byte[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, short[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, int[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, long[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, float[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, double[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, boolean[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, char[] values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     public JsonMap addList(String key, Iterable<?> values) throws JsonFieldAlreadyExistsException {
-        return add(key, new JsonList(values));
+        return add(key, JsonList.from(values));
     }
 
     @Override
