@@ -13,7 +13,7 @@ import static test.util.TestConstants.WORDS_PER_TEST;
 /**
  * @author Dennis Woithe
  */
-@SuppressWarnings({"DuplicateStringLiteralInspection"}) //
+@SuppressWarnings("DuplicateStringLiteralInspection") //
 final class JsonStringToInstanceTest {
 
     @Test

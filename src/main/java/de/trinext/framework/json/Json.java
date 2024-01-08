@@ -235,6 +235,7 @@ public final class Json {
     }
 
     /** Converts any instance to a tree of {@link JsonElement}s. */
+    @SuppressWarnings("OverlyLongMethod")
     public static JsonElement<?> treeFromInstance(Object obj) {
         return switch (obj) {
             case null -> NULL;
@@ -395,7 +396,7 @@ public final class Json {
      *     <li>Instantiating non static inner classes is currently not supported.</li>
      * </ul>
      * <p>
-     * TODO: Add support for {@link Date} and subclasses of {@link TemporalAccessor}.
+     * TODO: Add support for subclasses of {@link TemporalAccessor}.
      */
     @SuppressWarnings("OverlyCoupledMethod")
     public static <T> T instanceFromTree(JsonElement<?> jElem, Class<T> cls) {
