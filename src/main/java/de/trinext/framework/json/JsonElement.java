@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import de.trinext.framework.json.JsonPathFinder.JsonPathFormatException;
+
 import static de.trinext.framework.json.JsonPathFinder.THROW_PATH_FORMAT_EXCPT;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -20,7 +22,7 @@ import static java.util.stream.Collectors.toSet;
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess", "ClassReferencesSubclass"})
-public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive, JsonNull {
+public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive {
 
     /**
      * The internal value of this element.
@@ -110,41 +112,46 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    /**
+     * Converts the value of {@code this} into something else.
+     *
+     * @param converter the mapping-function.
+     * @param cls the {@link Class} of the target value.
+     *
+     * @throws IllegalArgumentException if the conversion fails.
+     * @see Json#CANT_CONVERT
+     */
+    protected <T> T convert(Function<V, T> converter, Class<T> cls) {
+        try {
+            return converter.apply(value);
+        } catch (RuntimeException r) {
+            throw (IllegalArgumentException) Json.CANT_CONVERT.apply(this, cls).initCause(r);
+        }
+    }
+
     // ==== GETTERS ========================================================== //
 
     // ==== PRIMITIVE ==== //
 
     /**
-     * Tries to return this element as a byte.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.</li>
-     *     <li>If the value doesn't fit into a byte, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Tries to return this element as a byte using {@link JsonNumber#getAsByte()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final Optional<Byte> tryGetAsByte() {
         return tryGetAsNumber().map(Number::byteValue);
     }
 
     /**
-     * Tries to return this element as a short.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.</li>
-     *     <li>If the value doesn't fit into a short, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Tries to return this element as a short using {@link JsonNumber#getAsShort()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final Optional<Short> tryGetAsShort() {
         return tryGetAsNumber().map(Number::shortValue);
     }
 
     /**
-     * Tries to return this element as an {@link OptionalInt}.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link OptionalInt#empty()}.</li>
-     *     <li>If the value doesn't fit into an int, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Returns this element as an {@link OptionalInt} using {@link JsonNumber#getAsInt()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final OptionalInt tryGetAsInt() {
         var nr = tryGetAsNumber();
@@ -154,12 +161,8 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     }
 
     /**
-     * Tries to return this element as a {@link OptionalLong}.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link OptionalLong#empty()}.</li>
-     *     <li>If the value doesn't fit into a long, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Returns this element as a {@link OptionalLong} using {@link JsonNumber#getAsLong()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final OptionalLong tryGetAsLong() {
         var nr = tryGetAsNumber();
@@ -169,24 +172,16 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     }
 
     /**
-     * Tries to return this element as a float.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.</li>
-     *     <li>If the value doesn't fit into a float, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Tries to return this element as a float using {@link JsonNumber#getAsFloat()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final Optional<Float> tryGetAsFloat() {
         return tryGetAsNumber().map(Number::floatValue);
     }
 
     /**
-     * Tries to return this element as a {@link OptionalDouble}.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link OptionalDouble#empty()}.</li>
-     *     <li>If the value doesn't fit into a double, it gets truncated according to the
-     *     <a href="https://docs.oracle.com/javase/specs/jls/se10/html/jls-5.html#jls-5.1.3">specification "Narrowing Primitive Conversion"</a>.</li>
-     * </ul>
+     * Returns this element as a {@link OptionalDouble} using {@link JsonNumber#getAsDouble()}.
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final OptionalDouble tryGetAsDouble() {
         var nr = tryGetAsNumber();
@@ -197,54 +192,49 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
 
     /**
      * Tries to return this element as a boolean.
-     * <ul>
-     *     <li>If this is not a {@link JsonBool}, returns {@link Optional#empty()}.</li>
-     * </ul>
+     * If this is not a {@link JsonBool}, returns {@link Optional#empty()}.
      */
     @SuppressWarnings("InstanceofThis")
     public final Optional<Boolean> tryGetAsBool() {
         return this instanceof JsonBool j
-               ? Optional.of(j.value) : Optional.empty();
+               ? Optional.of(j.getAsBool())
+               : Optional.empty();
     }
 
     /**
-     * Tries to return this element as a char.
-     * <ul>
-     *     <li>If this is not a {@link JsonString}, returns {@link Optional#empty()}.</li>
-     *     <li>If the string has more than one character, returns {@link Optional#empty()}.</li>
-     * </ul>
+     * Tries to return this element as a char using {@link JsonString#getAsChar()}.
+     * If this is not a {@link JsonString}, returns {@link Optional#empty()}.</li>
+     *
+     * @throws IllegalArgumentException if the string is not of length 1.
+     * @see Json#CANT_CONVERT
      */
-    @SuppressWarnings("ReturnOfNull")
     public final Optional<Character> tryGetAsChar() {
-        return tryGetAsString().map(s -> s.length() == 1 ? s.charAt(0) : null);
+        return this instanceof JsonString jStr
+               ? Optional.of(jStr.getAsChar())
+               : Optional.empty();
     }
 
     // ==== OBJECT =========================================================== //
 
     /**
      * Tries to return this element as a {@link Number}.
-     * <ul>
-     *     <li>If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.</li>
-     * </ul>
+     * If this is not a {@link JsonNumber}, returns {@link Optional#empty()}.
      */
     public final Optional<Number> tryGetAsNumber() {
-        return switch (this) {
-            case JsonInteger jInt -> Optional.of(jInt.value);
-            case JsonDecimal jDec -> Optional.of(jDec.value);
-            default -> Optional.empty();
-        };
+        return this instanceof JsonNumber<?> jNr
+               ? Optional.of(jNr.getAsNumber())
+               : Optional.empty();
     }
 
     /**
      * Tries to return this element as a {@link String}.
-     * <ul>
-     *     <li>If this is not a {@link JsonString}, returns {@link Optional#empty()}.</li>
-     * </ul>
+     * If this is not a {@link JsonString}, returns {@link Optional#empty()}.
      */
     @SuppressWarnings("InstanceofThis")
     public final Optional<String> tryGetAsString() {
         return this instanceof JsonString j
-               ? Optional.of(j.value) : Optional.empty();
+               ? Optional.of(j.getAsString())
+               : Optional.empty();
     }
 
     /**
@@ -256,11 +246,9 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
      */
     @SuppressWarnings("InstanceofThis")
     public final Optional<BigInteger> tryGetAsBigInt() {
-        return switch (this) {
-            case JsonInteger jInt -> Optional.of(jInt.value);
-            case JsonDecimal jDec -> Optional.of(jDec.value.toBigInteger());
-            default -> Optional.empty();
-        };
+        return this instanceof JsonNumber<?> jNr
+               ? Optional.of(jNr.getAsBigInt())
+               : Optional.empty();
     }
 
     /**
@@ -271,11 +259,9 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
      */
     @SuppressWarnings("ClassReferencesSubclass")
     public final Optional<BigDecimal> tryGetAsBigDec() {
-        return switch (this) {
-            case JsonDecimal jDec -> Optional.of(jDec.value);
-            case JsonInteger jInt -> Optional.of(new BigDecimal(jInt.value));
-            default -> Optional.empty();
-        };
+        return this instanceof JsonNumber<?> jNr
+               ? Optional.of(jNr.getAsBigDec())
+               : Optional.empty();
     }
 
 
@@ -392,6 +378,13 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
         return tryGetAsStreamOf(mapper).map(stream -> stream.collect(toSet()));
     }
 
+    /**
+     * Tries to return this as a {@link Stream} of elements of a certain class.
+     *
+     * @param elemCls the class of the elements in the stream. Uses {@link Json#instanceFromTree(JsonElement, Class)} to convert the elements.
+     *
+     * @see Json#CANT_CONVERT
+     */
     public final <T> Optional<Stream<T>> tryGetAsStreamOf(Class<? extends T> elemCls) {
         if (elemCls == null)
             throw ELEM_CLASS_NULL_EXCEPTION;
@@ -428,8 +421,10 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
      * Tries to return this element as an array of the passed class.
      *
      * @param elemCls the class of the elements in the array.
-     * <p>
-     * TODO: Specify behavior if the array is not of the passed class.
+     *
+     * @throws IllegalArgumentException If something goes wrong during the conversion.
+     * @see Json#instanceFromTree(JsonElement, Class)
+     * @see Json#CANT_CONVERT
      */
     public final <T> Optional<T[]> tryGetAsArrayOf(Class<? extends T> elemCls) {
         return tryGetAsStreamOf(elemCls).map(stream -> stream.toArray(length -> (T[]) Array.newInstance(elemCls, length)));
@@ -543,11 +538,15 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     /**
      * Tries to return this element as a {@code boolean[]}.
      * <ul>
-     *     <li>If this is a {@link JsonList} of {@link JsonBool}s, returns the list as a boolean array.</li>
+     *     <li>
+     *         If this is a {@link JsonList} of {@link JsonBool}s, returns the list as a boolean array.
+     *         Uses {@link JsonBool#getAsBool()} to convert the {@link JsonBool}s to booleans.
+     *     </li>
      *     <li>Otherwise, returns {@link Optional#empty()}.</li>
      * </ul>
-     * <p>
-     * TODO: Specify behavior if some elements are not {@link JsonBool}s.
+     *
+     * @throws IllegalArgumentException If something goes wrong during the conversion.
+     * @see Json#CANT_CONVERT
      */
     public final Optional<boolean[]> tryGetAsBooleanArray() {
         return tryGetAsArrayOf(Boolean.class).map(bools -> {
@@ -561,13 +560,19 @@ public abstract sealed class JsonElement<V> permits JsonContainer, JsonPrimitive
     /**
      * Tries to return this element as a {@code char[]}.
      * <ul>
-     *     <li>If this is a {@link JsonString}, returns the string as a char array.</li>
-     *     <li>If this is a {@link JsonList} of {@link JsonString}s of length 1, returns the list as a char array.</li>
-     *     <li>Otherwise, returns {@link Optional#empty()}.</li>
+     *     <li>
+     *         If this is a {@link JsonString}, returns the string as a char array.
+     *         Uses {@link JsonString#getAsString()} and {@link String#toCharArray()} to convert the string to a char array.
+     *     </li>
+     *     <li>
+     *         If this is a {@link JsonList} of {@link JsonString}s of length 1, returns the list as a char array.
+     *         Uses {@link JsonString#getAsChar()} to convert the strings to chars.
+     *     </li>
+     *     <li>If this is neither, returns {@link Optional#empty()}.</li>
      * </ul>
-     * <p>
-     * TODO: Specify behavior if some elements are not {@link JsonString}s.
-     * TODO: Specify behavior if some strings have length != 1.
+     *
+     * @throws IllegalArgumentException If something goes wrong during the conversion.
+     * @see Json#CANT_CONVERT
      */
     public final Optional<char[]> tryGetAsCharArray() {
         return switch (this) {

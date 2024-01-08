@@ -8,7 +8,7 @@ package de.trinext.framework.json;
 @SuppressWarnings({"unused", "WeakerAccess"})
 abstract sealed class JsonPrimitive<V>
         extends JsonElement<V>
-        permits JsonBool, JsonNumber, JsonString
+        permits JsonBool, JsonNumber, JsonString, JsonNull
 {
 
     // ==== CONSTRUCTORS ===================================================== //
@@ -19,6 +19,7 @@ abstract sealed class JsonPrimitive<V>
 
     static JsonPrimitive<?> from(Object obj) {
         return switch (obj) {
+            case null -> JsonNull.NULL;
             case Boolean val -> JsonBool.from((boolean) val);
             case Number val -> JsonNumber.from(val);
             default -> JsonString.from(obj.toString());

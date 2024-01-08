@@ -2,6 +2,7 @@ package de.trinext.framework.json;
 
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * The json representation of a potentially infinitely precise decimal number.
@@ -24,6 +25,7 @@ public final class JsonDecimal extends JsonNumber<BigDecimal> {
      * Turns a float into a {@link JsonDecimal}.
      *
      * @param value the float to be converted.
+     *
      * @return the {@link JsonDecimal} representing the float.
      */
     public static JsonDecimal from(float value) {
@@ -31,9 +33,21 @@ public final class JsonDecimal extends JsonNumber<BigDecimal> {
     }
 
     /**
+     * Turns a double into a {@link JsonDecimal}.
+     *
+     * @param value the double to be converted.
+     *
+     * @return the {@link JsonDecimal} representing the double.
+     */
+    public static JsonDecimal from(double value) {
+        return from(new BigDecimal(value));
+    }
+
+    /**
      * Turns a BigDecimal into a {@link JsonDecimal}.
      *
      * @param value the BigDecimal to be converted.
+     *
      * @return the {@link JsonDecimal} representing the BigDecimal.
      */
     public static JsonDecimal from(BigDecimal value) {
@@ -41,15 +55,23 @@ public final class JsonDecimal extends JsonNumber<BigDecimal> {
     }
 
     /**
-     * Turns a double into a {@link JsonDecimal}.
-     *
-     * @param value the double to be converted.
-     * @return the {@link JsonDecimal} representing the double.
+     * Returns this number as a {@link BigInteger}.
+     * The value gets truncated using the contract of {@link BigDecimal#toBigInteger()}.
      */
-    public static JsonDecimal from(double value) {
-        return from(new BigDecimal(value));
+    @Override
+    public BigInteger getAsBigInt() {
+        return value.toBigInteger();
     }
 
+    @Override
+    public BigDecimal getAsBigDec() {
+        return value;
+    }
+
+    @Override
+    public boolean hasDecimalPlaces() {
+        return value.stripTrailingZeros().scale() > 0;
+    }
 
     /**
      * Returns the string representation of this {@link JsonDecimal}.

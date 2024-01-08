@@ -202,7 +202,7 @@ class JsonPathFinder {
      * @author Dennis Woithe
      */
     @SuppressWarnings("serial")
-    private class JsonPathFormatException extends RuntimeException {
+    public class JsonPathFormatException extends RuntimeException {
 
         JsonPathFormatException(String message) {
             super(message + " Whole path: \"" + fullJsonPath + "\"");

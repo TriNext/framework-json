@@ -4,19 +4,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static test.util.RandomHelper.*;
+import static de.trinext.framework.util.RandomHelper.*;
 import static test.util.TestConstants.*;
 
 /**
  * @author Dennis Woithe
+ * @see JsonNumber
  */
 class JsonNumberTest {
 
-    // ==== METHODS ========================================================== //
-
     @Test @SuppressWarnings("OverlyLongLambda")
     void test_from_int_literal() {
-        runForRandomBigInts(NRS_PER_TEST, randBigInt -> {
+        runForRandomBigInts(WORDS_PER_TEST, randBigInt -> {
             var randByte = randBigInt.byteValue();
             assertEquals(
                     JsonInteger.from(randByte),
@@ -46,7 +45,7 @@ class JsonNumberTest {
 
     @Test
     void test_from_dec_literal() {
-        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+        runForRandomBigDecs(WORDS_PER_TEST, randBigDec -> {
             assertEquals(
                     randBigDec.floatValue(),
                     JsonNumber.from(randBigDec.floatValue()).value.floatValue()
@@ -64,11 +63,9 @@ class JsonNumberTest {
 
     @Test
     void test_from_number_literal() {
-        runForRandomBigDecs(NRS_PER_TEST, randBigDec -> {
+        runForRandomBigDecs(WORDS_PER_TEST, randBigDec -> {
             @SuppressWarnings("all")
             var anonNr = new Number() {
-
-                // ==== METHODS ========================================================== //
 
                 @Override
                 public int intValue() {

@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Dennis Woithe
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public final class JsonNull extends JsonElement<Void> {
+public final class JsonNull extends JsonPrimitive<Void> {
 
     // ==== CONSTANTS ======================================================== //
 

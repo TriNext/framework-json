@@ -1,8 +1,10 @@
 package de.trinext.framework.json.element;
 
-import de.trinext.framework.json.*;
+import de.trinext.framework.json.JsonMap;
+import de.trinext.framework.json.JsonString;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Arrays.stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,12 +36,12 @@ final class JsonElementClassEnumTest {
 
     @Test
     void test_try_get_as_enum() {
-        for (var enumConstant : TestEnum.values()) {
+        stream(TestEnum.values()).forEach(enumConstant -> {
             var jsonEnumConstant = JsonString.from(enumConstant.name());
             var optDeserialized = jsonEnumConstant.tryGetAsEnum(TestEnum.class);
             assertTrue(optDeserialized.isPresent());
             assertEquals(enumConstant, optDeserialized.get());
-        }
+        });
     }
 
     // ------------------------------------------------------------------------ //

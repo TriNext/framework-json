@@ -6,8 +6,6 @@ package test.util;
 public final class TestConstants {
 
     public static final int //
-
-            NRS_PER_TEST = 100,
             ELEMS_PER_LIST = 5,
             WORDS_PER_TEST = 100,
             WORD_LENGTH = 10;
